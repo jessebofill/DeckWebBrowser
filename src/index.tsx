@@ -9,7 +9,9 @@ import {
 import { lle, llog } from "./log";
 import { routePath, SP_Window } from "./init";
 import { Content } from "./components/QAMContent";
-import { FaShip } from "react-icons/fa";
+// import { IoMdPlanet } from "react-icons/io";
+// import { BsGlobeAmericas } from "react-icons/bs";
+import { PluginIcon } from "./native-components/PluginIcon";
 import { appendStyles } from "./styling";
 import { TabbedBrowser } from "./components/TabbedBrowser";
 import { tabManager } from "./classes/TabManager";
@@ -69,7 +71,7 @@ export default definePlugin((serverApi: ServerAPI) => {
     return {
         title: <div className={staticClasses.Title}>Web</div>,
         content: <Content />,
-        icon: <FaShip />,
+        icon: <PluginIcon />,
         onDismount() {
             serverApi.routerHook.removeRoute(routePath);
             unpatchMenu()

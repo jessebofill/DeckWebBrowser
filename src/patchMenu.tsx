@@ -1,6 +1,14 @@
-import { afterPatch, findInReactTree } from "decky-frontend-lib"
 import { llog } from "./log"
+import { afterPatch, findInReactTree } from "decky-frontend-lib"
 import { reactTree, routePath } from "./init"
+import { FC } from "react"
+import { PluginIcon } from "./native-components/PluginIcon"
+
+interface MainMenuItemProps {
+    route: string
+    label: string
+    onFocus: () => void
+}
 
 export const patchMenu = () => {
     const menuNode = findInReactTree(reactTree, (node) => node?.memoizedProps?.navID == 'MainNavMenuContainer')
@@ -8,24 +16,26 @@ export const patchMenu = () => {
     let patchedInnerMenu: any
     const menuWrapper = (props: any) => {
         const ret = orig(props)
-        llog('renderer ', ret)
         if (patchedInnerMenu) {
             ret.props.children.props.children[0].type = patchedInnerMenu
         } else {
             afterPatch(ret.props.children.props.children[0], 'type', (_: any, ret: any) => {
-                llog('dm ', ret)
-                const storeCopy = { ...ret.props.children[5] }
-                storeCopy.label = 'Browser'
-                storeCopy.props = {
-                    ...storeCopy.props,
-                    label: storeCopy.label,
-                    route: routePath,
-                    // routeState: {
-                    //     url: defaultUrl
-                    // }
-                }
+                const menuItemElement = findInReactTree(ret.props.children, (x) =>
+                    x?.type?.toString()?.includes('exactRouteMatch:'),
+                );
+                const MenuItemComponent: FC<MainMenuItemProps> = menuItemElement.type
+                const onFocus = menuItemElement.props.onFocus
 
-                ret.props.children.splice(5, 0, storeCopy)
+                const newItem =
+                    <MenuItemComponent
+                        route={routePath}
+                        label='Browser'
+                        onFocus={onFocus}
+                    >
+                        <PluginIcon />
+                    </MenuItemComponent>
+
+                ret.props.children.splice(5, 0, newItem)
                 return ret
             })
             patchedInnerMenu = ret.props.children.props.children[0].type

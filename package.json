@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "decky-frontend-lib": "^3.20.5",
-    "react-icons": "^4.4.0",
+    "react-icons": "^4.8.0",
     "uuid": "^9.0.0",
     "validator": "^13.9.0"
   },

@@ -5,8 +5,8 @@ dependencies:
     specifier: ^3.20.5
     version: 3.20.5
   react-icons:
-    specifier: ^4.4.0
-    version: 4.4.0
+    specifier: ^4.8.0
+    version: 4.8.0
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -722,8 +722,8 @@ packages:
       safe-buffer: 5.2.1
     dev: true
 
-  /react-icons@4.4.0:
-    resolution: {integrity: sha512-fSbvHeVYo/B5/L4VhB7sBA1i2tS8MkT0Hb9t2H1AVPkwGfVHLJCqyr2Py9dKMxsyM63Eng1GkdZfbWj+Fmv8Rg==}
+  /react-icons@4.8.0:
+    resolution: {integrity: sha512-N6+kOLcihDiAnj5Czu637waJqSnwlMNROzVZMhfX68V/9bu9qHaMIJC4UdozWoOk57gahFCNHwVvWzm0MTzRjg==}
     peerDependencies:
       react: '*'
     peerDependenciesMeta:
