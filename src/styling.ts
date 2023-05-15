@@ -2,7 +2,6 @@ import myFont from "../assets/FORCED_SQUARE.ttf"
 import { pluginName } from "./init";
 import { llog } from "./log";
 
-llog('FONT ', myFont)
 const tabPadding = 5
 const tabHeight = 34
 export const tabContainerHeight = tabPadding * 2 + tabHeight
