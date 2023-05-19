@@ -70,6 +70,11 @@ export function appendStyles(_window: any) {
         flex-direction: column;
         max-width: 100%
     }
+    .destructiveModal button.gamepaddialog_Button_1kn70.DialogButton.gpfocus.Primary {
+        background: #de3618;
+        color: #fff
+    }
+
     `
     // .tabbedBrowserContainer .gamepadtabbedpage_TabContentsScroll_1X4dt {
     //     position: absolute;
@@ -95,6 +100,5 @@ export function appendStyles(_window: any) {
     // }
     // background: #3D4450;
 
-    // Append the style element to the head section of the document
     _window.document.head.appendChild(style);
 }

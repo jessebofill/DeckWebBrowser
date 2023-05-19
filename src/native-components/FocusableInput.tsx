@@ -7,7 +7,7 @@ export interface FocusableInputProps extends FooterLegendProps {
     ref?: any
     value?: string
     type?: string
-    placeholder: string
+    placeholder?: string
     className?: string
     focusable?: boolean
     noFocusRing?: boolean

@@ -1,8 +1,9 @@
 import { llog } from "../log"
-import { GamepadButton, GamepadEvent, afterPatch } from 'decky-frontend-lib'
+import { GamepadButton, GamepadEvent, Menu, afterPatch, showContextMenu, showModal } from 'decky-frontend-lib'
 import { BrowserTab } from "../components/BrowserTab"
 import { BrowserTabCloser } from "../components/BrowserTabCloser"
 import { TabManager } from "./TabManager"
+import { BrowserContextMenu } from "../components/BrowserContextMenu"
 
 export default class BrowserTabHandler {
     title: string
@@ -36,14 +37,13 @@ export default class BrowserTabHandler {
 
             //start button
             onMenuButton: (evt: GamepadEvent) => {
-                //y button
-                llog('menu button: ', evt)
+                const shownContextMenu: { result: any } = { result: null }
+                shownContextMenu.result = showContextMenu(<BrowserContextMenu menu={shownContextMenu} tabManager={tabManager}/>)
             },
 
             onButtonDown: (evt: GamepadEvent) => {
                 switch (evt.detail.button) {
-                    //L4
-                    case 23:
+                    case GamepadButton.REAR_LEFT_UPPER:
                         //shift
                         SteamClient.Input.ControllerKeyboardSetKeyState(101, true)
                         //tab
@@ -51,21 +51,21 @@ export default class BrowserTabHandler {
                         SteamClient.Input.ControllerKeyboardSetKeyState(43, false)
                         SteamClient.Input.ControllerKeyboardSetKeyState(101, false)
                         break
-                    //R4
-                    case 25:
+
+                    case GamepadButton.REAR_RIGHT_UPPER:
                         //tab
                         SteamClient.Input.ControllerKeyboardSetKeyState(43, true)
                         SteamClient.Input.ControllerKeyboardSetKeyState(43, false)
                         break
-                    //L5
-                    case 24:
+
+                    case GamepadButton.REAR_LEFT_LOWER:
                         //page back
                         if (browser.m_URLRequested !== browser.m_history.entries[1].url) {
                             browser.m_browserView.GoBack()
                         }
                         break
-                    //R5
-                    case 26:
+
+                    case GamepadButton.REAR_RIGHT_LOWER:
                         //page forward
                         browser.m_browserView.GoForward()
                         break

@@ -1,7 +1,7 @@
 import { llog } from "../log"
 import { VFC, useEffect, useState } from "react"
 import { Tabs } from "../native-components/Tabs"
-import { patchSearchRootMemo } from "./SearchInputCustom"
+import { patchSearchRootMemo } from "./SearchBarInput"
 import { TabManager } from "../classes/TabManager"
 import { tabContainerHeight } from "../styling"
 

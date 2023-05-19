@@ -12,7 +12,7 @@ export enum SearchEngine {
 
 export class TabManager {
     tabHandlers: BrowserTabHandler[]
-    defaultURL: string
+    homePageUrl: string
     windowRouter: any
     headerStore: any
     activeTab: string
@@ -24,7 +24,7 @@ export class TabManager {
         if (!TabManager.instance) {
             TabManager.instance = this
         }
-        this.defaultURL = defaultURL
+        this.homePageUrl = defaultURL
         this.tabHandlers = []
         this.windowRouter = windowRouter
         this.headerStore = windowRouter.HeaderStore
@@ -34,7 +34,7 @@ export class TabManager {
     }
     createTab = (Url?: string) => {
         const id = uuidv4()
-        const url = Url || this.defaultURL
+        const url = Url || this.homePageUrl
         const browser = this.windowRouter.CreateBrowserView('ExternalWeb')
         this.tabHandlers.push(new BrowserTabHandler(id, browser, this))
         browser.LoadURL(url)
@@ -87,6 +87,14 @@ export class TabManager {
         return this.tabHandlers[this.getActiveTabIndex()]
     }
 
+    getActiveTabBrowserView() {
+        return this.getActiveTabHandler().browser.m_browserView
+    }
+
+    getActiveTabUrlRequested(){
+        return this.getActiveTabHandler().browser.m_URLRequested
+    }
+
     registerCloseListener(handler: () => void) {
         this.onTabClose = handler
     }
@@ -111,6 +119,20 @@ export class TabManager {
         this.getActiveTabHandler().takeFocus()
     }
 
+    activeTabLoad(url: string) {
+        this.getActiveTabHandler().loadUrl(url)
+    }
+    activeTabLoadHome() {
+        this.getActiveTabHandler().loadUrl(this.homePageUrl)
+    }
+
+    saveActiveTabAsHomePage() {
+        this.homePageUrl = this.getActiveTabUrlRequested()
+    }
+
+    closeAllTabs() {
+
+    }
 }
 
 function isOtherProtocol(input: string, protocols: string[]) {

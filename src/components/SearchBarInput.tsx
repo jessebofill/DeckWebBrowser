@@ -14,11 +14,11 @@ const searchBarRootNode = findInReactTree(reactTree, node => node?.type?.toStrin
 
 export const patchSearchRootMemo = (props: SearchInputProps) => {
     searchBarRootNode.child.memoizedProps.children[1].props = props
-    searchBarRootNode.child.memoizedProps.children[1].type = SearchInput
+    searchBarRootNode.child.memoizedProps.children[1].type = SearchBarInput
 }
 
-const SearchInput: VFC<SearchInputProps> = ({ tabManager }) => {
-    const url = tabManager.getActiveTabHandler().browser.m_URLRequested
+const SearchBarInput: VFC<SearchInputProps> = ({ tabManager }) => {
+    const url = tabManager.getActiveTabUrlRequested()
     const [value, setValue] = useState(url)
     // const [defaultValue, setDefaultValue] = useState(url)
     const [isFocused, setIsFocused] = useState(false)
@@ -27,7 +27,7 @@ const SearchInput: VFC<SearchInputProps> = ({ tabManager }) => {
     // llog('search rerendered')
 
     useEffect(() => {
-        const url = tabManager.getActiveTabHandler().browser.m_URLRequested
+        const url = tabManager.getActiveTabUrlRequested()
         // setDefaultValue(url)
         setValue(url)
     }, [isFocused])
@@ -44,7 +44,6 @@ const SearchInput: VFC<SearchInputProps> = ({ tabManager }) => {
     }, [])
 
     const submit = useCallback(() => {
-        llog('enter pressed')
         tabManager.browserRequest(value)
         tabManager.focusActiveBrowser()
     }, [value])

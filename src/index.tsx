@@ -1,11 +1,4 @@
-import {
-    definePlugin,
-    Router,
-    ServerAPI,
-    staticClasses,
-    getGamepadNavigationTrees,
-    getFocusNavController,
-} from "decky-frontend-lib";
+import { definePlugin, Router, ServerAPI, staticClasses, getGamepadNavigationTrees, getFocusNavController, } from "decky-frontend-lib";
 import { lle, llog } from "./log";
 import { routePath, SP_Window } from "./init";
 import { Content } from "./components/QAMContent";
@@ -69,7 +62,7 @@ export default definePlugin((serverApi: ServerAPI) => {
     }
 
     return {
-        title: <div className={staticClasses.Title}>Web</div>,
+        title: <div className={staticClasses.Title}>Web Browser</div>,
         content: <Content />,
         icon: <PluginIcon />,
         onDismount() {
