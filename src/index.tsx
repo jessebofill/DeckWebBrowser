@@ -1,5 +1,5 @@
 import { definePlugin, Router, ServerAPI, staticClasses, getGamepadNavigationTrees, getFocusNavController, } from "decky-frontend-lib";
-import { lle, llog } from "./log";
+import { warn, error, log, logN, warnN, errorN } from "./log";
 import { routePath, SP_Window } from "./init";
 import { Content } from "./components/QAMContent";
 // import { IoMdPlanet } from "react-icons/io";
@@ -27,7 +27,7 @@ export default definePlugin((serverApi: ServerAPI) => {
     serverApi.routerHook.addRoute(routePath, () => {
         return <TabbedBrowser tabManager={tabManager} />
     })
-
+    warnN('Settings Manager', 'Failed to load settings')
     const unpatchMenu = patchMenu()
 
     // const steamInputModule = findModuleChild((mod) => {

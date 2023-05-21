@@ -1,4 +1,4 @@
-import { llog } from "../log"
+import { log } from "../log"
 import { defaultUrl, windowRouter } from "../init"
 import BrowserTabHandler from "./BroswerTabHandler"
 import isURL from "validator/lib/isURL"
@@ -153,7 +153,7 @@ function convertLocalhostIpIfNeeded(input: string) {
         splitIp[0] = 'localhost:'
         input = splitIp.join('')
     }
-    llog('conversion: ', input)
+    log('conversion: ', input)
     return input
 }
 

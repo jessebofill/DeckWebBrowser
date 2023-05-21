@@ -1,4 +1,4 @@
-import { llog } from "../log";
+import { log } from "../log";
 import { ConfirmModal, Marquee, TextField, getFocusNavController, showModal, sleep } from "decky-frontend-lib";
 import { ChangeEvent, FocusEvent, VFC, useEffect, useState } from "react";
 import { favoritesManager } from "../classes/FavoritesManager";
@@ -47,7 +47,7 @@ export const NewFavoriteModal: VFC<NewFavoriteModalProps> = ({ tabManager, path,
                     favoritesManager.addFavorite(favoriteName, editedUrl, path)
                 }
                 if (favoritesManager.doesExist(favoriteName, path, false)) {
-                    llog('favorite exists')
+                    log('favorite exists')
                     showModal(
                         <ConfirmFavoriteOverwriteModal
                             name={favoriteName}

@@ -1,4 +1,4 @@
-import { llog } from "../log"
+import { log } from "../log"
 import { VFC, useEffect, useState } from "react"
 import { Tabs } from "../native-components/Tabs"
 import { patchSearchRootMemo } from "./SearchBarInput"
@@ -7,7 +7,7 @@ import { tabContainerHeight } from "../styling"
 
 const contentY = Math.round((tabContainerHeight + 40) * 1.5)
 const contentHeight = 800 - Math.round((80 + tabContainerHeight) * 1.5)
-llog('height: ', contentHeight, ' y: ', contentY)
+log('height: ', contentHeight, ' y: ', contentY)
 
 interface TabbedBrowserProps {
     tabManager: TabManager

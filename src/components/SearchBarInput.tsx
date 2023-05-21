@@ -1,4 +1,4 @@
-import { llog } from "../log"
+import { log } from "../log"
 import { ChangeEvent, VFC, useCallback, useEffect, useRef, useState } from "react"
 import { findInReactTree } from "decky-frontend-lib"
 import { reactTree } from "../init"
@@ -66,7 +66,7 @@ const SearchBarInput: VFC<SearchInputProps> = ({ tabManager }) => {
                 preferredFocus={false}
                 onFocusWithin={setIsFocused}
                 onFocus={() => {
-                    llog('search bar focused ', ref)
+                    log('search bar focused ', ref)
                     // @ts-ignore
                     setTimeout(() => ref.current.select(), 50)
                     // e.target.select()

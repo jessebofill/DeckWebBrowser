@@ -1,4 +1,4 @@
-import { llog } from "../log"
+import { log } from "../log"
 import { StructureController } from "./StructureController"
 import { settingsManager } from "./SettingsManager"
 

@@ -1,5 +1,5 @@
 import { Focusable, GamepadEvent, FooterLegendProps } from "decky-frontend-lib";
-import { llog } from "../log";
+import { log } from "../log";
 import { VFC, useEffect } from "react";
 import { BrowserContainer } from "../native-components/BrowserContainer";
 import { TabManager } from "../classes/TabManager";
@@ -20,7 +20,7 @@ export const BrowserTab: VFC<BrowserTabProps> = (props: BrowserTabProps) => {
         return () => clearNavNode()
     }, [])
 
-    llog('tab rerendered')
+    log('tab rerendered')
 
     const element = (
         <Focusable
@@ -48,9 +48,9 @@ export const BrowserTab: VFC<BrowserTabProps> = (props: BrowserTabProps) => {
 
             onGamepadDirection={(evt: GamepadEvent) => {
 
-                llog('direction pressed:  gamepad supported')
+                log('direction pressed:  gamepad supported')
                 if (browser.m_gamepadBridge.GetGameInputSupportLevel().Value < 3) {
-                    llog('direction pressed without gamepad support')
+                    log('direction pressed without gamepad support')
                     switch (evt.detail.button) {
                         case 9:
                             //arrow up

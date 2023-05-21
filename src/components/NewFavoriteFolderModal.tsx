@@ -1,4 +1,4 @@
-import { llog } from "../log"
+import { log } from "../log"
 import { ConfirmModal, Marquee, TextField, DialogButton, showModal } from "decky-frontend-lib"
 import { VFC, useState, ChangeEvent } from "react"
 import { TabManager } from "../classes/TabManager"
@@ -14,7 +14,7 @@ interface NewFavoriteFolderModalProps {
 }
 
 export const NewFavoriteFolderModal: VFC<NewFavoriteFolderModalProps> = ({ tabManager, path, closeModal }) => {
-    llog('rendering new folder modal')
+    log('rendering new folder modal')
     const [folderName, setFolderName] = useState('')
     const [alreadyExists, setAlreadyExists] = useState(false)
     const updateFolderName = (newName: string) => {

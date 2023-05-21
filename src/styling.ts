@@ -1,6 +1,6 @@
 import myFont from "../assets/FORCED_SQUARE.ttf"
 import { pluginName } from "./init";
-import { llog } from "./log";
+import { log } from "./log";
 
 const tabPadding = 5
 const tabHeight = 34

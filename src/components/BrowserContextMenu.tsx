@@ -1,4 +1,4 @@
-import { llog } from "../log";
+import { log } from "../log";
 import { Marquee, Menu, MenuGroup, MenuItem, showModal, GamepadButton, GamepadEvent, ModalRoot, Focusable, MenuGroupProps, ConfirmModal, MenuItemProps } from "decky-frontend-lib";
 import { VFC } from "react";
 import { NewFavoriteFolderModal } from "./NewFavoriteFolderModal";
@@ -146,7 +146,7 @@ interface BrowserContextMenuProps {
 }
 
 export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabManager }) => {
-    llog('rendering BrowserContext Menu')
+    log('rendering BrowserContext Menu')
 
     return (
         //@ts-ignore

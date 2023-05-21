@@ -1,6 +1,6 @@
+import { errorN, log} from "../log";
 import { ServerAPI, ServerResponse } from "decky-frontend-lib";
 import { Favorites } from "./FavoritesManager";
-import { llog } from "../log";
 
 
 interface Settings {
@@ -65,21 +65,21 @@ export class SettingsManager {
                 this.settings = result
                 this.settingsLoaded = true
             }
-            else console.warn('Web Browser: Failed to load settings')
+            else errorN('Settings Manager', 'Failed to load settings')
         })
         this.favoritesLoad.then(({ success, result }) => {
             if (success) {
                 this.favorites = result
                 this.favoritesLoaded = true
             }
-            else console.warn('Web Browser: Failed to load favorites')
+            else errorN('Settings Manager', 'Failed to load favorites')
         })
         this.historyLoad.then(({ success, result }) => {
             if (success) {
                 this.history = result
                 this.historyLoaded = true
             }
-            else console.warn('Web Browser: Failed to load history')
+            else errorN('Settings Manager', 'Failed to load history')
         })   
     }
 

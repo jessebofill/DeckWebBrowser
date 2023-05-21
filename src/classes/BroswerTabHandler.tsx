@@ -1,4 +1,4 @@
-import { llog } from "../log"
+import { log } from "../log"
 import { GamepadButton, GamepadEvent, Menu, afterPatch, showContextMenu, showModal } from 'decky-frontend-lib'
 import { BrowserTab } from "../components/BrowserTab"
 import { BrowserTabCloser } from "../components/BrowserTabCloser"
@@ -103,7 +103,7 @@ export default class BrowserTabHandler {
 
     closeBrowser() {
         setTimeout(() => this.browser.Destroy(), 200)
-        llog('Closing tab id: ' + this.id)
+        log('Closing tab id: ' + this.id)
     }
 
     //make sure this is an arrow function so 'this' keeps its reference as this class instance
@@ -125,9 +125,9 @@ export default class BrowserTabHandler {
 
     getNavNode = (browserTabElement: any) => {
         if (!this.navNode) {
-            llog('trying tp get navref ', browserTabElement)
+            log('trying tp get navref ', browserTabElement)
             afterPatch(browserTabElement.type, 'render', (_: any, ret: any) => {
-                llog('my focusbale ', ret)
+                log('my focusbale ', ret)
                 this.navNode = ret.props.value
                 return ret
             }, { singleShot: true })
@@ -135,12 +135,12 @@ export default class BrowserTabHandler {
     }
 
     clearNavNode = () => {
-        llog('clearing nav node ', this.id)
+        log('clearing nav node ', this.id)
         this.navNode = null
     }
 
     takeFocus() {
-        llog('trying to focus: ', this.id, ' with nav handle ', this.navNode)
+        log('trying to focus: ', this.id, ' with nav handle ', this.navNode)
         setTimeout(() => this.navNode.m_rgChildren[0].BTakeFocus(3), 500)
         // this.navNode.Tree.DeferredFocus.RequestFocus(this.navNode, { bFocusDescendant: true })
         // this.navNode.Tree.DeferredFocus.RequestFocus(this.navNode.m_rgChildren[0].m_rgChildren[0])
