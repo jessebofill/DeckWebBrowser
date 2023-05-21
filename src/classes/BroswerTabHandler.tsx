@@ -37,8 +37,8 @@ export default class BrowserTabHandler {
 
             //start button
             onMenuButton: (evt: GamepadEvent) => {
-                const shownContextMenu: { result: any } = { result: null }
-                shownContextMenu.result = showContextMenu(<BrowserContextMenu menu={shownContextMenu} tabManager={tabManager}/>)
+                const shownContextMenu: { instance: any } = { instance: null }
+                shownContextMenu.instance = showContextMenu(<BrowserContextMenu menu={shownContextMenu} tabManager={tabManager}/>)
             },
 
             onButtonDown: (evt: GamepadEvent) => {
@@ -131,31 +131,6 @@ export default class BrowserTabHandler {
                 this.navNode = ret.props.value
                 return ret
             }, { singleShot: true })
-            // const patch = afterPatch(browserTabElement, 'type', (_: any, ret: any) => {
-            //     llog('component T rendered', ret, _)
-            //     afterPatch(ret.props.children[2], 'type', (_: any, ret: any) => {
-            //         llog('Component B rendered ', this.id, ret, _)
-            //         const navHandle = ret.props.children.props.navRef.current
-            //         if (!this.navNode) {
-            //             llog('getting new nav handle: ', this.id)
-            //             this.navNode = ret.props.children.props.navRef.current
-            //         } else {
-            //             llog('already have handle: ', this.id)
-            //             if (this.navNode !== navHandle) {
-            //                 if (navHandle === undefined) llog('nav handle is undefined')
-            //                 else {
-            //                     this.navNode = ret.props.children.props.navRef.current
-            //                     llog('nav handle has changed for: ', this.id)
-            //                 }
-            //             }
-            //         }
-
-            //         // llog(this.navNode)
-            //         // setTimeout(patch.unpatch , 50)
-            //         return ret
-            //     })
-            //     return ret
-            // }, { singleShot: false })
         }
     }
 

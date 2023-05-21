@@ -1,4 +1,4 @@
-import { Router} from "decky-frontend-lib";
+import { Router } from "decky-frontend-lib";
 // import { name } from '../plugin.json'
 
 export const pluginName = 'Web Browser'

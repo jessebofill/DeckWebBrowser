@@ -2,8 +2,8 @@ lockfileVersion: '6.0'
 
 dependencies:
   decky-frontend-lib:
-    specifier: ^3.20.5
-    version: 3.20.5
+    specifier: ^3.21.0
+    version: 3.21.0
   react-icons:
     specifier: ^4.8.0
     version: 4.8.0
@@ -33,9 +33,6 @@ devDependencies:
   '@types/react':
     specifier: 16.14.0
     version: 16.14.0
-  '@types/react-reconciler':
-    specifier: ^0.28.2
-    version: 0.28.2
   '@types/uuid':
     specifier: ^9.0.1
     version: 9.0.1
@@ -216,12 +213,6 @@ packages:
 
   /@types/prop-types@15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
-    dev: true
-
-  /@types/react-reconciler@0.28.2:
-    resolution: {integrity: sha512-8tu6lHzEgYPlfDf/J6GOQdIc+gs+S2yAqlby3zTsB3SP2svlqTYe5fwZNtZyfactP74ShooP2vvi1BOp9ZemWw==}
-    dependencies:
-      '@types/react': 16.14.0
     dev: true
 
   /@types/react@16.14.0:
@@ -459,8 +450,8 @@ packages:
     resolution: {integrity: sha512-uX1KG+x9h5hIJsaKR9xHUeUraxf8IODOwq9JLNPq6BwB04a/xgpq3rcx47l5BZu5zBPlgD342tdke3Hom/nJRA==}
     dev: true
 
-  /decky-frontend-lib@3.20.5:
-    resolution: {integrity: sha512-aXllFYhWovoiyBHNzH8PW9EYgXotY9ysuU9icFNgrOWFotyJV+2KGLnfYEyBlDNiexKvXKVRKPw1gRFX2hP4AQ==}
+  /decky-frontend-lib@3.21.0:
+    resolution: {integrity: sha512-BZY+F9HKhjF0zthoBdQxbluZ/37UyjlzCCpcC6dQfOeAAPmjFDATs/FF/n9qo9B+NMepgWUXpStZR0becE9EOw==}
     dev: false
 
   /deepmerge@4.2.2:

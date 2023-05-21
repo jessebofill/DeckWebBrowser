@@ -1,10 +1,10 @@
 {
   "name": "Web Browser",
-  "author": "John Doe",
-  "flags": ["debug", "_root"],
+  "author": "Jesse Bofill",
+  "flags": ["debug"],
   "publish": {
-    "tags": ["template", "root"],
-    "description": "Decky example plugin.",
+    "tags": ["browser", "web", "internet"],
+    "description": "Web Browser",
     "image": "https://opengraph.githubassets.com/1/SteamDeckHomebrew/PluginLoader"
   }
 }

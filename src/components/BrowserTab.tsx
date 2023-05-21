@@ -3,7 +3,6 @@ import { llog } from "../log";
 import { VFC, useEffect } from "react";
 import { BrowserContainer } from "../native-components/BrowserContainer";
 import { TabManager } from "../classes/TabManager";
-import { dispatchClick } from "../mouse";
 
 interface BrowserTabProps {
     browser: any

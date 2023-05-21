@@ -1,6 +1,6 @@
 import { llog } from "../log";
-import { ConfirmModal, Marquee, TextField, showModal } from "decky-frontend-lib";
-import { ChangeEvent, VFC, useState } from "react";
+import { ConfirmModal, Marquee, TextField, getFocusNavController, showModal, sleep } from "decky-frontend-lib";
+import { ChangeEvent, FocusEvent, VFC, useEffect, useState } from "react";
 import { favoritesManager } from "../classes/FavoritesManager";
 import { TabManager } from "../classes/TabManager";
 import { ConfirmFavoriteOverwriteModal } from "./ConfrimationModals";
@@ -11,7 +11,7 @@ interface NewFavoriteModalProps {
     closeModal: any
 }
 
-export const NewFavoriteModal: VFC<NewFavoriteModalProps> = ({tabManager, path, closeModal }) => {
+export const NewFavoriteModal: VFC<NewFavoriteModalProps> = ({ tabManager, path, closeModal }) => {
     const [editedUrl, setEditedUrl] = useState(tabManager.getActiveTabUrlRequested())
     const [favoriteName, setFavoriteName] = useState(tabManager.getActiveTabHandler().title)
     const [alreadyExists, setAlreadyExists] = useState(favoritesManager.doesExist(favoriteName, path, false))
@@ -21,6 +21,18 @@ export const NewFavoriteModal: VFC<NewFavoriteModalProps> = ({tabManager, path, 
     }
     const dir = favoritesManager.pathToString(path, '> ')
 
+    // hacky way to select second text box on mount, focusOnMount doesnt work
+    useEffect(() => {
+        (async () => {
+            const activeContext = getFocusNavController().m_ActiveContext
+            while (activeContext.m_ActiveFocusChange.to?.m_element.classList[0] !== "gamepaddialog_BasicTextInput_3GCBi") {
+                await sleep(5)
+            }
+            activeContext.m_ActiveFocusChange.to.m_Parent.m_rgChildren[0].m_Parent.m_Parent.m_rgChildren[1].BTakeFocus(3)
+        })()
+    }, [])
+
+
     return (
         <ConfirmModal
             className={alreadyExists ? 'destructiveModal' : ''}
@@ -29,7 +41,11 @@ export const NewFavoriteModal: VFC<NewFavoriteModalProps> = ({tabManager, path, 
             strOKButtonText={alreadyExists ? 'Update ' + favoriteName : ('Save favorite' + (favoriteName ? ' as ' + favoriteName : ''))}
             strCancelButtonText='Cancel'
             onOK={() => {
-                closeModal()
+                const confirm = () => {
+                    closeModal()
+                    // toast showing new favorite created
+                    favoritesManager.addFavorite(favoriteName, editedUrl, path)
+                }
                 if (favoritesManager.doesExist(favoriteName, path, false)) {
                     llog('favorite exists')
                     showModal(
@@ -37,13 +53,11 @@ export const NewFavoriteModal: VFC<NewFavoriteModalProps> = ({tabManager, path, 
                             name={favoriteName}
                             oldUrl={favoritesManager.getFavorite(favoriteName, path)}
                             newUrl={editedUrl}
-                            onConfirm={() => { }}
+                            onConfirm={confirm}
                             closeModal={() => { }}
                         />)
                 } else {
-                    llog('favorite does not exist ')
-                    // toast showing new favorite created
-                    favoritesManager.addFavorite(favoriteName, editedUrl, path)
+                    confirm()
                 }
             }}
             onCancel={closeModal}
@@ -59,8 +73,7 @@ export const NewFavoriteModal: VFC<NewFavoriteModalProps> = ({tabManager, path, 
             <TextField
                 description='Edit url'
                 value={editedUrl}
-                onChange={(evt: ChangeEvent) => {
-                    //@ts-ignore
+                onChange={(evt: ChangeEvent<HTMLInputElement>) => {
                     setEditedUrl(evt.target.value)
                 }}
                 //@ts-ignore
@@ -69,13 +82,12 @@ export const NewFavoriteModal: VFC<NewFavoriteModalProps> = ({tabManager, path, 
             <TextField
                 description={alreadyExists ? 'WARNING: ' + favoriteName + ' already exists in this location' : 'Enter a name for favorite'}
                 value={favoriteName}
-                onChange={(evt: ChangeEvent) => {
-                    //@ts-ignore
+                onChange={(evt: ChangeEvent<HTMLInputElement>) => {
                     updateFavoriteName(evt.target.value)
                 }}
                 //@ts-ignore
                 onEnterKeyPress={() => { return 'VKClose' }}
-                focusOnMount={true}
+                onFocus={(evt: FocusEvent<HTMLInputElement>) => { evt.target.select() }}
             />
         </ConfirmModal>
     )

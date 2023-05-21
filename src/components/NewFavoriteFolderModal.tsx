@@ -48,8 +48,7 @@ export const NewFavoriteFolderModal: VFC<NewFavoriteFolderModalProps> = ({ tabMa
             </Marquee>
             <TextField
                 description={alreadyExists ? 'A folder with this name already exists in this location' : 'Enter a folder name'}
-                onChange={(evt: ChangeEvent) => {
-                    //@ts-ignore
+                onChange={(evt: ChangeEvent<HTMLInputElement>) => {
                     updateFolderName(evt.target.value)
                 }}
                 //@ts-ignore

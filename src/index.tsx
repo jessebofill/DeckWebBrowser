@@ -10,6 +10,8 @@ import { TabbedBrowser } from "./components/TabbedBrowser";
 import { tabManager } from "./classes/TabManager";
 import { patchMenu } from "./patchMenu";
 import { moveMouse } from "./mouse";
+import { settingsManager } from "./classes/SettingsManager";
+import { favoritesManager } from "./classes/FavoritesManager";
 
 /**
  * 
@@ -17,6 +19,8 @@ import { moveMouse } from "./mouse";
  */
 
 export default definePlugin((serverApi: ServerAPI) => {
+    settingsManager.init(serverApi)
+    favoritesManager.init()
     appendStyles(SP_Window)
     // SteamClient.Input.RegisterForControllerAnalogInputMessages(moveMouse)
 
@@ -43,8 +47,6 @@ export default definePlugin((serverApi: ServerAPI) => {
 
     //     }
     // })
-
-    // const mainBNode = findInReactTree(reactTree, (x) => x?.props?.path == '/steamweb')
 
     //@ts-ignore
     window.test = {

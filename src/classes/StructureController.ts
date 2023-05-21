@@ -143,7 +143,6 @@ export class StructureController {
 
     static traverseAndGetMember(dataStructure: Object, lineageArray: string[]) {
         let parent = dataStructure
-        llog('parent', parent)
         let traversed = ['origin']
         for (let memberName of lineageArray) {
             if (!parent.hasOwnProperty(memberName)) {
@@ -152,7 +151,6 @@ export class StructureController {
             parent = parent[memberName]
             traversed.push(memberName)
         }
-        llog('array ', lineageArray)
         return parent
     }
 
