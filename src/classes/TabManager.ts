@@ -3,6 +3,7 @@ import { defaultUrl, windowRouter } from "../init"
 import BrowserTabHandler from "./BroswerTabHandler"
 import isURL from "validator/lib/isURL"
 import { v4 as uuidv4 } from "uuid"
+import { settingsManager } from "./SettingsManager"
 
 export enum SearchEngine {
     GOOGLE,
@@ -12,7 +13,7 @@ export enum SearchEngine {
 
 export class TabManager {
     tabHandlers: BrowserTabHandler[]
-    homePageUrl: string
+    fallbackUrl: string
     windowRouter: any
     headerStore: any
     activeTab: string
@@ -20,11 +21,11 @@ export class TabManager {
     onTabClose?: () => void
     defaultSearchEngine: SearchEngine
     static instance: TabManager
-    constructor(defaultURL: string, windowRouter: any) {
+    constructor(defaultUrl: string, windowRouter: any) {
         if (!TabManager.instance) {
             TabManager.instance = this
         }
-        this.homePageUrl = defaultURL
+        this.fallbackUrl = defaultUrl
         this.tabHandlers = []
         this.windowRouter = windowRouter
         this.headerStore = windowRouter.HeaderStore
@@ -34,7 +35,7 @@ export class TabManager {
     }
     createTab = (Url?: string) => {
         const id = uuidv4()
-        const url = Url || this.homePageUrl
+        const url = Url || settingsManager.settings.homeUrl || this.fallbackUrl
         const browser = this.windowRouter.CreateBrowserView('ExternalWeb')
         this.tabHandlers.push(new BrowserTabHandler(id, browser, this))
         browser.LoadURL(url)
@@ -123,11 +124,11 @@ export class TabManager {
         this.getActiveTabHandler().loadUrl(url)
     }
     activeTabLoadHome() {
-        this.getActiveTabHandler().loadUrl(this.homePageUrl)
+        this.getActiveTabHandler().loadUrl(settingsManager.settings.homeUrl || this.fallbackUrl)
     }
 
     saveActiveTabAsHomePage() {
-        this.homePageUrl = this.getActiveTabUrlRequested()
+        settingsManager.saveSetting('homeUrl', this.getActiveTabUrlRequested())
     }
 
     closeAllTabs() {

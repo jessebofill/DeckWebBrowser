@@ -146,7 +146,7 @@ export class StructureController {
         let traversed = ['origin']
         for (let memberName of lineageArray) {
             if (!parent.hasOwnProperty(memberName)) {
-                throw new Error(`Cannot find member ${memberName} at location ${StructureController.lineageArrayToString(traversed, '> ', true)}`)
+                throw new Error(`Cannot find member "${memberName}" at location "${StructureController.lineageArrayToString(traversed, '> ', true)}".`)
             }
             parent = parent[memberName]
             traversed.push(memberName)
@@ -164,6 +164,9 @@ export class StructureController {
         }
         const memberToDelete = lineageArray[lineageArray.length - 1]
         const parent = StructureController.traverseAndGetMemberParent(dataStructure, lineageArray)
+        if (!parent.hasOwnProperty(memberToDelete)){
+            throw new Error(`Member at "${StructureController.lineageArrayToString(['origin', ...lineageArray], '> ', true)}" does not contain child member "${memberToDelete}" to delete.`)
+        }
         delete parent[memberToDelete]
     }
 
@@ -199,6 +202,7 @@ export class StructureController {
             if (!parent.hasOwnProperty(memberName)) {
                 return false
             }
+            parent = parent[memberName]
         }
         return true
     }

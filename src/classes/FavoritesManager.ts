@@ -27,24 +27,33 @@ class FavoritesManager extends StructureController {
         return StructureController.lineageArrayToString(pathArray, separator, removeTrailingSeparator)
     }
 
-    doesExist(name: string, pathArray: string[], isFolder: boolean) {
-        if (!isFolder) name += '_P'
-        const path = pathArray.slice(1)
-        path.push(name)
+    doesExist(pathArray: string[], isFolder: boolean) {
+        const lastIndex = pathArray.length - 1
+        const name = pathArray[lastIndex]
+        const path = pathArray.slice(1, -1)
+        path.push(isFolder ? name : name + '_P')
+        log('fm path', path)
         return this.doesLineageExist(path)
     }
 
-    getFavorite(name: string, pathArray: string[]) {
-        return this.traverseAndGetMember(pathArray.slice(1))[name + '_P']
+    getFavorite(pathArray: string[]) {
+        const path = pathArray.slice(1)
+        path[path.length - 1] = pathArray[pathArray.length - 1] + '_P'
+        return this.traverseAndGetMember(path) as string
     }
 
-    addFolder(folderName: string, pathArray: string[]) {
-        this.addComplexChildMember(folderName, pathArray.slice(1))
+    addFolder(folderName: string, parentPathArray: string[]) {
+        this.addComplexChildMember(folderName, parentPathArray.slice(1))
         this.save()
     }
 
-    addFavorite(favoriteName: string, url: string, pathArray: string[]) {
-        this.addPrimitiveChildMember(favoriteName + '_P', url, pathArray.slice(1))
+    addFavorite(favoriteName: string, url: string, parentPathArray: string[]) {
+        this.addPrimitiveChildMember(favoriteName + '_P', url, parentPathArray.slice(1))
+        this.save()
+    }
+
+    delete(pathArray: string[]) {
+        this.removeMember(pathArray.slice(1))
         this.save()
     }
 

@@ -1,5 +1,6 @@
 import { ConfirmModal, Marquee } from "decky-frontend-lib";
 import { VFC } from "react";
+import { favoritesManager } from "../classes/FavoritesManager";
 
 interface ConfirmFavoriteOverwriteModalProps {
     name: string
@@ -43,41 +44,38 @@ export const ConfirmFavoriteOverwriteModal: VFC<ConfirmFavoriteOverwriteModalPro
 }
 
 interface ConfirmFavoriteItemDeleteProps {
-    name: string
-    pathStr: string
+    path: string[]
     url?: string
     isFolder?: boolean
-    onConfirm: () => void
     closeModal: () => void
 }
 
-export const ConfirmFavoriteDeleteModal: VFC<ConfirmFavoriteItemDeleteProps> = ({ name, pathStr, url, isFolder, onConfirm, closeModal }) => {
+export const ConfirmFavoriteDeleteModal: VFC<ConfirmFavoriteItemDeleteProps> = ({ path, url, isFolder, closeModal }) => {
+    const name = path[path.length - 1]
+    const pathStr = favoritesManager.pathToString(path, '> ', true)
     const body: any[] = []
     if (isFolder) {
         body[0] = pathStr
-
-
     } else {
         body[0] = pathStr.slice(0, -2)
-        body[1] = <Marquee
+        body[1] = (<Marquee
             style={{ position: 'relative', top: '-120px' }}
             play={true}
             center={true}
         >
             {url}
-        </Marquee>
+        </Marquee>)
     }
 
     return (
         <ConfirmModal
             className={'destructiveModal'}
             strTitle={'Are you sure you want to delete ' + (isFolder ? 'folder ' + name : name.slice(0, -2))}
-            // bDestructiveWarning={true}
             strOKButtonText='Delete'
             strCancelButtonText='Cancel'
             onOK={() => {
+                favoritesManager.delete(path)
                 closeModal()
-                onConfirm()
             }}
             onCancel={closeModal}
         >

@@ -7,19 +7,19 @@ import { ConfirmFavoriteOverwriteModal } from "./ConfrimationModals";
 
 interface NewFavoriteModalProps {
     tabManager: TabManager
-    path: string[]
+    parentPath: string[]
     closeModal: any
 }
 
-export const NewFavoriteModal: VFC<NewFavoriteModalProps> = ({ tabManager, path, closeModal }) => {
+export const NewFavoriteModal: VFC<NewFavoriteModalProps> = ({ tabManager, parentPath, closeModal }) => {
     const [editedUrl, setEditedUrl] = useState(tabManager.getActiveTabUrlRequested())
     const [favoriteName, setFavoriteName] = useState(tabManager.getActiveTabHandler().title)
-    const [alreadyExists, setAlreadyExists] = useState(favoritesManager.doesExist(favoriteName, path, false))
+    const [alreadyExists, setAlreadyExists] = useState(favoritesManager.doesExist([...parentPath, favoriteName], false))
     const updateFavoriteName = (newName: string) => {
         setFavoriteName(newName)
-        setAlreadyExists(favoritesManager.doesExist(newName, path, false))
+        setAlreadyExists(favoritesManager.doesExist([...parentPath, newName], false))
     }
-    const dir = favoritesManager.pathToString(path, '> ')
+    const dir = favoritesManager.pathToString(parentPath, '> ')
 
     // hacky way to select second text box on mount, focusOnMount doesnt work
     useEffect(() => {
@@ -32,7 +32,7 @@ export const NewFavoriteModal: VFC<NewFavoriteModalProps> = ({ tabManager, path,
         })()
     }, [])
 
-
+    //STOP HERE
     return (
         <ConfirmModal
             className={alreadyExists ? 'destructiveModal' : ''}
@@ -44,14 +44,14 @@ export const NewFavoriteModal: VFC<NewFavoriteModalProps> = ({ tabManager, path,
                 const confirm = () => {
                     closeModal()
                     // toast showing new favorite created
-                    favoritesManager.addFavorite(favoriteName, editedUrl, path)
+                    favoritesManager.addFavorite(favoriteName, editedUrl, parentPath)
                 }
-                if (favoritesManager.doesExist(favoriteName, path, false)) {
+                if (favoritesManager.doesExist([...parentPath, favoriteName], false)) {
                     log('favorite exists')
                     showModal(
                         <ConfirmFavoriteOverwriteModal
                             name={favoriteName}
-                            oldUrl={favoritesManager.getFavorite(favoriteName, path)}
+                            oldUrl={favoritesManager.getFavorite([...parentPath, favoriteName])}
                             newUrl={editedUrl}
                             onConfirm={confirm}
                             closeModal={() => { }}

@@ -9,19 +9,21 @@ import { NewFavoriteModal } from "./NewFavoriteModal"
 
 interface NewFavoriteFolderModalProps {
     tabManager: TabManager
-    path: string[]
+    parentPath: string[]
     closeModal: any
 }
 
-export const NewFavoriteFolderModal: VFC<NewFavoriteFolderModalProps> = ({ tabManager, path, closeModal }) => {
-    log('rendering new folder modal')
+export const NewFavoriteFolderModal: VFC<NewFavoriteFolderModalProps> = ({ tabManager, parentPath, closeModal }) => {
+    // log('rendering new folder modal')
+    log('parant path', parentPath)
     const [folderName, setFolderName] = useState('')
     const [alreadyExists, setAlreadyExists] = useState(false)
     const updateFolderName = (newName: string) => {
         setFolderName(newName)
-        setAlreadyExists(favoritesManager.doesExist(newName, path, true))
+        log('does exist', favoritesManager.doesExist([...parentPath, newName], true))
+        setAlreadyExists(favoritesManager.doesExist([...parentPath, newName], true))
     }
-    const dir = favoritesManager.pathToString(path, '> ')
+    const dir = favoritesManager.pathToString(parentPath, '> ')
 
     return (
         <ConfirmModal
@@ -31,10 +33,10 @@ export const NewFavoriteFolderModal: VFC<NewFavoriteFolderModalProps> = ({ tabMa
             onOK={() => {
                 closeModal()
                 // toast showing new folder created
-                if (!favoritesManager.doesExist(folderName, path, true)) {
-                    favoritesManager.addFolder(folderName, path)
+                if (!favoritesManager.doesExist([...parentPath, folderName], true)) {
+                    favoritesManager.addFolder(folderName, parentPath)
                 }
-                showModal(<NewFavoriteModal path={[...path, folderName]} tabManager={tabManager} closeModal={() => { }} />)
+                showModal(<NewFavoriteModal parentPath={[...parentPath, folderName]} tabManager={tabManager} closeModal={() => { }} />)
             }}
             onCancel={closeModal}
             bOKDisabled={!folderName}
@@ -62,10 +64,10 @@ export const NewFavoriteFolderModal: VFC<NewFavoriteFolderModalProps> = ({ tabMa
                         onClick={() => {
                             closeModal()
                             // toast showing new folder created
-                            if (!favoritesManager.doesExist(folderName, path, true)) {
-                                favoritesManager.addFolder(folderName, path)
+                            if (!favoritesManager.doesExist([...parentPath, folderName], true)) {
+                                favoritesManager.addFolder(folderName, parentPath)
                             }
-                            showModal(<NewFavoriteFolderModal path={[...path, folderName]} tabManager={tabManager} closeModal={() => { }} />)
+                            showModal(<NewFavoriteFolderModal parentPath={[...parentPath, folderName]} tabManager={tabManager} closeModal={() => { }} />)
                         }}
                     >
                         {'Make folder within'}

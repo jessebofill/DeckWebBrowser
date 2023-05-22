@@ -27,7 +27,6 @@ export default definePlugin((serverApi: ServerAPI) => {
     serverApi.routerHook.addRoute(routePath, () => {
         return <TabbedBrowser tabManager={tabManager} />
     })
-    warnN('Settings Manager', 'Failed to load settings')
     const unpatchMenu = patchMenu()
 
     // const steamInputModule = findModuleChild((mod) => {

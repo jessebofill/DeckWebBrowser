@@ -1,4 +1,4 @@
-import { log } from "../log";
+import { log, warnN } from "../log";
 import { Marquee, Menu, MenuGroup, MenuItem, showModal, GamepadButton, GamepadEvent, ModalRoot, Focusable, MenuGroupProps, ConfirmModal, MenuItemProps } from "decky-frontend-lib";
 import { VFC } from "react";
 import { NewFavoriteFolderModal } from "./NewFavoriteFolderModal";
@@ -7,12 +7,26 @@ import { favoritesManager } from "../classes/FavoritesManager";
 import { TabManager } from "../classes/TabManager";
 import { structureMappingFn } from "../classes/StructureController";
 import { ConfirmFavoriteDeleteModal } from "./ConfrimationModals";
+import { settingsManager } from "../classes/SettingsManager";
 
 type SubemenuProps = MenuItemProps & MenuGroupProps
 
 const formatFavoriteListMenu: structureMappingFn = (children, value, path, tabManager, menu: { instance: any }) => {
     path[0] = 'Favorites'
     const label = path[path.length - 1]
+
+    const showDeleteItemModal = () => {
+        menu.instance.Hide()
+        const closeModal = () => { log('consirem')}
+        showModal(
+            <ConfirmFavoriteDeleteModal
+                path={path}
+                isFolder={!!children}
+                url={value}
+                closeModal={closeModal}
+            />
+        )
+    }
 
     if (children) {
         if (children.length === 0) children[0] = <MenuItem onMenuButton={() => { menu.instance.Hide() }}>Empty</MenuItem>
@@ -21,19 +35,7 @@ const formatFavoriteListMenu: structureMappingFn = (children, value, path, tabMa
         groupProps.onMenuButton = () => {
             menu.instance.Hide()
         }
-        groupProps.onSecondaryButton = () => {
-            menu.instance.Hide()
-            const closeModal = () => { }
-            showModal(
-                <ConfirmFavoriteDeleteModal
-                    name={label}
-                    pathStr={favoritesManager.pathToString(path, '> ', true)}
-                    isFolder={true}
-                    onConfirm={() => { closeModal() }}
-                    closeModal={closeModal}
-                />
-            )
-        }
+        groupProps.onSecondaryButton = () => { showDeleteItemModal() }
         return (
             <MenuGroup {...groupProps} >
                 {...children}
@@ -48,19 +50,7 @@ const formatFavoriteListMenu: structureMappingFn = (children, value, path, tabMa
             onOKActionDescription='Open Here'
             onClick={() => { tabManager.activeTabLoad(value) }}
             //X button
-            onSecondaryButton={() => {
-                menu.instance.Hide()
-                const closeModal = () => { }
-                showModal(
-                    <ConfirmFavoriteDeleteModal
-                        name={label}
-                        url={value}
-                        pathStr={favoritesManager.pathToString(path, '> ', true)}
-                        onConfirm={() => { }}
-                        closeModal={closeModal}
-                    />
-                )
-            }}
+            onSecondaryButton={() => { showDeleteItemModal() }}
             //Y button
             onOptionsButton={() => {
                 menu.instance.Hide()
@@ -70,12 +60,11 @@ const formatFavoriteListMenu: structureMappingFn = (children, value, path, tabMa
             onMenuButton={() => { menu.instance.Hide() }}
 
             onButtonDown={(evt: GamepadEvent) => {
-                const modal: { instance: any } = { instance: null }
                 switch (evt.detail.button) {
                     case GamepadButton.SELECT:
-                        const closeModal = () => { }
+                        const modal: { instance: any } = { instance: null }
                         modal.instance = showModal(
-                            <ModalRoot closeModal={closeModal}>
+                            <ModalRoot>
                                 <Focusable
                                     onOKActionDescription='Open'
                                     onOptionsActionDescription='Open in New Tab'
@@ -116,7 +105,7 @@ const formatAddToFavoritesMenu: structureMappingFn = (children, value, path, tab
                 //@ts-ignore
                 className="gamepadcontextmenu_Positive_2gJWj"
                 onClick={() => {
-                    showModal(<NewFavoriteModal path={path} tabManager={tabManager} closeModal={() => { }} />)
+                    showModal(<NewFavoriteModal parentPath={path} tabManager={tabManager} closeModal={() => { }} />)
                 }}
                 onMenuButton={() => { menu.instance.Hide() }}
             >
@@ -126,7 +115,7 @@ const formatAddToFavoritesMenu: structureMappingFn = (children, value, path, tab
                 //@ts-ignore
                 className="gamepadcontextmenu_Emphasis_1viOG"
                 onClick={() => {
-                    showModal(<NewFavoriteFolderModal path={path} tabManager={tabManager} closeModal={() => { }} />)
+                    showModal(<NewFavoriteFolderModal parentPath={path} tabManager={tabManager} closeModal={() => { }} />)
                 }}
                 onMenuButton={() => { menu.instance.Hide() }}
             >
@@ -147,6 +136,18 @@ interface BrowserContextMenuProps {
 
 export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabManager }) => {
     log('rendering BrowserContext Menu')
+    if (!favoritesManager.loaded) {
+        warnN('Context Menu', 'Favorites have not loaded')
+    }
+    if (!settingsManager.settingsLoaded) {
+        warnN('Context Menu', 'Settings have not loaded')
+    }
+    const addToFavoritesMenuItem = favoritesManager.loaded ?
+        favoritesManager.map(formatAddToFavoritesMenu, [tabManager, menu]) :
+        <MenuGroup label='Add to Favorites' disabled={true} />
+    const favoritesMenuItem = favoritesManager.loaded ?
+        favoritesManager.map(formatFavoriteListMenu, [tabManager, menu]) :
+        <MenuGroup label='Favorites' disabled={true} />
 
     return (
         //@ts-ignore
@@ -154,7 +155,23 @@ export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabMana
             <MenuItem
                 //@ts-ignore
                 className="gamepadcontextmenu_Emphasis_1viOG"
+                actionDescriptionMap={{ [GamepadButton.SELECT]: 'View Home Page Url' }}
                 onClick={() => { tabManager.activeTabLoadHome() }}
+                disabled={!settingsManager.settingsLoaded}
+                onButtonDown={(evt: GamepadEvent) => {
+                    switch (evt.detail.button) {
+                        case GamepadButton.SELECT:
+                            const modal: { instance: any } = { instance: null }
+                            modal.instance = showModal(
+                                <ModalRoot >
+                                    <Focusable noFocusRing={true} onActivate={() => { modal.instance.Close() }}>
+                                        <Marquee play={true} center={true}>
+                                            {settingsManager.settings.homeUrl}
+                                        </Marquee>
+                                    </Focusable>
+                                </ModalRoot>)
+                    }
+                }}
             >
                 Home
             </MenuItem>
@@ -162,8 +179,8 @@ export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabMana
                 Refresh Page
             </MenuItem>
             <div className="gamepadcontextmenu_ContextMenuSeparator_1KL6n" />
-            {favoritesManager.map(formatAddToFavoritesMenu, [tabManager, menu])}
-            {favoritesManager.map(formatFavoriteListMenu, [tabManager, menu])}
+            {addToFavoritesMenuItem}
+            {favoritesMenuItem}
             <MenuItem
                 onClick={() => {
                     const closeModal = () => { }
@@ -182,7 +199,7 @@ export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabMana
                             <div style={{ height: 15 }}>
                                 <Marquee play={true}>{tabManager.getActiveTabUrlRequested()}</Marquee>
                             </div>
-                        </ConfirmModal>,
+                        </ConfirmModal>
                     )
                 }}
             >
