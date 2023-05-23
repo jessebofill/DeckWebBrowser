@@ -1,7 +1,6 @@
 import { definePlugin, Router, ServerAPI, staticClasses, getGamepadNavigationTrees, getFocusNavController, } from "decky-frontend-lib";
-import { warn, error, log, logN, warnN, errorN } from "./log";
 import { routePath, SP_Window } from "./init";
-import { Content } from "./components/QAMContent";
+import { QAMContent } from "./components/QAMContent";
 // import { IoMdPlanet } from "react-icons/io";
 // import { BsGlobeAmericas } from "react-icons/bs";
 import { PluginIcon } from "./native-components/PluginIcon";
@@ -64,7 +63,7 @@ export default definePlugin((serverApi: ServerAPI) => {
 
     return {
         title: <div className={staticClasses.Title}>Web Browser</div>,
-        content: <Content />,
+        content: <QAMContent />,
         icon: <PluginIcon />,
         onDismount() {
             serverApi.routerHook.removeRoute(routePath);

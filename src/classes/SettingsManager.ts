@@ -1,11 +1,11 @@
-import { errorN, log} from "../log";
+import { errorN, log } from "../log";
 import { ServerAPI, ServerResponse } from "decky-frontend-lib";
 import { Favorites } from "./FavoritesManager";
 
 
 interface Settings {
     homeUrl?: string
-    defaultTabs?: string[]
+    defaultTabs: string[]
 }
 
 interface History {
@@ -13,7 +13,7 @@ interface History {
 }
 
 interface BackendLoadArgs {
-    manager: 'settings' | SaveDataSetType
+    manager: SaveDataSetType
 }
 
 interface BackendSaveSettingArgs {
@@ -21,11 +21,11 @@ interface BackendSaveSettingArgs {
     value: Settings[BackendSaveSettingArgs['key']]
 }
 
-type SaveDataSetType = 'favorites' | 'history'
+type SaveDataSetType = 'settings' | 'favorites' | 'history'
 
 interface BackendSaveDataArgs {
     manager: SaveDataSetType
-    data: Favorites | History
+    data: Settings | Favorites | History
 }
 
 export class SettingsManager {
@@ -45,7 +45,7 @@ export class SettingsManager {
         this.settingsLoaded = false
         this.favoritesLoaded = false
         this.historyLoaded = false
-        this.settings = {}
+        this.settings = { defaultTabs: ['home'] }
         this.favorites = {}
         this.history = {}
     }
@@ -62,7 +62,8 @@ export class SettingsManager {
         this.historyLoad = this.serverApi.callPluginMethod<BackendLoadArgs, History>('load', { manager: 'history' })
         this.settingsLoad.then(({ success, result }) => {
             if (success) {
-                this.settings = result
+                if (Object.keys(result).length === 0) this.saveDataSet('settings')
+                else this.settings = result
                 this.settingsLoaded = true
             }
             else errorN('Settings Manager', 'Failed to load settings')
@@ -80,12 +81,16 @@ export class SettingsManager {
                 this.historyLoaded = true
             }
             else errorN('Settings Manager', 'Failed to load history')
-        })   
+        })
+    }
+    
+    saveSetting(settingName: keyof Settings){
+        this.serverApi?.callPluginMethod<BackendSaveSettingArgs>('save_setting', { key: settingName, value: this.settings[settingName] })
     }
 
-    saveSetting<Setting extends keyof Settings>(settingName: Setting, value: Settings[Setting]) {
+    setSetting<Setting extends keyof Settings>(settingName: Setting, value: Settings[Setting]) {
         this.settings[settingName] = value
-        this.serverApi?.callPluginMethod<BackendSaveSettingArgs>('save_setting', { key: settingName, value: value })
+        this.saveSetting(settingName)
     }
 
     saveDataSet(dataSet: SaveDataSetType) {

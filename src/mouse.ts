@@ -1,3 +1,6 @@
+import { SP_Window } from "./init"
+import { log } from "./log"
+
 const mouseCoords = [640, 400]
 const offsets = [0, 0]
 
@@ -27,6 +30,7 @@ const event = new MouseEvent('click', {
 
 // Dispatch the event on the button element
 export function dispatchClick() {
-
-    // document.elementFromPoint(...mouseCoords).dispatchEvent(event)
+    //global coords need to be translated to target window
+    SP_Window?.document.elementFromPoint(mouseCoords[0], mouseCoords[1])?.dispatchEvent(event)
+    log('element', SP_Window?.document.elementFromPoint(mouseCoords[0], mouseCoords[1]))
 }

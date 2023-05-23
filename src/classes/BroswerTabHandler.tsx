@@ -4,6 +4,7 @@ import { BrowserTab } from "../components/BrowserTab"
 import { BrowserTabCloser } from "../components/BrowserTabCloser"
 import { TabManager } from "./TabManager"
 import { BrowserContextMenu } from "../components/BrowserContextMenu"
+import { dispatchClick } from "../mouse"
 
 export default class BrowserTabHandler {
     title: string
@@ -38,7 +39,7 @@ export default class BrowserTabHandler {
             //start button
             onMenuButton: (evt: GamepadEvent) => {
                 const shownContextMenu: { instance: any } = { instance: null }
-                shownContextMenu.instance = showContextMenu(<BrowserContextMenu menu={shownContextMenu} tabManager={tabManager}/>)
+                shownContextMenu.instance = showContextMenu(<BrowserContextMenu menu={shownContextMenu} tabManager={tabManager} />)
             },
 
             onButtonDown: (evt: GamepadEvent) => {
@@ -69,6 +70,9 @@ export default class BrowserTabHandler {
                         //page forward
                         browser.m_browserView.GoForward()
                         break
+                    // case GamepadButton.TRIGGER_RIGHT:
+                    //     dispatchClick()
+                    //     break
                 }
             },
             // onOKActionDescription='Enter'
@@ -125,9 +129,9 @@ export default class BrowserTabHandler {
 
     getNavNode = (browserTabElement: any) => {
         if (!this.navNode) {
-            log('trying tp get navref ', browserTabElement)
+            // log('trying tp get navref ', browserTabElement)
             afterPatch(browserTabElement.type, 'render', (_: any, ret: any) => {
-                log('my focusbale ', ret)
+                // log('my focusbale ', ret)
                 this.navNode = ret.props.value
                 return ret
             }, { singleShot: true })
@@ -135,12 +139,12 @@ export default class BrowserTabHandler {
     }
 
     clearNavNode = () => {
-        log('clearing nav node ', this.id)
+        // log('clearing nav node ', this.id)
         this.navNode = null
     }
 
     takeFocus() {
-        log('trying to focus: ', this.id, ' with nav handle ', this.navNode)
+        // log('trying to focus: ', this.id, ' with nav handle ', this.navNode)
         setTimeout(() => this.navNode.m_rgChildren[0].BTakeFocus(3), 500)
         // this.navNode.Tree.DeferredFocus.RequestFocus(this.navNode, { bFocusDescendant: true })
         // this.navNode.Tree.DeferredFocus.RequestFocus(this.navNode.m_rgChildren[0].m_rgChildren[0])

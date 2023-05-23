@@ -1,4 +1,4 @@
-import { log } from "../log"
+import { log, warnN } from "../log"
 import { defaultUrl, windowRouter } from "../init"
 import BrowserTabHandler from "./BroswerTabHandler"
 import isURL from "validator/lib/isURL"
@@ -35,7 +35,7 @@ export class TabManager {
     }
     createTab = (Url?: string) => {
         const id = uuidv4()
-        const url = Url || settingsManager.settings.homeUrl || this.fallbackUrl
+        const url = (Url && Url !== 'home') ? Url : (settingsManager.settings.homeUrl || this.fallbackUrl)
         const browser = this.windowRouter.CreateBrowserView('ExternalWeb')
         this.tabHandlers.push(new BrowserTabHandler(id, browser, this))
         browser.LoadURL(url)
@@ -55,8 +55,18 @@ export class TabManager {
         if (this.onTabClose) this.onTabClose()
     }
 
+    createDefaultTabs() {
+        if (!settingsManager.settingsLoaded) {
+            warnN('Tab Manager', 'Settings have not loaded when trying to create default tabs. Using fallback url to create tab instead.')
+            this.createTab()
+        } else {
+            for (let tab of settingsManager.settings.defaultTabs){
+                this.createTab(tab)
+            }
+        }
+    }
+
     setActiveBrowserHeaderByIndex(index: number) {
-        // llog('setting backstack: ', this.tabHandlers[index].id, ' activetab: ', this.activeTab)
         this.headerStore.SetCurrentBrowserAndBackstack(this.tabHandlers[index].browser, true)
     }
 
@@ -92,7 +102,7 @@ export class TabManager {
         return this.getActiveTabHandler().browser.m_browserView
     }
 
-    getActiveTabUrlRequested(){
+    getActiveTabUrlRequested() {
         return this.getActiveTabHandler().browser.m_URLRequested
     }
 
@@ -120,7 +130,8 @@ export class TabManager {
         this.getActiveTabHandler().takeFocus()
     }
 
-    activeTabLoad(url: string) {
+    activeTabLoad(Url?: string) {
+        const url = (Url && Url !== 'home') ? Url : (settingsManager.settings.homeUrl || this.fallbackUrl)
         this.getActiveTabHandler().loadUrl(url)
     }
     activeTabLoadHome() {
@@ -128,7 +139,7 @@ export class TabManager {
     }
 
     saveActiveTabAsHomePage() {
-        settingsManager.saveSetting('homeUrl', this.getActiveTabUrlRequested())
+        settingsManager.setSetting('homeUrl', this.getActiveTabUrlRequested())
     }
 
     closeAllTabs() {

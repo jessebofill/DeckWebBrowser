@@ -1,6 +1,7 @@
 import { ConfirmModal, Marquee } from "decky-frontend-lib";
 import { VFC } from "react";
 import { favoritesManager } from "../classes/FavoritesManager";
+import { settingsManager } from "../classes/SettingsManager";
 
 interface ConfirmFavoriteOverwriteModalProps {
     name: string
@@ -81,6 +82,37 @@ export const ConfirmFavoriteDeleteModal: VFC<ConfirmFavoriteItemDeleteProps> = (
         >
             <div style={{ height: 15 }}>
                 {...body}
+            </div>
+
+        </ConfirmModal>
+    )
+}
+
+interface ConfirmDeleteDefaultTabModalProps {
+    index: number
+    closeModal: () => void
+}
+
+export const ConfirmDeleteDefaultTabModal: VFC<ConfirmDeleteDefaultTabModalProps> = ({ index, closeModal }) => {
+    return (
+        <ConfirmModal
+            className={'destructiveModal'}
+            strTitle={'Are you sure you want to delete this default tabs'}
+            strOKButtonText='Delete'
+            strCancelButtonText='Cancel'
+            onOK={() => {
+                settingsManager.settings.defaultTabs.splice(index, 1)
+                settingsManager.saveSetting('defaultTabs')
+                closeModal()
+            }}
+            onCancel={closeModal}
+        >
+            <div style={{ height: 15 }}>
+                <Marquee
+                    play={true}
+                >
+                    {settingsManager.settings.defaultTabs[index]}
+                </Marquee>
             </div>
 
         </ConfirmModal>

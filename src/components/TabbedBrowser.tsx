@@ -4,6 +4,7 @@ import { Tabs } from "../native-components/Tabs"
 import { patchSearchRootMemo } from "./SearchBarInput"
 import { TabManager } from "../classes/TabManager"
 import { tabContainerHeight } from "../styling"
+import { status } from "../init"
 
 const contentY = Math.round((tabContainerHeight + 40) * 1.5)
 const contentHeight = 800 - Math.round((80 + tabContainerHeight) * 1.5)
@@ -34,10 +35,10 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
         setActiveTab(tabManager.activeTab)
     }
 
-    if (tabManager.tabHandlers.length === 0) {
-        tabManager.createTab()
-        tabManager.createTab('https://bing.com')
-        tabManager.createTab('https://store.steampowered.com')
+    if (!status.running) {
+        log('first run')
+        status.running = true
+        tabManager.createDefaultTabs()
     }
 
     useEffect(() => {
@@ -59,7 +60,7 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
     }, [])
 
     return (
-        <div style={{ marginTop: '40px', height: 'calc( 100% - 40px)', background: '#3D4450' }} className="tabbedBrowserContainer"        >
+        <div style={{ marginTop: '40px', height: 'calc( 100% - 40px)', background: '#3D4450' }} className="tabbedBrowserContainer">
             <Tabs
                 title="Web Browser"
                 activeTab={activeTab}

@@ -1,18 +1,21 @@
 import myFont from "../assets/FORCED_SQUARE.ttf"
 import { pluginName } from "./init";
-import { log } from "./log";
+import { log, warnN } from "./log";
 
 const tabPadding = 5
 const tabHeight = 34
 export const tabContainerHeight = tabPadding * 2 + tabHeight
-export function appendStyles(_window: any) {
-    let style = _window.document.createElement('style');
-    // const font_name = new FontFace('MyFont', `url(http://127.0.0.1:1337/plugins/${pluginName}/assets/FORCED_SQUARE.ttf)`);
-    // const font_name = new FontFace('MyFont', myFont);
-    // _window.document.fonts.add(font_name);
-    // font_name.load()
+export function appendStyles(_window?: Window) {
+    if (!_window) warnN('Styling', 'No SP Window')
+    else {
 
-    style.textContent = `
+        let style = _window.document.createElement('style');
+        // const font_name = new FontFace('MyFont', `url(http://127.0.0.1:1337/plugins/${pluginName}/assets/FORCED_SQUARE.ttf)`);
+        // const font_name = new FontFace('MyFont', myFont);
+        // _window.document.fonts.add(font_name);
+        // font_name.load()
+
+        style.textContent = `
     @font-face {
         font-family: MyFont;
         src: url('${myFont}') format('truetype');
@@ -76,29 +79,30 @@ export function appendStyles(_window: any) {
     }
 
     `
-    // .tabbedBrowserContainer .gamepadtabbedpage_TabContentsScroll_1X4dt {
-    //     position: absolute;
-    //     top: 0;
-    //     right: 0;
-    //     bottom: 0;
-    //     left: 0;
-    //     padding-top: 0px;
-    //     padding-left: 0vw;
-    //     padding-right: 0vw;
-    //     scroll-padding-top: 116px;
-    //     scroll-padding-bottom: 56px;
-    // }
-    // .tabbedBrowserContainer .mainbrowser_BrowserContainer_3-G5o {
-    //     position: absolute;
-    //     top: 0;
-    //     right: 0;
-    //     bottom: 0;
-    //     left: 0;
-    // }
-    // .tabbedBrowserContainer .mainbrowser_MainBrowser_12QSs {
+        // .tabbedBrowserContainer .gamepadtabbedpage_TabContentsScroll_1X4dt {
+        //     position: absolute;
+        //     top: 0;
+        //     right: 0;
+        //     bottom: 0;
+        //     left: 0;
+        //     padding-top: 0px;
+        //     padding-left: 0vw;
+        //     padding-right: 0vw;
+        //     scroll-padding-top: 116px;
+        //     scroll-padding-bottom: 56px;
+        // }
+        // .tabbedBrowserContainer .mainbrowser_BrowserContainer_3-G5o {
+        //     position: absolute;
+        //     top: 0;
+        //     right: 0;
+        //     bottom: 0;
+        //     left: 0;
+        // }
+        // .tabbedBrowserContainer .mainbrowser_MainBrowser_12QSs {
 
-    // }
-    // background: #3D4450;
+        // }
+        // background: #3D4450;
 
-    _window.document.head.appendChild(style);
+        _window.document.head.appendChild(style);
+    }
 }

@@ -17,7 +17,7 @@ const formatFavoriteListMenu: structureMappingFn = (children, value, path, tabMa
 
     const showDeleteItemModal = () => {
         menu.instance.Hide()
-        const closeModal = () => { log('consirem')}
+        const closeModal = () => { }
         showModal(
             <ConfirmFavoriteDeleteModal
                 path={path}
@@ -31,7 +31,7 @@ const formatFavoriteListMenu: structureMappingFn = (children, value, path, tabMa
     if (children) {
         if (children.length === 0) children[0] = <MenuItem onMenuButton={() => { menu.instance.Hide() }}>Empty</MenuItem>
         const groupProps: SubemenuProps = { label: label }
-        if (path.length !== 1) groupProps.onSecondaryActionDescription = 'Delete Folder'
+        if (path.length !== 1) groupProps.onSecondaryActionDescription = 'Delete'
         groupProps.onMenuButton = () => {
             menu.instance.Hide()
         }
@@ -45,9 +45,9 @@ const formatFavoriteListMenu: structureMappingFn = (children, value, path, tabMa
     return (
         <MenuItem
             actionDescriptionMap={{ [GamepadButton.SELECT]: 'View Url' }}
-            onSecondaryActionDescription='Delete Favorite'
+            onSecondaryActionDescription='Delete'
             onOptionsActionDescription='Open in New Tab'
-            onOKActionDescription='Open Here'
+            onOKActionDescription='Open in Current Tab'
             onClick={() => { tabManager.activeTabLoad(value) }}
             //X button
             onSecondaryButton={() => { showDeleteItemModal() }}
@@ -181,6 +181,7 @@ export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabMana
             <div className="gamepadcontextmenu_ContextMenuSeparator_1KL6n" />
             {addToFavoritesMenuItem}
             {favoritesMenuItem}
+            <div className="gamepadcontextmenu_ContextMenuSeparator_1KL6n" />
             <MenuItem
                 onClick={() => {
                     const closeModal = () => { }
@@ -205,16 +206,25 @@ export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabMana
             >
                 Set as Home Page
             </MenuItem >
+            <MenuItem
+                disabled={!settingsManager.settingsLoaded}
+                onClick={() => {
+                    settingsManager.settings.defaultTabs.push(tabManager.getActiveTabUrlRequested())
+                    settingsManager.saveSetting('defaultTabs')
+                }}
+            >
+                Add to Default Tabs
+            </MenuItem>
             <div className="gamepadcontextmenu_ContextMenuSeparator_1KL6n" />
             <MenuItem >History</MenuItem>
             <div className="gamepadcontextmenu_ContextMenuSeparator_1KL6n" />
-            <MenuItem
+            {/* <MenuItem
                 onClick={() => {
 
                 }}
             >
                 Settings
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem
                 onClick={() => {
 
