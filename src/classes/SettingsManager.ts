@@ -1,6 +1,7 @@
 import { errorN, log } from "../log";
 import { ServerAPI, ServerResponse } from "decky-frontend-lib";
 import { Favorites } from "./FavoritesManager";
+import { backendService } from "./BackendService";
 
 
 interface Settings {
@@ -29,7 +30,6 @@ interface BackendSaveDataArgs {
 }
 
 export class SettingsManager {
-    serverApi: ServerAPI | null
     settings: Settings
     favorites: Favorites
     history: History
@@ -41,7 +41,6 @@ export class SettingsManager {
     favoritesLoad: Promise<ServerResponse<Favorites>> | undefined
 
     constructor() {
-        this.serverApi = null
         this.settingsLoaded = false
         this.favoritesLoaded = false
         this.historyLoaded = false
@@ -50,16 +49,15 @@ export class SettingsManager {
         this.history = {}
     }
 
-    init(serverApi: ServerAPI) {
-        this.serverApi = serverApi
+    init() {
         this.load()
     }
 
     load() {
-        if (!this.serverApi) throw new Error('The Server API has not been initialized')
-        this.settingsLoad = this.serverApi.callPluginMethod<BackendLoadArgs, Settings>('load', { manager: 'settings' })
-        this.favoritesLoad = this.serverApi.callPluginMethod<BackendLoadArgs, Favorites>('load', { manager: 'favorites' })
-        this.historyLoad = this.serverApi.callPluginMethod<BackendLoadArgs, History>('load', { manager: 'history' })
+        if (!backendService.serverApi) throw new Error('The Server API has not been initialized')
+        this.settingsLoad = backendService.serverApi.callPluginMethod<BackendLoadArgs, Settings>('load', { manager: 'settings' })
+        this.favoritesLoad = backendService.serverApi.callPluginMethod<BackendLoadArgs, Favorites>('load', { manager: 'favorites' })
+        this.historyLoad = backendService.serverApi.callPluginMethod<BackendLoadArgs, History>('load', { manager: 'history' })
         this.settingsLoad.then(({ success, result }) => {
             if (success) {
                 if (Object.keys(result).length === 0) this.saveDataSet('settings')
@@ -85,7 +83,7 @@ export class SettingsManager {
     }
     
     saveSetting(settingName: keyof Settings){
-        this.serverApi?.callPluginMethod<BackendSaveSettingArgs>('save_setting', { key: settingName, value: this.settings[settingName] })
+        backendService.serverApi!.callPluginMethod<BackendSaveSettingArgs>('save_setting', { key: settingName, value: this.settings[settingName] })
     }
 
     setSetting<Setting extends keyof Settings>(settingName: Setting, value: Settings[Setting]) {
@@ -94,7 +92,7 @@ export class SettingsManager {
     }
 
     saveDataSet(dataSet: SaveDataSetType) {
-        this.serverApi?.callPluginMethod<BackendSaveDataArgs>('save_data', { manager: dataSet, data: this[dataSet] })
+        backendService.serverApi!.callPluginMethod<BackendSaveDataArgs>('save_data', { manager: dataSet, data: this[dataSet] })
     }
 }
 

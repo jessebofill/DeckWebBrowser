@@ -4,8 +4,10 @@
 # or add the `decky-loader/plugin` path to `python.analysis.extraPaths` in `.vscode/settings.json`
 import os
 import decky_plugin
-from injector import get_tab_lambda, Tab, get_tabs, close_old_tabs
+from injector import get_tab, Tab
 from settings import SettingsManager
+from typing import Dict
+
 
 settingsDir = os.environ["DECKY_PLUGIN_SETTINGS_DIR"]
 
@@ -14,6 +16,8 @@ settingManagers = {
     'favorites': SettingsManager(name="favorites", settings_directory=settingsDir),
     'history': SettingsManager(name="history", settings_directory=settingsDir)
 }
+
+tabs: Dict[str, Tab] = {}
 
 # settings.read()
 class Plugin:
@@ -32,6 +36,15 @@ class Plugin:
         # res = await browser_tab.evaluate_js("console.log('lets see if this worked!!!')")
         # decky_plugin.logger.info("res %s" %res)
 
+    async def assign_target(self, frontendId):
+        tab = await get_tab(f'data:text/plain,{frontendId}')
+        if(tab != None):
+            tabs[frontendId] = tab
+            decky_plugin.logger.info(tabs)
+        return str(tab.id)
+        
+    async def execute_in_target(self, frontendId, code, run_async=False):
+        await tabs[frontendId].evaluate_js(code, run_async)
 
     # Function called first during the unload process, utilize this to handle your plugin being removed
     async def _unload(self):

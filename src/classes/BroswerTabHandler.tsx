@@ -14,30 +14,32 @@ export default class BrowserTabHandler {
     closeTab: any
     onTitleChange: any
     navNode: any
-    constructor(id: string, browser: any, tabManager: TabManager) {
+    targetId: string | undefined
+    hasTarget: boolean
+    constructor(id: string, browser: any, tabManager: TabManager, targetId?: string) {
         browser.m_browserView.on('set-title', this.onSetTitle)
 
         this.title = 'data:text/html,<body><%2Fbody>'
         this.id = id
         this.browser = browser
         this.navNode = null
+        this.targetId = targetId
+        this.hasTarget = !!targetId
 
         const outerTabActionProps = {
             //X button
-            onSecondaryButton: (evt: GamepadEvent) => {
+            onSecondaryButton: () => {
                 browser.m_browserView.SetFocus(false)
                 tabManager.closeTab(id)
-                // llog('button secondary: ', evt)
             },
 
             //Y button
-            onOptionsButton: (evt: GamepadEvent) => {
+            onOptionsButton: () => {
                 tabManager.createTab()
-                // llog('button options: ', evt)
             },
 
             //start button
-            onMenuButton: (evt: GamepadEvent) => {
+            onMenuButton: () => {
                 const shownContextMenu: { instance: any } = { instance: null }
                 shownContextMenu.instance = showContextMenu(<BrowserContextMenu menu={shownContextMenu} tabManager={tabManager} />)
             },
@@ -119,7 +121,7 @@ export default class BrowserTabHandler {
             if (this.onTitleChange) this.onTitleChange()
         }
     }
-    registerTitleChangeListener(handler: () => void) {
+    registerOnTitleChange(handler: () => void) {
         this.onTitleChange = handler
     }
 
@@ -129,9 +131,7 @@ export default class BrowserTabHandler {
 
     getNavNode = (browserTabElement: any) => {
         if (!this.navNode) {
-            // log('trying tp get navref ', browserTabElement)
             afterPatch(browserTabElement.type, 'render', (_: any, ret: any) => {
-                // log('my focusbale ', ret)
                 this.navNode = ret.props.value
                 return ret
             }, { singleShot: true })
@@ -139,7 +139,6 @@ export default class BrowserTabHandler {
     }
 
     clearNavNode = () => {
-        // log('clearing nav node ', this.id)
         this.navNode = null
     }
 

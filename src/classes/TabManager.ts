@@ -4,6 +4,7 @@ import BrowserTabHandler from "./BroswerTabHandler"
 import isURL from "validator/lib/isURL"
 import { v4 as uuidv4 } from "uuid"
 import { settingsManager } from "./SettingsManager"
+import { backendService } from "./BackendService"
 
 export enum SearchEngine {
     GOOGLE,
@@ -18,29 +19,51 @@ export class TabManager {
     headerStore: any
     activeTab: string
     onNewTab?: () => void
-    onTabClose?: () => void
+    onCloseTab?: () => void
     defaultSearchEngine: SearchEngine
-    static instance: TabManager
+    loadTabPromise: Promise<void> | undefined
     constructor(defaultUrl: string, windowRouter: any) {
-        if (!TabManager.instance) {
-            TabManager.instance = this
-        }
         this.fallbackUrl = defaultUrl
         this.tabHandlers = []
         this.windowRouter = windowRouter
         this.headerStore = windowRouter.HeaderStore
         this.activeTab = ""
         this.defaultSearchEngine = SearchEngine.GOOGLE
-        return TabManager.instance
     }
-    createTab = (Url?: string) => {
+    waitForUniqueUriLoad = (browser: any, id: string) => {
+        let onFinish: any
+        browser.m_browserView.on('finished-request', (title: string) => {
+            if (title === `data:text/plain,${id}`) {
+                onFinish()
+            }
+        })
+        return Promise.race([new Promise((resolve) => {
+            onFinish = resolve
+        }),
+        new Promise((resolve, reject) => {
+            setTimeout(() => {
+                reject({ msg: 'Could not load unique URI within time limit' })
+            }, 1000)
+        })])
+    }
+
+    createTab = async (Url?: string) => {
         const id = uuidv4()
         const url = (Url && Url !== 'home') ? Url : (settingsManager.settings.homeUrl || this.fallbackUrl)
         const browser = this.windowRouter.CreateBrowserView('ExternalWeb')
-        this.tabHandlers.push(new BrowserTabHandler(id, browser, this))
+        browser.LoadURL(`data:text/plain,${id}`)
+        const response = await this.waitForUniqueUriLoad(browser, id).then(() => {
+            return backendService.serverApi!.callPluginMethod('assign_target', { frontendId: id })
+        }).then((res) => {
+            if (!res.success) warnN('Tab Manager', 'Backend method "assign_target" returned this message> ')
+            return res
+        }).catch(({ msg }) => {
+            warnN('Tab Manager', msg)
+            return { success: false, result: undefined }
+        })
+        this.tabHandlers.push(new BrowserTabHandler(id, browser, this, response.success ? response.result as string : undefined))
         browser.LoadURL(url)
         this.setActiveTabById(id)
-        // llog('new active tab: ', this.activeTab)
         if (this.onNewTab) this.onNewTab()
     }
 
@@ -52,7 +75,7 @@ export class TabManager {
             this.setActiveTabByIndex(index === 0 ? index + 1 : index - 1)
         }
         this.tabHandlers.splice(index, 1)
-        if (this.onTabClose) this.onTabClose()
+        if (this.onCloseTab) this.onCloseTab()
     }
 
     createDefaultTabs() {
@@ -60,8 +83,12 @@ export class TabManager {
             warnN('Tab Manager', 'Settings have not loaded when trying to create default tabs. Using fallback url to create tab instead.')
             this.createTab()
         } else {
-            for (let tab of settingsManager.settings.defaultTabs){
-                this.createTab(tab)
+            for ( let i = 0; i < settingsManager.settings.defaultTabs.length; i++) {
+                const tab = settingsManager.settings.defaultTabs[i]
+                const tabPromise = this.createTab(tab)
+                if(i === settingsManager.settings.defaultTabs.length - 1){
+                    this.loadTabPromise = tabPromise
+                }
             }
         }
     }
@@ -106,10 +133,10 @@ export class TabManager {
         return this.getActiveTabHandler().browser.m_URLRequested
     }
 
-    registerCloseListener(handler: () => void) {
-        this.onTabClose = handler
+    registerOnCloseTab(handler: () => void) {
+        this.onCloseTab = handler
     }
-    registerNewTabListener(handler: () => void) {
+    registerOnNewTab(handler: () => void) {
         this.onNewTab = handler
     }
 

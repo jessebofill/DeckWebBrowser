@@ -20,8 +20,6 @@ export const BrowserTab: VFC<BrowserTabProps> = (props: BrowserTabProps) => {
         return () => clearNavNode()
     }, [])
 
-    log('tab rerendered')
-
     const element = (
         <Focusable
             focusClassName='tabContentContainer'

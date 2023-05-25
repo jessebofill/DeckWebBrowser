@@ -8,6 +8,7 @@ import { TabManager } from "../classes/TabManager";
 import { structureMappingFn } from "../classes/StructureController";
 import { ConfirmFavoriteDeleteModal } from "./ConfrimationModals";
 import { settingsManager } from "../classes/SettingsManager";
+import { backendService } from "../classes/BackendService";
 
 type SubemenuProps = MenuItemProps & MenuGroupProps
 

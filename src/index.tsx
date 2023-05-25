@@ -11,6 +11,7 @@ import { patchMenu } from "./patchMenu";
 import { moveMouse } from "./mouse";
 import { settingsManager } from "./classes/SettingsManager";
 import { favoritesManager } from "./classes/FavoritesManager";
+import { backendService } from "./classes/BackendService";
 
 /**
  * 
@@ -18,7 +19,8 @@ import { favoritesManager } from "./classes/FavoritesManager";
  */
 
 export default definePlugin((serverApi: ServerAPI) => {
-    settingsManager.init(serverApi)
+    backendService.init(serverApi)
+    settingsManager.init()
     favoritesManager.init()
     appendStyles(SP_Window)
     // SteamClient.Input.RegisterForControllerAnalogInputMessages(moveMouse)
