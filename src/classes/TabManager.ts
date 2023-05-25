@@ -170,7 +170,10 @@ export class TabManager {
     }
 
     closeAllTabs() {
-
+        for (let i = 0; i < this.tabHandlers.length; i++) {
+            this.tabHandlers[i].closeBrowser()
+        }
+        this.tabHandlers = []
     }
 }
 

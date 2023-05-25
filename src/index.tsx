@@ -18,6 +18,7 @@ import { backendService } from "./classes/BackendService";
  * TODO also search needs to be patch after menu open as well
  */
 
+
 export default definePlugin((serverApi: ServerAPI) => {
     backendService.init(serverApi)
     settingsManager.init()
@@ -27,6 +28,7 @@ export default definePlugin((serverApi: ServerAPI) => {
 
     serverApi.routerHook.addRoute(routePath, () => {
         return <TabbedBrowser tabManager={tabManager} />
+        
     })
     const unpatchMenu = patchMenu()
 

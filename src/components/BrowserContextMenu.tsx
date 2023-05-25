@@ -1,5 +1,5 @@
 import { log, warnN } from "../log";
-import { Marquee, Menu, MenuGroup, MenuItem, showModal, GamepadButton, GamepadEvent, ModalRoot, Focusable, MenuGroupProps, ConfirmModal, MenuItemProps } from "decky-frontend-lib";
+import { Marquee, Menu, MenuGroup, MenuItem, showModal, GamepadButton, GamepadEvent, ModalRoot, Focusable, MenuGroupProps, ConfirmModal, MenuItemProps, Navigation, sleep } from "decky-frontend-lib";
 import { VFC } from "react";
 import { NewFavoriteFolderModal } from "./NewFavoriteFolderModal";
 import { NewFavoriteModal } from "./NewFavoriteModal";
@@ -9,6 +9,7 @@ import { structureMappingFn } from "../classes/StructureController";
 import { ConfirmFavoriteDeleteModal } from "./ConfrimationModals";
 import { settingsManager } from "../classes/SettingsManager";
 import { backendService } from "../classes/BackendService";
+import { routePath, status } from "../init";
 
 type SubemenuProps = MenuItemProps & MenuGroupProps
 
@@ -122,7 +123,7 @@ const formatAddToFavoritesMenu: structureMappingFn = (children, value, path, tab
             >
                 New Folder
             </MenuItem>
-            <div className="gamepadcontextmenu_ContextMenuSeparator_1KL6n" style={{ paddingTop: '2px' }} />
+            {children.length > 0 ? <div className="gamepadcontextmenu_ContextMenuSeparator_1KL6n" /> : null}
             {...children}
         </MenuGroup>
     )
@@ -236,8 +237,13 @@ export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabMana
             <MenuItem
                 //@ts-ignore
                 className="gamepadcontextmenu_Destructive_3aIFv"
-                onClick={() => {
-
+                onClick={async () => {
+                    Navigation.NavigateBack()
+                    while (window.location.pathname === '/routes' + routePath) {
+                        await sleep(100)
+                    }
+                    status.running = false
+                    tabManager.closeAllTabs()
                 }}
             >
                 Kill Browser
