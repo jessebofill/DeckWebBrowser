@@ -91,6 +91,7 @@ export function ReorderableList<T>(props: ReorderableListProps<T>) {
                     flexDirection: 'column',
                     justifyContent: 'flex-start',
                     alignContent: 'stretch',
+                    padding: '0px 16px'
                 }}
             >
                 <Focusable

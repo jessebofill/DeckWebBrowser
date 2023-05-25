@@ -60,7 +60,7 @@ export class TabManager {
             warnN('Tab Manager', 'Settings have not loaded when trying to create default tabs. Using fallback url to create tab instead.')
             this.createTab()
         } else {
-            for (let tab of settingsManager.settings.defaultTabs){
+            for (let tab of settingsManager.settings.defaultTabs) {
                 this.createTab(tab)
             }
         }
@@ -143,7 +143,10 @@ export class TabManager {
     }
 
     closeAllTabs() {
-
+        for (let i = 0; i < this.tabHandlers.length; i++) {
+            this.tabHandlers[i].closeBrowser()
+        }
+        this.tabHandlers = []
     }
 }
 

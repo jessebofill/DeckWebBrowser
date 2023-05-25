@@ -1,4 +1,4 @@
-import { PanelSection, PanelSectionRow, Router, Field, GamepadEvent, GamepadButton, Marquee, showModal, SteamSpinner } from "decky-frontend-lib";
+import { PanelSection, PanelSectionRow, Router, Field, GamepadEvent, GamepadButton, showModal, SteamSpinner, ButtonItem, Navigation, sleep } from "decky-frontend-lib";
 import { VFC, useMemo } from "react";
 import { defaultUrl, routePath, status } from "../init";
 import { settingsManager } from "../classes/SettingsManager";
@@ -49,58 +49,81 @@ export const QAMContent: VFC = ({ }) => {
         return items
     }, [settingsManager.settings.defaultTabs.length])
 
-    return (!settingsManager.settingsLoaded ?
-        <PanelSection title='Loading Settings'>
-            <SteamSpinner />
-        </PanelSection> :
+    return (
         <>
-            <PanelSection title='Home Page' >
-                <PanelSectionRow >
-                    <Field focusable={true}
-                        description={
-                            <div style={{ wordBreak: 'break-all', marginTop: '-8px' }}>
-                                {settingsManager.settings.homeUrl || defaultUrl}
-                            </div>
-                        }
-                        onOptionsActionDescription={status.running ? 'Open in New Tab' : ''}
-                        onOKActionDescription={status.running ? 'Open in Current Tab' : 'Open'}
-                        onOKButton={() => openUrl(settingsManager.settings.homeUrl || defaultUrl)}
-                        onOptionsButton={() => { openUrl(settingsManager.settings.homeUrl || defaultUrl, true) }}
-                    />
-                </PanelSectionRow>
-            </PanelSection>
-            <PanelSection title="Default Tabs">
-                <PanelSectionRow style={{ marginLeft: '-16px', marginRight: '-16px' }}>
-                    <ReorderableList<{ tab: string }>
-                        entries={defaultTabItems}
-                        onSave={(entries) => {
-                            settingsManager.setSetting('defaultTabs', entries.map((entry) => entry.data!.tab))
-                        }}
-                        onButtonPress={(evt: GamepadEvent, entry: ReorderableEntry<{ tab: string }>) => {
-                            const tab = entry.data!.tab
-                            switch (evt.detail.button) {
-                                case GamepadButton.SECONDARY:
-                                    if (tab !== 'home') {
-                                        const closeModal = () => { }
-                                        showModal(<ConfirmDeleteDefaultTabModal index={entry.position} closeModal={closeModal} />)
-                                    }
-                                    break
-                                case GamepadButton.OK:
-                                    openUrl(tab)
-                                    break
-                                case GamepadButton.OPTIONS:
-                                    openUrl(tab, true)
+            {!settingsManager.settingsLoaded ?
+                (<PanelSection title='Loading Settings'>
+                    <SteamSpinner />
+                </PanelSection>) :
+                <>
+                    <PanelSection title='Home Page' >
+                        <PanelSectionRow >
+                            <Field focusable={true}
+                                description={
+                                    <div style={{ wordBreak: 'break-all', marginTop: '-8px' }}>
+                                        {settingsManager.settings.homeUrl || defaultUrl}
+                                    </div>
+                                }
+                                onOptionsActionDescription={status.running ? 'Open in New Tab' : ''}
+                                onOKActionDescription={status.running ? 'Open in Current Tab' : 'Open'}
+                                onOKButton={() => openUrl(settingsManager.settings.homeUrl || defaultUrl)}
+                                onOptionsButton={() => { openUrl(settingsManager.settings.homeUrl || defaultUrl, true) }}
+                            />
+                        </PanelSectionRow>
+                    </PanelSection>
+                    <PanelSection title="Default Tabs">
+                        <PanelSectionRow style={{ marginLeft: '-16px', marginRight: '-16px' }}>
+                            <ReorderableList<{ tab: string }>
+                                entries={defaultTabItems}
+                                onSave={(entries) => {
+                                    settingsManager.setSetting('defaultTabs', entries.map((entry) => entry.data!.tab))
+                                }}
+                                onButtonPress={(evt: GamepadEvent, entry: ReorderableEntry<{ tab: string }>) => {
+                                    const tab = entry.data!.tab
+                                    switch (evt.detail.button) {
+                                        case GamepadButton.SECONDARY:
+                                            if (tab !== 'home') {
+                                                const closeModal = () => { }
+                                                showModal(<ConfirmDeleteDefaultTabModal index={entry.position} closeModal={closeModal} />)
+                                            }
+                                            break
+                                        case GamepadButton.OK:
+                                            openUrl(tab)
+                                            break
+                                        case GamepadButton.OPTIONS:
+                                            openUrl(tab, true)
 
+                                    }
+                                }}
+                                reorderButton={GamepadButton.START}
+                                saveOrderOnOk={true}
+                                fieldProps={{
+                                    onSecondaryActionDescription: 'Delete',
+                                    onOptionsActionDescription: status.running ? 'Open in New Tab' : '',
+                                    onOKActionDescription: status.running ? 'Open in Current Tab' : 'Open'
+                                }}
+                            />
+                        </PanelSectionRow>
+                    </PanelSection>
+                </>
+            }
+            <PanelSection title='other' >
+                <PanelSectionRow>
+                    <ButtonItem
+                        layout='below'
+                        onClick={async () => {
+                            if (window.location.pathname === '/routes' + routePath) {
+                                Navigation.NavigateBack()
                             }
+                            while (window.location.pathname === '/routes' + routePath){
+                                await sleep(100)
+                            }
+                            status.running = false
+                            tabManager.closeAllTabs()
                         }}
-                        reorderButton={GamepadButton.START}
-                        saveOrderOnOk={true}
-                        fieldProps={{
-                            onSecondaryActionDescription: 'Delete',
-                            onOptionsActionDescription: status.running ? 'Open in New Tab' : '',
-                            onOKActionDescription: status.running ? 'Open in Current Tab' : 'Open'
-                        }}
-                    />
+                    >
+                        Kill Browser
+                    </ButtonItem>
                 </PanelSectionRow>
             </PanelSection>
         </>

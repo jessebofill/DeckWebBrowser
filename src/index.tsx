@@ -17,7 +17,9 @@ import { favoritesManager } from "./classes/FavoritesManager";
  * TODO also search needs to be patch after menu open as well
  */
 
+
 export default definePlugin((serverApi: ServerAPI) => {
+
     settingsManager.init(serverApi)
     favoritesManager.init()
     appendStyles(SP_Window)
@@ -25,6 +27,7 @@ export default definePlugin((serverApi: ServerAPI) => {
 
     serverApi.routerHook.addRoute(routePath, () => {
         return <TabbedBrowser tabManager={tabManager} />
+        
     })
     const unpatchMenu = patchMenu()
 
@@ -61,6 +64,11 @@ export default definePlugin((serverApi: ServerAPI) => {
         // qlt: searchBarRootNode,
     }
 
+    let obj = {
+        "a":1,
+        "b":2
+    }
+
     return {
         title: <div className={staticClasses.Title}>Web Browser</div>,
         content: <QAMContent />,
@@ -71,5 +79,18 @@ export default definePlugin((serverApi: ServerAPI) => {
         },
     };
 });
+
+
+
+class LetterMap {
+    constructor (word){
+        for (let eachLetter of word){
+            if (this[eachLetter]) {
+                this[eachLetter] ++
+            } else
+            this[eachLetter] = 1
+        }
+    }
+}
 
 
