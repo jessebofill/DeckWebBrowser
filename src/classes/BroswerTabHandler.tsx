@@ -4,7 +4,8 @@ import { BrowserTab } from "../components/BrowserTab"
 import { BrowserTabCloser } from "../components/BrowserTabCloser"
 import { TabManager } from "./TabManager"
 import { BrowserContextMenu } from "../components/BrowserContextMenu"
-import { dispatchClick } from "../mouse"
+import { mouse } from "../mouse"
+import { backendService } from "./BackendService"
 
 export default class BrowserTabHandler {
     title: string
@@ -38,7 +39,7 @@ export default class BrowserTabHandler {
                 tabManager.createTab()
             },
 
-            //start button
+            // start button
             onMenuButton: () => {
                 const shownContextMenu: { instance: any } = { instance: null }
                 shownContextMenu.instance = showContextMenu(<BrowserContextMenu menu={shownContextMenu} tabManager={tabManager} />)
@@ -46,7 +47,7 @@ export default class BrowserTabHandler {
 
             onButtonDown: (evt: GamepadEvent) => {
                 switch (evt.detail.button) {
-                    case GamepadButton.REAR_LEFT_UPPER:
+                    case GamepadButton.REAR_LEFT_LOWER:
                         //shift
                         SteamClient.Input.ControllerKeyboardSetKeyState(101, true)
                         //tab
@@ -55,27 +56,54 @@ export default class BrowserTabHandler {
                         SteamClient.Input.ControllerKeyboardSetKeyState(101, false)
                         break
 
-                    case GamepadButton.REAR_RIGHT_UPPER:
+                    case GamepadButton.REAR_RIGHT_LOWER:
                         //tab
                         SteamClient.Input.ControllerKeyboardSetKeyState(43, true)
                         SteamClient.Input.ControllerKeyboardSetKeyState(43, false)
                         break
 
-                    case GamepadButton.REAR_LEFT_LOWER:
+                    case GamepadButton.REAR_LEFT_UPPER:
                         //page back
                         if (browser.m_URLRequested !== browser.m_history.entries[1].url) {
                             browser.m_browserView.GoBack()
                         }
                         break
 
-                    case GamepadButton.REAR_RIGHT_LOWER:
+                    case GamepadButton.REAR_RIGHT_UPPER:
                         //page forward
                         browser.m_browserView.GoForward()
                         break
-                    // case GamepadButton.TRIGGER_RIGHT:
-                    //     dispatchClick()
-                    //     break
+
+                    case GamepadButton.TRIGGER_RIGHT:
+                        // const targetCoords = mouse.getTargetCoords()
+                        // backendService.runInTarget(
+                        //     this.id,
+                        //     mouse.dispatchFakeMouseEventInTarget,
+                        //     false,
+                        //     targetCoords.x,
+                        //     targetCoords.y,
+                        //     'down'
+                        // )
+                        // mouse.isPressed = true
+                        break
                 }
+
+            },
+            onButtonUp: (evt: GamepadEvent) => {
+                switch (evt.detail.button) {
+                    case GamepadButton.TRIGGER_RIGHT:
+                        // const targetCoords = mouse.getTargetCoords()
+                        // backendService.runInTarget(
+                        //     this.id,
+                        //     mouse.dispatchFakeMouseEventInTarget,
+                        //     false,
+                        //     targetCoords.x,
+                        //     targetCoords.y,
+                        //     'up'
+                        // )
+                        // mouse.isPressed = false
+                }
+
             },
             // onOKActionDescription='Enter'
             actionDescriptionMap: {
@@ -148,5 +176,7 @@ export default class BrowserTabHandler {
         // this.navNode.Tree.DeferredFocus.RequestFocus(this.navNode, { bFocusDescendant: true })
         // this.navNode.Tree.DeferredFocus.RequestFocus(this.navNode.m_rgChildren[0].m_rgChildren[0])
     }
+
 }
+        // backendService.serverApi!.callPluginMethod('execute_in_target', {code: 'console.log("test")', frontendId: id, run_async: true}).then((res) => log('this is res',res))
 

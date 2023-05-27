@@ -8,13 +8,13 @@ import { appendStyles } from "./styling";
 import { TabbedBrowser } from "./components/TabbedBrowser";
 import { tabManager } from "./classes/TabManager";
 import { patchMenu } from "./patchMenu";
-import { moveMouse } from "./mouse";
+import { mouse } from "./mouse";
 import { settingsManager } from "./classes/SettingsManager";
 import { favoritesManager } from "./classes/FavoritesManager";
 import { backendService } from "./classes/BackendService";
 
 /**
- * 
+ * TODO fix closing tabs if its last tab
  * TODO also search needs to be patch after menu open as well
  */
 
@@ -24,7 +24,7 @@ export default definePlugin((serverApi: ServerAPI) => {
     settingsManager.init()
     favoritesManager.init()
     appendStyles(SP_Window)
-    // SteamClient.Input.RegisterForControllerAnalogInputMessages(moveMouse)
+    
 
     serverApi.routerHook.addRoute(routePath, () => {
         return <TabbedBrowser tabManager={tabManager} />

@@ -3,13 +3,13 @@ import { VFC, useEffect, useState } from "react"
 import { Tabs } from "../native-components/Tabs"
 import { patchSearchRootMemo } from "./SearchBarInput"
 import { TabManager } from "../classes/TabManager"
-import { tabContainerHeight } from "../styling"
+import { tabContentRealHeight, tabContentRealY } from "../styling"
 import { status } from "../init"
-import { SteamSpinner, sleep } from "decky-frontend-lib"
+import { SteamSpinner } from "decky-frontend-lib"
+import { mouse } from "../mouse"
 
-const contentY = Math.round((tabContainerHeight + 40) * 1.5)
-const contentHeight = 800 - Math.round((80 + tabContainerHeight) * 1.5)
-log('height: ', contentHeight, ' y: ', contentY)
+
+log('height: ', tabContentRealHeight, ' y: ', tabContentRealY)
 
 interface TabbedBrowserProps {
     tabManager: TabManager
@@ -43,6 +43,7 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
     }
 
     useEffect(() => {
+        // const unregisterForAnalogInputMessages = window.SteamClient.Input.RegisterForControllerAnalogInputMessages(mouse.move).unregister;        
         (async () => {
             // log('mounted')
             await tabManager.loadTabPromise
@@ -52,12 +53,13 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
             tabManager.registerOnCloseTab(onCloseTab)
             tabManager.tabHandlers.forEach(tabHandler => tabHandler.registerOnTitleChange(onTitleChange))
             setTimeout(() => {
-                tabManager.getActiveTabBrowserView().SetBounds(0, contentY + 1, 1280, contentHeight)
+                tabManager.getActiveTabBrowserView().SetBounds(0, tabContentRealY, 1280, tabContentRealHeight + 1)
                 patchSearchRootMemo({ tabManager: tabManager })
-            }, 200)
+            }, 300)
 
         })()
         return () => {
+            // unregisterForAnalogInputMessages()
             tabManager.headerStore.SetCurrentBrowserAndBackstack(null, false)
             // log('unmounted')
         }

@@ -1,10 +1,13 @@
 import myFont from "../assets/FORCED_SQUARE.ttf"
-import { pluginName } from "./init";
 import { log, warnN } from "./log";
 
-const tabPadding = 5
+const tabBarPadding = 5
+//tabHeight is defined by component and should not be changed
 const tabHeight = 34
-export const tabContainerHeight = tabPadding * 2 + tabHeight
+export const tabBarHeight = tabBarPadding * 2 + tabHeight
+export const tabContentRealY = Math.round((tabBarHeight + 40) * 1.5) //40px offset for header
+export const tabContentRealHeight = 800 - Math.round((80 + tabBarHeight) * 1.5) //80px for header + footer
+
 export function appendStyles(_window?: Window) {
     if (!_window) warnN('Styling', 'No SP Window')
     else {
@@ -63,10 +66,10 @@ export function appendStyles(_window?: Window) {
     }
 
     .tabbedBrowserContainer .gamepadtabbedpage_FixCenterAlignScroll_1CJeU {
-        padding: ${tabPadding}px 0px;
+        padding: ${tabBarPadding}px 0px;
     }
     .tabbedBrowserContainer .mainbrowser_ExternalBrowserContainer_3FyI1 {
-        top: ${tabContainerHeight}px;
+        top: ${tabBarHeight}px;
         background: linear-gradient(to bottom, #363941 .5%, #464d58 40%);
         flex: 1;
         display: flex;

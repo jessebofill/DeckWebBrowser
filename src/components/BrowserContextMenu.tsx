@@ -137,7 +137,7 @@ interface BrowserContextMenuProps {
 }
 
 export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabManager }) => {
-    log('rendering BrowserContext Menu')
+    // log('rendering BrowserContext Menu')
     if (!favoritesManager.loaded) {
         warnN('Context Menu', 'Favorites have not loaded')
     }
@@ -150,6 +150,8 @@ export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabMana
     const favoritesMenuItem = favoritesManager.loaded ?
         favoritesManager.map(formatFavoriteListMenu, [tabManager, menu]) :
         <MenuGroup label='Favorites' disabled={true} />
+
+    const activeTabHasTarget = tabManager.getActiveTabHandler().hasTarget
 
     return (
         //@ts-ignore
@@ -228,9 +230,13 @@ export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabMana
                 Settings
             </MenuItem> */}
             <MenuItem
-                onClick={() => {
-
-                }}
+                onClick={activeTabHasTarget ? () => tabManager.inspectActiveTab() : () => tabManager.openCefInspectorTab()}
+                onOptionsButton={activeTabHasTarget ? () => {
+                    menu.instance.Hide()
+                    tabManager.openCefInspectorTab()
+                } : () => {}}
+                onOKActionDescription={activeTabHasTarget ? 'Inspect Tab' : 'Open Inspector'}
+                onOptionsActionDescription={activeTabHasTarget ? 'Open Inspector' : ''}
             >
                 Inspect
             </MenuItem>

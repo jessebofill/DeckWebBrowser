@@ -1,5 +1,5 @@
 import { PanelSection, PanelSectionRow, Router, Field, GamepadEvent, GamepadButton, showModal, SteamSpinner, ButtonItem, Navigation, sleep } from "decky-frontend-lib";
-import { VFC, useMemo } from "react";
+import { VFC, useMemo, useState } from "react";
 import { defaultUrl, routePath, status } from "../init";
 import { settingsManager } from "../classes/SettingsManager";
 import { ReorderableEntry, ReorderableList } from "./ReorderableListModified";
@@ -27,7 +27,7 @@ const openUrl = (url: string, inNewtab?: boolean) => {
     }
 }
 export const QAMContent: VFC = ({ }) => {
-
+    const [isRunning, setIsRunning] = useState(status.running)
     const defaultTabItems = useMemo(() => {
         const items: ReorderableEntry<{ tab: string }>[] = []
         for (let i = 0; i < settingsManager.settings.defaultTabs.length; i++) {
@@ -107,15 +107,17 @@ export const QAMContent: VFC = ({ }) => {
                     </PanelSection>
                 </>
             }
-            <PanelSection title='other' >
+            <PanelSection title='other'>
                 <PanelSectionRow>
                     <ButtonItem
+                        disabled={!isRunning}
                         layout='below'
                         onClick={async () => {
+                            setIsRunning(false)
                             if (window.location.pathname === '/routes' + routePath) {
                                 Navigation.NavigateBack()
                             }
-                            while (window.location.pathname === '/routes' + routePath){
+                            while (window.location.pathname === '/routes' + routePath) {
                                 await sleep(100)
                             }
                             status.running = false

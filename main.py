@@ -44,7 +44,8 @@ class Plugin:
         return str(tab.id)
         
     async def execute_in_target(self, frontendId, code, run_async=False):
-        await tabs[frontendId].evaluate_js(code, run_async)
+        # await tabs[frontendId].evaluate_js(code, run_async)
+        return await tabs[frontendId].evaluate_js(code, run_async)
 
     # Function called first during the unload process, utilize this to handle your plugin being removed
     async def _unload(self):

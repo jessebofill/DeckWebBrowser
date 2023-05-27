@@ -5,6 +5,7 @@ import isURL from "validator/lib/isURL"
 import { v4 as uuidv4 } from "uuid"
 import { settingsManager } from "./SettingsManager"
 import { backendService } from "./BackendService"
+import { loadScriptInTarget } from "../injectToTarget"
 
 export enum SearchEngine {
     GOOGLE,
@@ -33,6 +34,7 @@ export class TabManager {
     waitForUniqueUriLoad = (browser: any, id: string) => {
         let onFinish: any
         browser.m_browserView.on('finished-request', (title: string) => {
+            // loadScriptInTarget(id).then((e) => log('script loaded', e))
             if (title === `data:text/plain,${id}`) {
                 onFinish()
             }
@@ -52,18 +54,23 @@ export class TabManager {
         const url = (Url && Url !== 'home') ? Url : (settingsManager.settings.homeUrl || this.fallbackUrl)
         const browser = this.windowRouter.CreateBrowserView('ExternalWeb')
         browser.LoadURL(`data:text/plain,${id}`)
+        const tabHandler = new BrowserTabHandler(id, browser, this)
+        this.tabHandlers.push(tabHandler)
+        this.setActiveTabById(id)
         const response = await this.waitForUniqueUriLoad(browser, id).then(() => {
             return backendService.serverApi!.callPluginMethod('assign_target', { frontendId: id })
         }).then((res) => {
             if (!res.success) warnN('Tab Manager', 'Backend method "assign_target" returned this message> ')
+            else {
+                tabHandler.targetId = res.result as string
+                tabHandler.hasTarget = true
+            }
             return res
         }).catch(({ msg }) => {
             warnN('Tab Manager', msg)
             return { success: false, result: undefined }
         })
-        this.tabHandlers.push(new BrowserTabHandler(id, browser, this, response.success ? response.result as string : undefined))
         browser.LoadURL(url)
-        this.setActiveTabById(id)
         if (this.onNewTab) this.onNewTab()
     }
 
@@ -79,14 +86,15 @@ export class TabManager {
     }
 
     createDefaultTabs() {
+        log('creating default tabs')
         if (!settingsManager.settingsLoaded) {
             warnN('Tab Manager', 'Settings have not loaded when trying to create default tabs. Using fallback url to create tab instead.')
             this.createTab()
         } else {
-            for ( let i = 0; i < settingsManager.settings.defaultTabs.length; i++) {
+            for (let i = 0; i < settingsManager.settings.defaultTabs.length; i++) {
                 const tab = settingsManager.settings.defaultTabs[i]
                 const tabPromise = this.createTab(tab)
-                if(i === settingsManager.settings.defaultTabs.length - 1){
+                if (i === settingsManager.settings.defaultTabs.length - 1) {
                     this.loadTabPromise = tabPromise
                 }
             }
@@ -123,6 +131,10 @@ export class TabManager {
 
     getActiveTabHandler() {
         return this.tabHandlers[this.getActiveTabIndex()]
+    }
+
+    getTabIdByTargetId(targetId: string) {
+        return this.tabHandlers.find(tabHandler => tabHandler.targetId === targetId)?.id
     }
 
     getActiveTabBrowserView() {
@@ -174,6 +186,16 @@ export class TabManager {
             this.tabHandlers[i].closeBrowser()
         }
         this.tabHandlers = []
+    }
+
+    openCefInspectorTab(targetId?: string) {
+        const url = targetId ? 'localhost:8080/devtools/inspector.html?ws=localhost:8080/devtools/page/' + targetId : 'localhost:8080'
+        this.createTab(url)
+    }
+
+    inspectActiveTab() {
+        const targetId = this.getActiveTabHandler().targetId
+        targetId && this.openCefInspectorTab(targetId)
     }
 }
 
