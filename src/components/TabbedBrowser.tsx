@@ -45,7 +45,7 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
     useEffect(() => {
         // const unregisterForAnalogInputMessages = window.SteamClient.Input.RegisterForControllerAnalogInputMessages(mouse.move).unregister;        
         (async () => {
-            // log('mounted')
+            log('mounted')
             await tabManager.loadTabPromise
             tabManager.setActiveBrowserHeader()
             setActiveTab(tabManager.activeTab)
@@ -60,8 +60,10 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
         })()
         return () => {
             // unregisterForAnalogInputMessages()
-            tabManager.headerStore.SetCurrentBrowserAndBackstack(null, false)
-            // log('unmounted')
+            if (tabManager.getActiveTabHandler().browser.name === tabManager.headerStore.GetCurrentBrowserAndBackstack().browser.name) {
+                tabManager.headerStore.SetCurrentBrowserAndBackstack(null, false)
+            }
+            log('unmounted')
         }
     }, [])
 
