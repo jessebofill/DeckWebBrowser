@@ -220,8 +220,8 @@ export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabMana
                 Add to Default Tabs
             </MenuItem>
             <div className="gamepadcontextmenu_ContextMenuSeparator_1KL6n" />
-            <MenuItem >History</MenuItem>
-            <div className="gamepadcontextmenu_ContextMenuSeparator_1KL6n" />
+            {/* <MenuItem >History</MenuItem> */}
+            {/* <div className="gamepadcontextmenu_ContextMenuSeparator_1KL6n" /> */}
             {/* <MenuItem
                 onClick={() => {
 

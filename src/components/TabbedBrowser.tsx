@@ -60,7 +60,7 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
         })()
         return () => {
             // unregisterForAnalogInputMessages()
-            if (tabManager.getActiveTabHandler().browser.name === tabManager.headerStore.GetCurrentBrowserAndBackstack().browser.name) {
+            if (tabManager.browserViewName === tabManager.headerStore.GetCurrentBrowserAndBackstack().browser.name) {
                 tabManager.headerStore.SetCurrentBrowserAndBackstack(null, false)
             }
             log('unmounted')

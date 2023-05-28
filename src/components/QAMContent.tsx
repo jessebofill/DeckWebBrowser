@@ -109,6 +109,11 @@ export const QAMContent: VFC = ({ }) => {
             }
             <PanelSection title='other'>
                 <PanelSectionRow>
+                    <ButtonItem layout='below' onClick={() => openUrl('localhost:8080', true)}>
+                        Open Inspector
+                    </ButtonItem>
+                </PanelSectionRow>
+                <PanelSectionRow>
                     <ButtonItem
                         disabled={!isRunning}
                         layout='below'

@@ -16,6 +16,7 @@ export enum SearchEngine {
 export class TabManager {
     tabHandlers: BrowserTabHandler[]
     fallbackUrl: string
+    browserViewName: string
     windowRouter: any
     headerStore: any
     activeTab: string
@@ -25,6 +26,7 @@ export class TabManager {
     loadTabPromise: Promise<void> | undefined
     constructor(defaultUrl: string, windowRouter: any) {
         this.fallbackUrl = defaultUrl
+        this.browserViewName = 'TabbedWebBrowser'
         this.tabHandlers = []
         this.windowRouter = windowRouter
         this.headerStore = windowRouter.HeaderStore
@@ -52,7 +54,7 @@ export class TabManager {
     createTab = async (Url?: string) => {
         const id = uuidv4()
         const url = (Url && Url !== 'home') ? Url : (settingsManager.settings.homeUrl || this.fallbackUrl)
-        const browser = this.windowRouter.CreateBrowserView('ExternalWeb')
+        const browser = this.windowRouter.CreateBrowserView(this.browserViewName)
         browser.LoadURL(`data:text/plain,${id}`)
         const tabHandler = new BrowserTabHandler(id, browser, this)
         this.tabHandlers.push(tabHandler)
