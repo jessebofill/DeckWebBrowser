@@ -3,15 +3,11 @@ import { defaultUrl, windowRouter } from "../init"
 import BrowserTabHandler from "./BroswerTabHandler"
 import isURL from "validator/lib/isURL"
 import { v4 as uuidv4 } from "uuid"
-import { settingsManager } from "./SettingsManager"
+import { SearchEngine, settingsManager } from "./SettingsManager"
 import { backendService } from "./BackendService"
 import { loadScriptInTarget } from "../injectToTarget"
 
-export enum SearchEngine {
-    GOOGLE,
-    BING,
-    YAHOO
-}
+
 
 export class TabManager {
     tabHandlers: BrowserTabHandler[]
@@ -162,7 +158,7 @@ export class TabManager {
                 isURL(localhostToIp(input))) {
                 browserHandler.loadUrl(convertLocalhostIpIfNeeded(input))
             } else {
-                browserHandler.loadUrl(getQueriedUrl(input, this.defaultSearchEngine))
+                browserHandler.loadUrl(getQueriedUrl(input, settingsManager.settings.searchEngine || this.defaultSearchEngine))
             }
         }
     }

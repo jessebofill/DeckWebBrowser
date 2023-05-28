@@ -4,9 +4,16 @@ import { Favorites } from "./FavoritesManager";
 import { backendService } from "./BackendService";
 
 
+export enum SearchEngine {
+    GOOGLE,
+    BING,
+    YAHOO
+}
+
 interface Settings {
     homeUrl?: string
     defaultTabs: string[]
+    searchEngine?: SearchEngine
 }
 
 interface History {

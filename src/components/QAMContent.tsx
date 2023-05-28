@@ -1,7 +1,7 @@
-import { PanelSection, PanelSectionRow, Router, Field, GamepadEvent, GamepadButton, showModal, SteamSpinner, ButtonItem, Navigation, sleep } from "decky-frontend-lib";
+import { PanelSection, PanelSectionRow, Router, Field, GamepadEvent, GamepadButton, showModal, SteamSpinner, ButtonItem, Navigation, sleep, DropdownItem } from "decky-frontend-lib";
 import { VFC, useMemo, useState } from "react";
 import { defaultUrl, routePath, status } from "../init";
-import { settingsManager } from "../classes/SettingsManager";
+import { SearchEngine, settingsManager } from "../classes/SettingsManager";
 import { ReorderableEntry, ReorderableList } from "./ReorderableListModified";
 import { ConfirmDeleteDefaultTabModal } from "./ConfrimationModals";
 import { tabManager } from "../classes/TabManager";
@@ -101,6 +101,22 @@ export const QAMContent: VFC = ({ }) => {
                                     onSecondaryActionDescription: 'Delete',
                                     onOptionsActionDescription: status.running ? 'Open in New Tab' : '',
                                     onOKActionDescription: status.running ? 'Open in Current Tab' : 'Open'
+                                }}
+                            />
+                        </PanelSectionRow>
+                    </PanelSection>
+                    <PanelSection title='Search Engine' >
+                        <PanelSectionRow>
+                            <DropdownItem
+                                layout='below'
+                                rgOptions={[
+                                    { label: 'Google', data: SearchEngine.GOOGLE },
+                                    { label: 'Bing', data: SearchEngine.BING },
+                                    { label: 'Yahoo', data: SearchEngine.YAHOO }
+                                ]}
+                                selectedOption={settingsManager.settings.searchEngine}
+                                onChange={(option) => {
+                                    settingsManager.setSetting('searchEngine', option.data)
                                 }}
                             />
                         </PanelSectionRow>
