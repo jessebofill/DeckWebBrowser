@@ -1,5 +1,5 @@
 import { log } from "../log"
-import { GamepadButton, GamepadEvent, Menu, afterPatch, showContextMenu, showModal } from 'decky-frontend-lib'
+import { GamepadButton, GamepadEvent, Menu, afterPatch, showContextMenu } from 'decky-frontend-lib'
 import { BrowserTab } from "../components/BrowserTab"
 import { BrowserTabCloser } from "../components/BrowserTabCloser"
 import { TabManager } from "./TabManager"
@@ -92,26 +92,26 @@ export default class BrowserTabHandler {
             onButtonUp: (evt: GamepadEvent) => {
                 switch (evt.detail.button) {
                     case GamepadButton.TRIGGER_RIGHT:
-                        // const targetCoords = mouse.getTargetCoords()
-                        // backendService.runInTarget(
-                        //     this.id,
-                        //     mouse.dispatchFakeMouseEventInTarget,
-                        //     false,
-                        //     targetCoords.x,
-                        //     targetCoords.y,
-                        //     'up'
-                        // )
-                        // mouse.isPressed = false
+                    // const targetCoords = mouse.getTargetCoords()
+                    // backendService.runInTarget(
+                    //     this.id,
+                    //     mouse.dispatchFakeMouseEventInTarget,
+                    //     false,
+                    //     targetCoords.x,
+                    //     targetCoords.y,
+                    //     'up'
+                    // )
+                    // mouse.isPressed = false
                 }
 
             },
-            // onOKActionDescription='Enter'
+            onOKActionDescription: '',
             actionDescriptionMap: {
                 [GamepadButton.REAR_LEFT_UPPER]: 'Tab',
                 [GamepadButton.REAR_RIGHT_UPPER]: 'Shift Tab',
                 [GamepadButton.REAR_LEFT_LOWER]: 'Pg Back',
                 [GamepadButton.REAR_RIGHT_LOWER]: 'Pg Forward',
-                [GamepadButton.SELECT]: 'Search',
+                // [GamepadButton.SELECT]: 'Search',
             },
             onCancelActionDescription: 'Back',
             onSecondaryActionDescription: 'Close Tab',
@@ -170,13 +170,13 @@ export default class BrowserTabHandler {
         this.navNode = null
     }
 
-    takeFocus() {
+    async takeFocus() {
+        this.navNode.BTakeFocus(3)
+        // this.navNode.m_rgChildren[0].BTakeFocus(3)
         // log('trying to focus: ', this.id, ' with nav handle ', this.navNode)
-        setTimeout(() => this.navNode.m_rgChildren[0].BTakeFocus(3), 500)
+        // setTimeout(() => this.navNode.m_rgChildren[0].BTakeFocus(3), 500)
         // this.navNode.Tree.DeferredFocus.RequestFocus(this.navNode, { bFocusDescendant: true })
         // this.navNode.Tree.DeferredFocus.RequestFocus(this.navNode.m_rgChildren[0].m_rgChildren[0])
     }
 
 }
-        // backendService.serverApi!.callPluginMethod('execute_in_target', {code: 'console.log("test")', frontendId: id, run_async: true}).then((res) => log('this is res',res))
-

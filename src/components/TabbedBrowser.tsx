@@ -1,7 +1,6 @@
 import { log } from "../log"
 import { VFC, useEffect, useState } from "react"
 import { Tabs } from "../native-components/Tabs"
-import { patchSearchRootMemo } from "./SearchBarInput"
 import { TabManager } from "../classes/TabManager"
 import { tabContentRealHeight, tabContentRealY } from "../styling"
 import { status } from "../init"
@@ -45,7 +44,7 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
     useEffect(() => {
         // const unregisterForAnalogInputMessages = window.SteamClient.Input.RegisterForControllerAnalogInputMessages(mouse.move).unregister;        
         (async () => {
-            log('mounted')
+            // log('mounted')
             await tabManager.loadTabPromise
             tabManager.setActiveBrowserHeader()
             setActiveTab(tabManager.activeTab)
@@ -54,16 +53,16 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
             tabManager.tabHandlers.forEach(tabHandler => tabHandler.registerOnTitleChange(onTitleChange))
             setTimeout(() => {
                 tabManager.getActiveTabBrowserView().SetBounds(0, tabContentRealY, 1280, tabContentRealHeight + 1)
-                patchSearchRootMemo({ tabManager: tabManager })
             }, 300)
 
         })()
+
         return () => {
             // unregisterForAnalogInputMessages()
             if (tabManager.browserViewName === tabManager.headerStore.GetCurrentBrowserAndBackstack().browser.name) {
                 tabManager.headerStore.SetCurrentBrowserAndBackstack(null, false)
             }
-            log('unmounted')
+            // log('unmounted')
         }
     }, [])
 

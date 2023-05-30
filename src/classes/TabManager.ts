@@ -29,23 +29,6 @@ export class TabManager {
         this.activeTab = ""
         this.defaultSearchEngine = SearchEngine.GOOGLE
     }
-    waitForUniqueUriLoad = (browser: any, id: string) => {
-        let onFinish: any
-        browser.m_browserView.on('finished-request', (title: string) => {
-            // loadScriptInTarget(id).then((e) => log('script loaded', e))
-            if (title === `data:text/plain,${id}`) {
-                onFinish()
-            }
-        })
-        return Promise.race([new Promise((resolve) => {
-            onFinish = resolve
-        }),
-        new Promise((resolve, reject) => {
-            setTimeout(() => {
-                reject({ msg: 'Could not load unique URI within time limit' })
-            }, 1000)
-        })])
-    }
 
     createTab = async (Url?: string) => {
         const id = uuidv4()
@@ -55,7 +38,7 @@ export class TabManager {
         const tabHandler = new BrowserTabHandler(id, browser, this)
         this.tabHandlers.push(tabHandler)
         this.setActiveTabById(id)
-        const response = await this.waitForUniqueUriLoad(browser, id).then(() => {
+        const response = await waitForUniqueUriLoad(browser, id).then(() => {
             return backendService.serverApi!.callPluginMethod('assign_target', { frontendId: id })
         }).then((res) => {
             if (!res.success) warnN('Tab Manager', 'Backend method "assign_target" returned this message> ')
@@ -232,6 +215,24 @@ function getQueriedUrl(query: string, searchEngine: SearchEngine) {
             prefix = 'https://search.yahoo.com/search?p='
     }
     return prefix + query
+}
+
+function waitForUniqueUriLoad(browser: any, id: string) {
+    let onFinish: any
+    browser.m_browserView.on('finished-request', (title: string) => {
+        // loadScriptInTarget(id).then((e) => log('script loaded', e))
+        if (title === `data:text/plain,${id}`) {
+            onFinish()
+        }
+    })
+    return Promise.race([new Promise((resolve) => {
+        onFinish = resolve
+    }),
+    new Promise((resolve, reject) => {
+        setTimeout(() => {
+            reject({ msg: 'Could not load unique URI within time limit' })
+        }, 1000)
+    })])
 }
 
 export const tabManager = new TabManager(defaultUrl, windowRouter)

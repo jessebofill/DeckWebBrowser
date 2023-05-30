@@ -45,10 +45,7 @@ export const BrowserTab: VFC<BrowserTabProps> = (props: BrowserTabProps) => {
             }}
 
             onGamepadDirection={(evt: GamepadEvent) => {
-
-                log('direction pressed:  gamepad supported')
                 if (browser.m_gamepadBridge.GetGameInputSupportLevel().Value < 3) {
-                    log('direction pressed without gamepad support')
                     switch (evt.detail.button) {
                         case 9:
                             //arrow up

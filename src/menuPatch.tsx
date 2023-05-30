@@ -8,6 +8,7 @@ interface MainMenuItemProps {
     route: string
     label: string
     onFocus: () => void
+    onActivate?: () => void
 }
 
 export const patchMenu = () => {
@@ -27,13 +28,13 @@ export const patchMenu = () => {
                 const onFocus = menuItemElement.props.onFocus
 
                 const newItem =
-                    <MenuItemComponent
-                        route={routePath}
-                        label='Browser'
-                        onFocus={onFocus}
-                    >
-                        <PluginIcon />
-                    </MenuItemComponent>
+                        <MenuItemComponent
+                            route={routePath}
+                            label='Browser'
+                            onFocus={onFocus}
+                        >
+                            <PluginIcon />
+                        </MenuItemComponent>
 
                 ret.props.children.splice(5, 0, newItem)
                 return ret

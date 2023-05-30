@@ -1,7 +1,5 @@
 import { log } from "../log"
 import { ChangeEvent, VFC, useCallback, useEffect, useRef, useState } from "react"
-import { findInReactTree } from "decky-frontend-lib"
-import { reactTree } from "../init"
 import { SearchIcon } from "../native-components/SearchIcon"
 import { TabManager } from "../classes/TabManager"
 import { FocusableInput } from "../native-components/FocusableInput"
@@ -10,15 +8,8 @@ interface SearchInputProps {
     tabManager: TabManager
 }
 
-const searchBarRootNode = findInReactTree(reactTree, node => node?.type?.toString().includes('SetUniversalSearchFocused'))
-
-export const patchSearchRootMemo = (props: SearchInputProps) => {
-    searchBarRootNode.child.memoizedProps.children[1].props = props
-    searchBarRootNode.child.memoizedProps.children[1].type = SearchBarInput
-}
-
-const SearchBarInput: VFC<SearchInputProps> = ({ tabManager }) => {
-    const url = tabManager.getActiveTabUrlRequested()
+export const SearchBarInput: VFC<SearchInputProps> = ({ tabManager }) => {
+    const url = "" //tabManager.getActiveTabUrlRequested()
     const [value, setValue] = useState(url)
     const [isFocused, setIsFocused] = useState(false)
     const ref = useRef(null)
@@ -66,7 +57,7 @@ const SearchBarInput: VFC<SearchInputProps> = ({ tabManager }) => {
                 preferredFocus={false}
                 onFocusWithin={setIsFocused}
                 onFocus={() => {
-                    log('search bar focused ', ref)
+                    // log('search bar focused ', ref)
                     // @ts-ignore
                     setTimeout(() => ref.current.select(), 50)
                     // e.target.select()
@@ -74,9 +65,6 @@ const SearchBarInput: VFC<SearchInputProps> = ({ tabManager }) => {
                 onChange={(evt: ChangeEvent<HTMLInputElement>) => setValue(evt.target.value)}
                 onKeyDown={(evt: KeyboardEvent) => { if (evt.key === 'Enter') submit() }}
                 onEnterKeyPress={() => (submit(), 'VKClose')}
-                // onKeyboardShow={(e) => { llog('keyboard show: ', e) }}
-                // onBlur={() => setIsFocused(false)}
-                // onKeyboardNavOut={() => { }}
             />
             <SearchIcon
                 className={'searchbar_SearchIconRight_1Ka4T' + addBackgroundClass(isFocused)}
