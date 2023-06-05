@@ -1,10 +1,10 @@
 {
   "name": "Web Browser",
   "author": "Jesse Bofill",
-  "flags": ["debug"],
+  "flags": [],
   "publish": {
     "tags": ["browser", "web", "internet"],
-    "description": "Web Browser",
+    "description": "A web browser with multiple features including tabs!, limited gamepad support, favorites and a multifunction search/url bar.",
     "image": "https://opengraph.githubassets.com/1/SteamDeckHomebrew/PluginLoader"
   }
 }
