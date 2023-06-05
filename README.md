@@ -1,17 +1,13 @@
-<h1 style="text-align: center;">Web Browser for Steam Deck</h1>
+<h1 align="center">Web Browser for Steam Deck</h1>
 
-<div style="text-align: center;">A multifeatured web broswer integegrated into the Steam Deck's game mode UI!</div>
+<div align="center">A multifeatured web broswer integegrated into the Steam Deck's game mode UI!</div>
 
-<div style="text-align: center;">
-  <small>Find it in the <a href="https://wiki.deckbrew.xyz/en/user-guide/plugin-store">Decky Loader store</a></small>
-</div> 
+<div align="center"><sub>Find it in the <a href="https://wiki.deckbrew.xyz/en/user-guide/plugin-store">Decky Loader store</a></sub></div>
 <br>
-
-
 
 ![Web browser screenshot of google front page](assets/screenshots/main.jpg)
 
-<small>*WARNING: This plugin uses the Steam Deck's built in Chromium Embedded Framework. This version of CEF is known to have security flaws. Caution is advised when navigating to external and unreputable sites. Some sites may exploit these secrity flaws and allow malicious code to be executed on your device. Use at your own risk.*</small>
+##### *WARNING: This plugin uses the Steam Deck's built in Chromium Embedded Framework. This version of CEF is known to have security flaws. Caution is advised when navigating to external and unreputable sites. Some sites may exploit these secrity flaws and allow malicious code to be executed on your device. Use at your own risk.*
 
 ## Features
 
@@ -56,31 +52,30 @@ An icon is added to the Steam Decks main menu to quickly access the browser.
 The browser makes use of the Steam Deck's controls to easily perform it's main tasks and also give the ability to navigate webpages that dont have gamepad support natively.
 
 #### Full List of Controls
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/y-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/y-dark.svg"><img height="16px" alt="Y Button:" title="Y Button" src="assets/button-icons/y-dark.svg"></picture> Open a new tab
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/y-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/y-dark.svg"><img height="16px" alt="Y Button:" title="Y Button" src="assets/button-icons/y-dark.svg" style="vertical-align: middle; transform: translateY(-2px);"></picture> Open a new tab
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/x-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/x-dark.svg"><img height="16px" alt="X Button:" title="X Button" src="assets/button-icons/x-dark.svg"></picture> Close tab
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/x-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/x-dark.svg"><img height="16px" alt="X Button:" title="X Button" src="assets/button-icons/x-dark.svg" style="vertical-align: middle; transform: translateY(-2px);"></picture> Close tab
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/l1-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/l1-dark.svg"><img height="16px" alt="L1 Button" title="L1 Button" src="assets/button-icons/l1-dark.svg"></picture> /
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/r1-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/r1-dark.svg"><img height="16px" alt="R1 Button:" title="R1 Button" src="assets/button-icons/r1-dark.svg"></picture> Previous/ Next tab
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/l1-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/l1-dark.svg"><img height="16px" alt="L1 Button" title="L1 Button" src="assets/button-icons/l1-dark.svg" style="vertical-align: middle; transform: translateY(-2px);"></picture> /
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/r1-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/r1-dark.svg"><img height="16px" alt="R1 Button:" title="R1 Button" src="assets/button-icons/r1-dark.svg" style="vertical-align: middle; transform: translateY(-2px);"></picture> Previous/ Next tab
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/start-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/start-dark.svg"><img height="16px" alt="Start Button:" title="Start Button" src="assets/button-icons/start-dark.svg"></picture> Open context menu
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/start-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/start-dark.svg"><img height="16px" alt="Start Button:" title="Start Button" src="assets/button-icons/start-dark.svg" style="vertical-align: middle; transform: translateY(-2px);"></picture> Open context menu
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/l4-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/l4-dark.svg"><img height="16px" alt="L4 Button" title="L4 Button" src="assets/button-icons/l4-dark.svg"></picture> /
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/r4-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/r4-dark.svg"><img height="16px" alt="R4 Button:" title="R4 Button" src="assets/button-icons/r4-dark.svg"></picture> Page back/ forward
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/l4-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/l4-dark.svg"><img height="16px" alt="L4 Button" title="L4 Button" src="assets/button-icons/l4-dark.svg" style="vertical-align: middle; transform: translateY(-2px);"></picture> /
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/r4-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/r4-dark.svg"><img height="16px" alt="R4 Button:" title="R4 Button" src="assets/button-icons/r4-dark.svg" style="vertical-align: middle; transform: translateY(-2px);"></picture> Page back/ forward
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/l5-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/l5-dark.svg"><img height="16px" alt="L5 Button" title="L5 Button" src="assets/button-icons/l5-dark.svg"></picture> /
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/r5-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/r5-dark.svg"><img height="16px" alt="R5 Button:" title="R5 Button" src="assets/button-icons/r5-dark.svg"></picture> "Tab" key/ "Shift" + "Tab" key (selects previous/ next element on page)
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/l5-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/l5-dark.svg"><img height="16px" alt="L5 Button" title="L5 Button" src="assets/button-icons/l5-dark.svg" style="vertical-align: middle; transform: translateY(-2px);"></picture> /
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/r5-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/r5-dark.svg"><img height="16px" alt="R5 Button:" title="R5 Button" src="assets/button-icons/r5-dark.svg" style="vertical-align: middle; transform: translateY(-2px);"></picture> "Tab" key/ "Shift" + "Tab" key (selects previous/ next element on page)
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/dpad_up-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/dpad_up-dark.svg"><img height="16px" alt="D Pad Up" title="D Pad Up" src="assets/button-icons/dpad_up-dark.svg"></picture> /
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/dpad_down-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/dpad_down-dark.svg"><img height="16px" alt="D Pad Down:" title="D Pad Down" src="assets/button-icons/dpad_down-dark.svg"></picture> "Page Up"/ "Page Down" key
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/dpad_up-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/dpad_up-dark.svg"><img height="16px" alt="D Pad Up" title="D Pad Up" src="assets/button-icons/dpad_up-dark.svg" style="vertical-align: middle; transform: translateY(-2px);"></picture> /
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/dpad_down-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/dpad_down-dark.svg"><img height="16px" alt="D Pad Down:" title="D Pad Down" src="assets/button-icons/dpad_down-dark.svg" style="vertical-align: middle; transform: translateY(-2px);"></picture> "Page Up"/ "Page Down" key
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/dpad_left-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/dpad_left-dark.svg"><img height="16px" alt="D Pad Left" title="D Pad Left" src="assets/button-icons/dpad_left-dark.svg"></picture> /
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/dpad_right-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/dpad_right-dark.svg"><img height="16px" alt="D Pad Right:" title="D Pad Right" src="assets/button-icons/dpad_right-dark.svg"></picture> "Arrow Left"/ "Arrow Right" key
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/dpad_left-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/dpad_left-dark.svg"><img height="16px" alt="D Pad Left" title="D Pad Left" src="assets/button-icons/dpad_left-dark.svg" style="vertical-align: middle; transform: translateY(-2px);"></picture> /
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/dpad_right-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/dpad_right-dark.svg"><img height="16px" alt="D Pad Right:" title="D Pad Right" src="assets/button-icons/dpad_right-dark.svg" style="vertical-align: middle; transform: translateY(-2px);"></picture> "Arrow Left"/ "Arrow Right" key
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/a-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/a-dark.svg"><img height="16px" alt="A Button:" title="A Button" src="assets/button-icons/a-dark.svg"></picture> "Enter" key
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/a-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/a-dark.svg"><img height="16px" alt="A Button:" title="A Button" src="assets/button-icons/a-dark.svg" style="vertical-align: middle; transform: translateY(-2px);"></picture> "Enter" key
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/b-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/b-dark.svg"><img height="16px" alt="B Button:" title="B Button" src="assets/button-icons/b-dark.svg" style="vertical-align: middle; transform: translateY(-2px);"></picture> If page has focus it will defocus it and set focus to the tab bar/ if page is not focused it will navigate back in the Steam UI
+<picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/b-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/b-dark.svg"><img height="16px" alt="B Button:" title="B Button" src="assets/button-icons/b-dark.svg"></picture> If page has focus it will defocus it and set focus to the tab bar/ if page is not focused it will navigate back in the Steam UI
 
 *Note: If a webpage has gamepad support these controls will be overridden and use the built in functions for those buttons. These controls will still work if the page itself is not focused but instead the tab in the tab bar is.
 
