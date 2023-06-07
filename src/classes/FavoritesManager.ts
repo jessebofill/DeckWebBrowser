@@ -1,4 +1,3 @@
-import { log } from "../log"
 import { StructureController } from "./StructureController"
 import { settingsManager } from "./SettingsManager"
 
@@ -32,7 +31,6 @@ class FavoritesManager extends StructureController {
         const name = pathArray[lastIndex]
         const path = pathArray.slice(1, -1)
         path.push(isFolder ? name : name + '_P')
-        log('fm path', path)
         return this.doesLineageExist(path)
     }
 

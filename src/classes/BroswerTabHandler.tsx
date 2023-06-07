@@ -1,11 +1,8 @@
-import { log } from "../log"
-import { GamepadButton, GamepadEvent, Menu, afterPatch, showContextMenu } from 'decky-frontend-lib'
+import { GamepadButton, GamepadEvent, afterPatch, showContextMenu } from 'decky-frontend-lib'
 import { BrowserTab } from "../components/BrowserTab"
 import { BrowserTabCloser } from "../components/BrowserTabCloser"
 import { TabManager } from "./TabManager"
 import { BrowserContextMenu } from "../components/BrowserContextMenu"
-import { mouse } from "../mouse"
-import { backendService } from "./BackendService"
 
 export default class BrowserTabHandler {
     title: string
@@ -73,35 +70,6 @@ export default class BrowserTabHandler {
                         //page forward
                         browser.m_browserView.GoForward()
                         break
-
-                    case GamepadButton.TRIGGER_RIGHT:
-                        // const targetCoords = mouse.getTargetCoords()
-                        // backendService.runInTarget(
-                        //     this.id,
-                        //     mouse.dispatchFakeMouseEventInTarget,
-                        //     false,
-                        //     targetCoords.x,
-                        //     targetCoords.y,
-                        //     'down'
-                        // )
-                        // mouse.isPressed = true
-                        break
-                }
-
-            },
-            onButtonUp: (evt: GamepadEvent) => {
-                switch (evt.detail.button) {
-                    case GamepadButton.TRIGGER_RIGHT:
-                    // const targetCoords = mouse.getTargetCoords()
-                    // backendService.runInTarget(
-                    //     this.id,
-                    //     mouse.dispatchFakeMouseEventInTarget,
-                    //     false,
-                    //     targetCoords.x,
-                    //     targetCoords.y,
-                    //     'up'
-                    // )
-                    // mouse.isPressed = false
                 }
 
             },
@@ -111,7 +79,6 @@ export default class BrowserTabHandler {
                 [GamepadButton.REAR_RIGHT_UPPER]: 'Shift Tab',
                 [GamepadButton.REAR_LEFT_LOWER]: 'Pg Back',
                 [GamepadButton.REAR_RIGHT_LOWER]: 'Pg Forward',
-                // [GamepadButton.SELECT]: 'Search',
             },
             onCancelActionDescription: 'Back',
             onSecondaryActionDescription: 'Close Tab',
@@ -137,7 +104,6 @@ export default class BrowserTabHandler {
 
     closeBrowser() {
         setTimeout(() => this.browser.Destroy(), 200)
-        log('Closing tab id: ' + this.id)
     }
 
     //make sure this is an arrow function so 'this' keeps its reference as this class instance
@@ -172,11 +138,6 @@ export default class BrowserTabHandler {
 
     async takeFocus() {
         this.navNode.BTakeFocus(3)
-        // this.navNode.m_rgChildren[0].BTakeFocus(3)
-        // log('trying to focus: ', this.id, ' with nav handle ', this.navNode)
-        // setTimeout(() => this.navNode.m_rgChildren[0].BTakeFocus(3), 500)
-        // this.navNode.Tree.DeferredFocus.RequestFocus(this.navNode, { bFocusDescendant: true })
-        // this.navNode.Tree.DeferredFocus.RequestFocus(this.navNode.m_rgChildren[0].m_rgChildren[0])
     }
 
 }

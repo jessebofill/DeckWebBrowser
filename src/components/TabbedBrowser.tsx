@@ -1,14 +1,9 @@
-import { log } from "../log"
 import { VFC, useEffect, useState } from "react"
 import { Tabs } from "../native-components/Tabs"
 import { TabManager } from "../classes/TabManager"
 import { tabContentRealHeight, tabContentRealY } from "../styling"
 import { status } from "../init"
 import { SteamSpinner } from "decky-frontend-lib"
-import { mouse } from "../mouse"
-
-
-log('height: ', tabContentRealHeight, ' y: ', tabContentRealY)
 
 interface TabbedBrowserProps {
     tabManager: TabManager
@@ -36,15 +31,12 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
     }
 
     if (!status.running) {
-        log('first run')
         status.running = true
         tabManager.createDefaultTabs()
     }
 
     useEffect(() => {
-        // const unregisterForAnalogInputMessages = window.SteamClient.Input.RegisterForControllerAnalogInputMessages(mouse.move).unregister;        
         (async () => {
-            // log('mounted')
             await tabManager.loadTabPromise
             tabManager.setActiveBrowserHeader()
             setActiveTab(tabManager.activeTab)
@@ -58,11 +50,9 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
         })()
 
         return () => {
-            // unregisterForAnalogInputMessages()
             if (tabManager.browserViewName === tabManager.headerStore.GetCurrentBrowserAndBackstack().browser.name) {
                 tabManager.headerStore.SetCurrentBrowserAndBackstack(null, false)
             }
-            // log('unmounted')
         }
     }, [])
 

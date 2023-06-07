@@ -1,13 +1,10 @@
-import { log, warnN } from "../log"
+import { warnN } from "../log"
 import { defaultUrl, windowRouter } from "../init"
 import BrowserTabHandler from "./BroswerTabHandler"
 import isURL from "validator/lib/isURL"
 import { v4 as uuidv4 } from "uuid"
 import { SearchEngine, settingsManager } from "./SettingsManager"
 import { backendService } from "./BackendService"
-import { loadScriptInTarget } from "../injectToTarget"
-
-
 
 export class TabManager {
     tabHandlers: BrowserTabHandler[]
@@ -67,7 +64,6 @@ export class TabManager {
     }
 
     createDefaultTabs() {
-        log('creating default tabs')
         if (!settingsManager.settingsLoaded) {
             warnN('Tab Manager', 'Settings have not loaded when trying to create default tabs. Using fallback url to create tab instead.')
             this.createTab()
@@ -198,7 +194,6 @@ function convertLocalhostIpIfNeeded(input: string) {
         splitIp[0] = 'localhost:'
         input = splitIp.join('')
     }
-    log('conversion: ', input)
     return input
 }
 
@@ -220,7 +215,6 @@ function getQueriedUrl(query: string, searchEngine: SearchEngine) {
 function waitForUniqueUriLoad(browser: any, id: string) {
     let onFinish: any
     browser.m_browserView.on('finished-request', (title: string) => {
-        // loadScriptInTarget(id).then((e) => log('script loaded', e))
         if (title === `data:text/plain,${id}`) {
             onFinish()
         }

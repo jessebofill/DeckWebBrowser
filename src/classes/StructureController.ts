@@ -1,5 +1,3 @@
-import { log } from "../log"
-
 export type structureMappingFn = (children: any[] | null, value: any, lineageArray: string[], ...externalArgs: any) => any
 
 export class StructureController {

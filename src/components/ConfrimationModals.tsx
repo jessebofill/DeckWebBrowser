@@ -16,14 +16,12 @@ export const ConfirmFavoriteOverwriteModal: VFC<ConfirmFavoriteOverwriteModalPro
         <ConfirmModal
             className={'destructiveModal'}
             strTitle={'Are you sure you want to overwrite ' + name}
-            // bDestructiveWarning={true}
             strCancelButtonText='Back'
             onOK={() => {
                 closeModal()
                 onConfirm()
             }}
             onCancel={closeModal}
-
         >
             <div style={{ marginTop: '10px', top: '10px', position: 'relative' }}>
                 <div >
@@ -39,7 +37,6 @@ export const ConfirmFavoriteOverwriteModal: VFC<ConfirmFavoriteOverwriteModalPro
                     </Marquee>
                 </div>
             </div>
-
         </ConfirmModal >
     )
 }
@@ -83,7 +80,6 @@ export const ConfirmFavoriteDeleteModal: VFC<ConfirmFavoriteItemDeleteProps> = (
             <div style={{ height: 15 }}>
                 {...body}
             </div>
-
         </ConfirmModal>
     )
 }
@@ -114,7 +110,6 @@ export const ConfirmDeleteDefaultTabModal: VFC<ConfirmDeleteDefaultTabModalProps
                     {settingsManager.settings.defaultTabs[index]}
                 </Marquee>
             </div>
-
         </ConfirmModal>
     )
 }

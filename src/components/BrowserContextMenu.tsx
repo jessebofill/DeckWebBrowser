@@ -1,4 +1,4 @@
-import { log, warnN } from "../log";
+import { warnN } from "../log";
 import { Marquee, Menu, MenuGroup, MenuItem, showModal, GamepadButton, GamepadEvent, ModalRoot, Focusable, MenuGroupProps, ConfirmModal, MenuItemProps, Navigation, sleep } from "decky-frontend-lib";
 import { VFC } from "react";
 import { NewFavoriteFolderModal } from "./NewFavoriteFolderModal";
@@ -8,7 +8,6 @@ import { TabManager } from "../classes/TabManager";
 import { structureMappingFn } from "../classes/StructureController";
 import { ConfirmFavoriteDeleteModal } from "./ConfrimationModals";
 import { settingsManager } from "../classes/SettingsManager";
-import { backendService } from "../classes/BackendService";
 import { routePath, status } from "../init";
 
 type SubemenuProps = MenuItemProps & MenuGroupProps
@@ -137,7 +136,6 @@ interface BrowserContextMenuProps {
 }
 
 export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabManager }) => {
-    // log('rendering BrowserContext Menu')
     if (!favoritesManager.loaded) {
         warnN('Context Menu', 'Favorites have not loaded')
     }
@@ -220,21 +218,12 @@ export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabMana
                 Add to Default Tabs
             </MenuItem>
             <div className="gamepadcontextmenu_ContextMenuSeparator_1KL6n" />
-            {/* <MenuItem >History</MenuItem> */}
-            {/* <div className="gamepadcontextmenu_ContextMenuSeparator_1KL6n" /> */}
-            {/* <MenuItem
-                onClick={() => {
-
-                }}
-            >
-                Settings
-            </MenuItem> */}
             <MenuItem
                 onClick={activeTabHasTarget ? () => tabManager.inspectActiveTab() : () => tabManager.openCefInspectorTab()}
                 onOptionsButton={activeTabHasTarget ? () => {
                     menu.instance.Hide()
                     tabManager.openCefInspectorTab()
-                } : () => {}}
+                } : () => { }}
                 onOKActionDescription={activeTabHasTarget ? 'Inspect Tab' : 'Open Inspector'}
                 onOptionsActionDescription={activeTabHasTarget ? 'Open Inspector' : ''}
             >

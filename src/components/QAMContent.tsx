@@ -5,12 +5,10 @@ import { SearchEngine, settingsManager } from "../classes/SettingsManager";
 import { ReorderableEntry, ReorderableList } from "./ReorderableListModified";
 import { ConfirmDeleteDefaultTabModal } from "./ConfrimationModals";
 import { tabManager } from "../classes/TabManager";
-import { log } from "../log";
 
 const openUrl = (url: string, inNewtab?: boolean) => {
     if (!status.running) {
         status.running = true
-        log('first run menu')
         tabManager.createTab(url)
         Router.CloseSideMenus()
         Router.Navigate(routePath)
@@ -26,6 +24,7 @@ const openUrl = (url: string, inNewtab?: boolean) => {
         }
     }
 }
+
 export const QAMContent: VFC = ({ }) => {
     const [isRunning, setIsRunning] = useState(status.running)
     const defaultTabItems = useMemo(() => {
@@ -92,7 +91,6 @@ export const QAMContent: VFC = ({ }) => {
                                             break
                                         case GamepadButton.OPTIONS:
                                             openUrl(tab, true)
-
                                     }
                                 }}
                                 reorderButton={GamepadButton.START}

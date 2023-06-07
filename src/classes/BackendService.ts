@@ -1,6 +1,4 @@
 import { ServerAPI } from "decky-frontend-lib"
-import { log } from "../log"
-
 class BackendService {
     serverApi: ServerAPI | null
     constructor() {
@@ -19,7 +17,6 @@ class BackendService {
             })
         }
         const code = '(' + fn.toString() + ')' + `(${strArgs! ? strArgs.join(',') : '' })`
-        // log('code: ', code)
         return this.serverApi!.callPluginMethod('execute_in_target', { code, frontendId: id, run_async: async })
     }
 }

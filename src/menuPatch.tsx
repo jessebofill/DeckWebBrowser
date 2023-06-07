@@ -1,4 +1,3 @@
-import { log } from "./log"
 import { afterPatch, findInReactTree } from "decky-frontend-lib"
 import { reactTree, routePath } from "./init"
 import { FC } from "react"

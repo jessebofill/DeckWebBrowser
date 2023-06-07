@@ -1,7 +1,5 @@
 import { Fragment, JSXElementConstructor, ReactElement, ReactNode, useEffect, useState } from 'react';
-
 import { Field, FieldProps, Focusable, GamepadButton, GamepadEvent } from 'decky-frontend-lib';
-import { log } from '../log';
 
 /**
  * A ReorderableList entry of type <T>.
@@ -62,7 +60,6 @@ export function ReorderableList<T>(props: ReorderableListProps<T>) {
         const event = e as CustomEvent;
         const button = event.detail.button
         if (button === (props.reorderButton ? props.reorderButton : GamepadButton.SECONDARY)) {
-            log('button', button)
             toggleReorderEnabled()
         }
         if (reorderEnabled) {
@@ -177,7 +174,7 @@ function ReorderableItem<T>(props: ReorderableListEntryProps<T>) {
         setIsSelectedLastFrame(val);
     }
 
-    if(!props.fieldProps) props.fieldProps = {}
+    if (!props.fieldProps) props.fieldProps = {}
 
     const {
         actionDescriptionMap,

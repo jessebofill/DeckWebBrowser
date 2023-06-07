@@ -1,4 +1,3 @@
-import { log } from "../log"
 import { ChangeEvent, VFC, useCallback, useEffect, useRef, useState } from "react"
 import { SearchIcon } from "../native-components/SearchIcon"
 import { TabManager } from "../classes/TabManager"
@@ -9,24 +8,15 @@ interface SearchInputProps {
 }
 
 export const SearchBarInput: VFC<SearchInputProps> = ({ tabManager }) => {
-    const url = "" //tabManager.getActiveTabUrlRequested()
+    const url = ""
     const [value, setValue] = useState(url)
     const [isFocused, setIsFocused] = useState(false)
     const ref = useRef(null)
-
-    // llog('search rerendered')
 
     useEffect(() => {
         const url = tabManager.getActiveTabUrlRequested()
         setValue(url)
     }, [isFocused])
-
-    // useEffect(() => {
-    //     llog('search mounted')
-    //     return () => {
-    //         llog('search unmounted')
-    //     }
-    // }, []);
 
     const addBackgroundClass = useCallback((isFocused: boolean) => {
         return isFocused ? ' searchbar_WhiteBackground_1l8js' : ''
@@ -57,10 +47,8 @@ export const SearchBarInput: VFC<SearchInputProps> = ({ tabManager }) => {
                 preferredFocus={false}
                 onFocusWithin={setIsFocused}
                 onFocus={() => {
-                    // log('search bar focused ', ref)
                     // @ts-ignore
                     setTimeout(() => ref.current.select(), 50)
-                    // e.target.select()
                 }}
                 onChange={(evt: ChangeEvent<HTMLInputElement>) => setValue(evt.target.value)}
                 onKeyDown={(evt: KeyboardEvent) => { if (evt.key === 'Enter') submit() }}

@@ -12,6 +12,4 @@ export const reactTree = (document.getElementById('root') as any)._reactRootCont
 export const status = {
     running: false
 }
-// const header = findInReactTree(tree, node => node?.type?.toString().includes('GetFlexGrowPriority()'))
-// export const searchInputNode = findInReactTree(reactTree, node => node?.type?.toString().includes('GamepadUI.Search.Root()'))
 

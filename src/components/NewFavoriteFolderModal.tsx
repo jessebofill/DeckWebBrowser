@@ -1,11 +1,8 @@
-import { log } from "../log"
 import { ConfirmModal, Marquee, TextField, DialogButton, showModal } from "decky-frontend-lib"
 import { VFC, useState, ChangeEvent } from "react"
 import { TabManager } from "../classes/TabManager"
 import { favoritesManager } from "../classes/FavoritesManager"
 import { NewFavoriteModal } from "./NewFavoriteModal"
-
-
 
 interface NewFavoriteFolderModalProps {
     tabManager: TabManager
@@ -14,13 +11,10 @@ interface NewFavoriteFolderModalProps {
 }
 
 export const NewFavoriteFolderModal: VFC<NewFavoriteFolderModalProps> = ({ tabManager, parentPath, closeModal }) => {
-    // log('rendering new folder modal')
-    log('parant path', parentPath)
     const [folderName, setFolderName] = useState('')
     const [alreadyExists, setAlreadyExists] = useState(false)
     const updateFolderName = (newName: string) => {
         setFolderName(newName)
-        log('does exist', favoritesManager.doesExist([...parentPath, newName], true))
         setAlreadyExists(favoritesManager.doesExist([...parentPath, newName], true))
     }
     const dir = favoritesManager.pathToString(parentPath, '> ')
@@ -32,7 +26,6 @@ export const NewFavoriteFolderModal: VFC<NewFavoriteFolderModalProps> = ({ tabMa
             strCancelButtonText='Cancel'
             onOK={() => {
                 closeModal()
-                // toast showing new folder created
                 if (!favoritesManager.doesExist([...parentPath, folderName], true)) {
                     favoritesManager.addFolder(folderName, parentPath)
                 }
@@ -60,10 +53,9 @@ export const NewFavoriteFolderModal: VFC<NewFavoriteFolderModalProps> = ({ tabMa
                         className='DialogInput_CopyAction'
                         disabled={!folderName}
                         focusable={!!folderName}
-                        style={{marginLeft: '25px'}}
+                        style={{ marginLeft: '25px' }}
                         onClick={() => {
                             closeModal()
-                            // toast showing new folder created
                             if (!favoritesManager.doesExist([...parentPath, folderName], true)) {
                                 favoritesManager.addFolder(folderName, parentPath)
                             }

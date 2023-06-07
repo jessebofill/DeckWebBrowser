@@ -1,7 +1,6 @@
 import { backendService } from "./classes/BackendService";
 import { tabManager } from "./classes/TabManager";
 import { SP_Window } from "./init"
-import { log } from "./log"
 import { tabContentRealY } from "./styling"
 
 type FakeMouseEvtType = 'down' | 'move' | 'up'
@@ -28,7 +27,6 @@ class Mouse {
         this.globalCoords.y = newY
     }
     move = (touchEvt: any) => {
-        // console.log('x: ', touchEvt[0].x, ' y: ', touchEvt[0].y)
         const dx = touchEvt[0].x - this.globalCoordOffsets.x
         const dy = touchEvt[0].y - this.globalCoordOffsets.y
         this.globalCoordOffsets.x = touchEvt[0].x

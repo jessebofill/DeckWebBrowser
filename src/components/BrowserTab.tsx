@@ -1,5 +1,4 @@
 import { Focusable, GamepadEvent, FooterLegendProps } from "decky-frontend-lib";
-import { log } from "../log";
 import { VFC, useEffect } from "react";
 import { BrowserContainer } from "../native-components/BrowserContainer";
 import { TabManager } from "../classes/TabManager";
@@ -28,8 +27,6 @@ export const BrowserTab: VFC<BrowserTabProps> = (props: BrowserTabProps) => {
                 // @ts-ignore
                 if (evt.target?.classList[0] !== 'mainbrowser_BrowserContainer_3-G5o') {
                     setTimeout(() => {
-                        // SteamClient.Input.ControllerKeyboardSetKeyState(43, true)
-                        // SteamClient.Input.ControllerKeyboardSetKeyState(43, false)
                         // @ts-ignore
                         evt.detail.focusedNode.m_rgChildren[0].BTakeFocus(3)
                     }, 200)
@@ -69,7 +66,6 @@ export const BrowserTab: VFC<BrowserTabProps> = (props: BrowserTabProps) => {
                     }
                 }
             }}
-            // onOKActionDescription='Enter'
             {...focusableActionProps}
         >
             <BrowserContainer
@@ -85,5 +81,4 @@ export const BrowserTab: VFC<BrowserTabProps> = (props: BrowserTabProps) => {
     )
     getNavNode(element)
     return element
-
 }

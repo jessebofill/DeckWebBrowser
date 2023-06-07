@@ -1,4 +1,3 @@
-import { log } from "../log";
 import { ConfirmModal, Marquee, TextField, getFocusNavController, showModal, sleep } from "decky-frontend-lib";
 import { ChangeEvent, FocusEvent, VFC, useEffect, useState } from "react";
 import { favoritesManager } from "../classes/FavoritesManager";
@@ -32,22 +31,18 @@ export const NewFavoriteModal: VFC<NewFavoriteModalProps> = ({ tabManager, paren
         })()
     }, [])
 
-    //STOP HERE
     return (
         <ConfirmModal
             className={alreadyExists ? 'destructiveModal' : ''}
-            //'Update favorite
             strTitle={dir + favoriteName}
             strOKButtonText={alreadyExists ? 'Update ' + favoriteName : ('Save favorite' + (favoriteName ? ' as ' + favoriteName : ''))}
             strCancelButtonText='Cancel'
             onOK={() => {
                 const confirm = () => {
                     closeModal()
-                    // toast showing new favorite created
                     favoritesManager.addFavorite(favoriteName, editedUrl, parentPath)
                 }
                 if (favoritesManager.doesExist([...parentPath, favoriteName], false)) {
-                    log('favorite exists')
                     showModal(
                         <ConfirmFavoriteOverwriteModal
                             name={favoriteName}

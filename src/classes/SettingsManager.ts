@@ -1,5 +1,5 @@
-import { errorN, log } from "../log";
-import { ServerAPI, ServerResponse } from "decky-frontend-lib";
+import { errorN } from "../log";
+import { ServerResponse } from "decky-frontend-lib";
 import { Favorites } from "./FavoritesManager";
 import { backendService } from "./BackendService";
 

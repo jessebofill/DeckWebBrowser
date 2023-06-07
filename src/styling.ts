@@ -1,5 +1,5 @@
 import myFont from "../assets/FORCED_SQUARE.ttf"
-import { log, warnN } from "./log";
+import { warnN } from "./log";
 
 const tabBarPadding = 5
 //tabHeight is defined by component and should not be changed
@@ -12,11 +12,7 @@ export function appendStyles(_window?: Window) {
     if (!_window) warnN('Styling', 'No SP Window')
     else {
 
-        let style = _window.document.createElement('style');
-        // const font_name = new FontFace('MyFont', `url(http://127.0.0.1:1337/plugins/${pluginName}/assets/FORCED_SQUARE.ttf)`);
-        // const font_name = new FontFace('MyFont', myFont);
-        // _window.document.fonts.add(font_name);
-        // font_name.load()
+        let style = _window.document.createElement('style')
 
         style.textContent = `
     @font-face {
@@ -80,31 +76,7 @@ export function appendStyles(_window?: Window) {
         background: #de3618;
         color: #fff
     }
-
     `
-        // .tabbedBrowserContainer .gamepadtabbedpage_TabContentsScroll_1X4dt {
-        //     position: absolute;
-        //     top: 0;
-        //     right: 0;
-        //     bottom: 0;
-        //     left: 0;
-        //     padding-top: 0px;
-        //     padding-left: 0vw;
-        //     padding-right: 0vw;
-        //     scroll-padding-top: 116px;
-        //     scroll-padding-bottom: 56px;
-        // }
-        // .tabbedBrowserContainer .mainbrowser_BrowserContainer_3-G5o {
-        //     position: absolute;
-        //     top: 0;
-        //     right: 0;
-        //     bottom: 0;
-        //     left: 0;
-        // }
-        // .tabbedBrowserContainer .mainbrowser_MainBrowser_12QSs {
-
-        // }
-        // background: #3D4450;
 
         _window.document.head.appendChild(style);
     }
