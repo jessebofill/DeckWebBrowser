@@ -1,4 +1,3 @@
-import { log } from "../log"
 import { FooterLegendProps, findModuleChild } from "decky-frontend-lib"
 import { VFC } from "react"
 

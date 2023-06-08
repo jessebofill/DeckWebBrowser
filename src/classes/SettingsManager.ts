@@ -14,6 +14,7 @@ interface Settings {
     homeUrl?: string
     defaultTabs: string[]
     searchEngine?: SearchEngine
+    seenWarning?: boolean
 }
 
 interface History {

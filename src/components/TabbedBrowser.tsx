@@ -1,10 +1,11 @@
 import { log } from "../log"
-import { VFC, useEffect, useState } from "react"
-import { Tabs } from "../native-components/Tabs"
+import { VFC, createContext, useEffect, useState } from "react"
+import { Navigation, Tabs, showModal, sleep } from "decky-frontend-lib"
 import { TabManager } from "../classes/TabManager"
-import { tabContentRealHeight, tabContentRealY } from "../styling"
-import { status } from "../init"
+import { routePath, status } from "../init"
 import { SteamSpinner } from "decky-frontend-lib"
+import { settingsManager } from "../classes/SettingsManager"
+import { UsageWarningModal } from "./UsageWarningModal"
 import { mouse } from "../mouse"
 
 
@@ -14,9 +15,12 @@ interface TabbedBrowserProps {
     tabManager: TabManager
 }
 
+export const BrowserMountAnimationContext = createContext<{ done: boolean }>({done: false})
+
 export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
     const [update, setUpdate] = useState(false)
-    const [activeTab, setActiveTab] = useState<string | null>(tabManager.tabHandlers.length > 0 ? tabManager.activeTab : null);
+    const [activeTab, setActiveTab] = useState<string | null>(tabManager.tabHandlers.length > 0 ? tabManager.activeTab : null)
+    const [mountAnimationFinished, setMountAnimationFinished] = useState(false)
 
     const activateTab = (id: string) => {
         tabManager.setActiveTabById(id)
@@ -43,6 +47,21 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
 
     useEffect(() => {
         // const unregisterForAnalogInputMessages = window.SteamClient.Input.RegisterForControllerAnalogInputMessages(mouse.move).unregister;        
+        if (!settingsManager.settings.seenWarning) {
+            showModal(<UsageWarningModal
+                closeModal={() => { }}
+                onOk={() => { settingsManager.setSetting('seenWarning', true) }}
+                onCancel={async () => {
+                    Navigation.NavigateBack()
+                    while (window.location.pathname === '/routes' + routePath) {
+                        await sleep(100)
+                    }
+                    status.running = false
+                    tabManager.closeAllTabs()
+                }}
+            />)
+
+        }
         (async () => {
             // log('mounted')
             await tabManager.loadTabPromise
@@ -52,8 +71,8 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
             tabManager.registerOnCloseTab(onCloseTab)
             tabManager.tabHandlers.forEach(tabHandler => tabHandler.registerOnTitleChange(onTitleChange))
             setTimeout(() => {
-                tabManager.getActiveTabBrowserView().SetBounds(0, tabContentRealY, 1280, tabContentRealHeight + 1)
-            }, 300)
+                setMountAnimationFinished(true)
+            }, 800)
 
         })()
 
@@ -68,13 +87,15 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
 
     return (!activeTab ? <SteamSpinner /> :
         <div style={{ marginTop: '40px', height: 'calc( 100% - 40px)', background: '#3D4450' }} className="tabbedBrowserContainer">
-            <Tabs
-                title="Web Browser"
-                activeTab={activeTab}
-                onShowTab={activateTab}
-                tabs={tabManager.tabHandlers.map(tabHandler => tabHandler.tab)}
-                autoFocusContents={true}
-            />
+            <BrowserMountAnimationContext.Provider value={{ done: mountAnimationFinished }}>
+                <Tabs
+                    title="Web Browser"
+                    activeTab={activeTab}
+                    onShowTab={activateTab}
+                    tabs={tabManager.tabHandlers.map(tabHandler => tabHandler.tab)}
+                    autoFocusContents={true}
+                />
+            </BrowserMountAnimationContext.Provider>
         </div >
     )
 }
