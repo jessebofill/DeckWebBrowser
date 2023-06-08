@@ -14,6 +14,6 @@ interface BrowserContainerProps {
 }
 
 export const BrowserContainer = findInReactTree(reactTree, node => {
-    return node?.type?.toString().includes('n.Z5.GamepadUI.SteamWeb()')
+    return node?.type?.toString().includes('Z5.GamepadUI.SteamWeb()') && node?.type?.toString().includes('GetStoreBrowser()')
 }).child.child.child.child.type as VFC<BrowserContainerProps>
 

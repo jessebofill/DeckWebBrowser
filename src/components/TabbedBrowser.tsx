@@ -1,5 +1,5 @@
 import { VFC, useEffect, useState } from "react"
-import { Tabs } from "../native-components/Tabs"
+import { Tabs } from "decky-frontend-lib"
 import { TabManager } from "../classes/TabManager"
 import { tabContentRealHeight, tabContentRealY } from "../styling"
 import { status } from "../init"
