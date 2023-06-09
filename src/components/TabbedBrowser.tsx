@@ -1,9 +1,11 @@
 import { VFC, useEffect, useState } from "react"
-import { Tabs } from "decky-frontend-lib"
+import { Navigation, Tabs, showModal, sleep } from "decky-frontend-lib"
 import { TabManager } from "../classes/TabManager"
 import { tabContentRealHeight, tabContentRealY } from "../styling"
-import { status } from "../init"
+import { routePath, status } from "../init"
 import { SteamSpinner } from "decky-frontend-lib"
+import { settingsManager } from "../classes/SettingsManager"
+import { UsageWarningModal } from "./UsageWarningModal"
 
 interface TabbedBrowserProps {
     tabManager: TabManager
@@ -36,6 +38,21 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
     }
 
     useEffect(() => {
+        if (!settingsManager.settings.seenWarning) {
+            showModal(<UsageWarningModal
+                closeModal={() => { }}
+                onOk={() => { settingsManager.setSetting('seenWarning', true) }}
+                onCancel={async () => {
+                    Navigation.NavigateBack()
+                    while (window.location.pathname === '/routes' + routePath) {
+                        await sleep(100)
+                    }
+                    status.running = false
+                    tabManager.closeAllTabs()
+                }}
+            />)
+
+        }
         (async () => {
             await tabManager.loadTabPromise
             tabManager.setActiveBrowserHeader()
