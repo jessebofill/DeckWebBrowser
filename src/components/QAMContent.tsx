@@ -146,6 +146,11 @@ export const QAMContent: VFC = ({ }) => {
                         Kill Browser
                     </ButtonItem>
                 </PanelSectionRow>
+                <PanelSectionRow>
+                    <ButtonItem layout='below' onClick={() => openUrl('https://github.com/jessebofill/DeckWebBrowser#readme', true)}>
+                        View Readme
+                    </ButtonItem>
+                </PanelSectionRow>
             </PanelSection>
         </>
     );
