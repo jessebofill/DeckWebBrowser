@@ -1,7 +1,8 @@
 import { Focusable, GamepadEvent, FooterLegendProps } from "decky-frontend-lib";
-import { VFC, useEffect } from "react";
+import { VFC, useContext, useEffect } from "react";
 import { BrowserContainer } from "../native-components/BrowserContainer";
 import { TabManager } from "../classes/TabManager";
+import { BrowserMountAnimationContext } from "./TabbedBrowser";
 
 interface BrowserTabProps {
     browser: any
@@ -14,6 +15,7 @@ interface BrowserTabProps {
 
 export const BrowserTab: VFC<BrowserTabProps> = (props: BrowserTabProps) => {
     const { browser, tabId, tabManager, getNavNode, clearNavNode, focusableActionProps } = props
+    const browserMountAnimation = useContext(BrowserMountAnimationContext)
 
     useEffect(() => {
         return () => clearNavNode()
@@ -71,7 +73,7 @@ export const BrowserTab: VFC<BrowserTabProps> = (props: BrowserTabProps) => {
             <BrowserContainer
                 browser={browser}
                 className={"mainbrowser_ExternalBrowserContainer_3FyI1" + (tabManager.activeTab === tabId ? ' activeBrowserTab_BrowserContainer' : '')}
-                visible={tabManager.activeTab === tabId}
+                visible={tabManager.activeTab === tabId && browserMountAnimation.done}
                 hideForModals={true}
                 external={true}
                 displayURLBar={false}
