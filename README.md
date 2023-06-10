@@ -5,7 +5,7 @@
 <div align="center"><sub>Find it in the <a href="https://wiki.deckbrew.xyz/en/user-guide/plugin-store">Decky Loader store</a></sub></div>
 <br>
 
-![Web browser screenshot of google front page](assets/screenshots/main.jpg)
+![Web browser screenshot of google front page](assets/screenshots/main.png)
 
 ##### *WARNING: This plugin uses the Steam Deck's built in Chromium Embedded Framework. This version of CEF is known to have security flaws. Caution is advised when navigating to external and unreputable sites. Some sites may exploit these secrity flaws and allow malicious code to be executed on your device. Use at your own risk.*
 
