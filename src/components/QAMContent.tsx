@@ -112,7 +112,7 @@ export const QAMContent: VFC = ({ }) => {
                                     { label: 'Bing', data: SearchEngine.BING },
                                     { label: 'Yahoo', data: SearchEngine.YAHOO }
                                 ]}
-                                selectedOption={settingsManager.settings.searchEngine}
+                                selectedOption={settingsManager.settings.searchEngine ?? SearchEngine.GOOGLE}
                                 onChange={(option) => {
                                     settingsManager.setSetting('searchEngine', option.data)
                                 }}
