@@ -9,7 +9,7 @@ import { UsageWarningModal } from "./UsageWarningModal"
 import { mouse } from "../mouse"
 
 
-log('height: ', tabContentRealHeight, ' y: ', tabContentRealY)
+// log('height: ', tabContentRealHeight, ' y: ', tabContentRealY)
 
 interface TabbedBrowserProps {
     tabManager: TabManager
