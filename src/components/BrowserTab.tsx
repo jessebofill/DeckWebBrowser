@@ -31,7 +31,7 @@ export const BrowserTab: VFC<BrowserTabProps> = (props: BrowserTabProps) => {
                     setTimeout(() => {
                         // @ts-ignore
                         evt.detail.focusedNode.m_rgChildren[0].BTakeFocus(3)
-                    }, 200)
+                    }, browserMountAnimation.done ? 200 : 1100)
                 }
             }}
 
