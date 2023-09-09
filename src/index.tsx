@@ -24,7 +24,7 @@ export default definePlugin((serverApi: ServerAPI) => {
     return {
         title: <div className={staticClasses.Title}>Web Browser</div>,
         content: <QAMContent />,
-        icon: <PluginIcon />,
+        icon: <PluginIcon size='1em'/>,
         onDismount() {
             serverApi.routerHook.removeRoute(routePath);
             unpatchMenu()
