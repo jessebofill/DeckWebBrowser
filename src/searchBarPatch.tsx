@@ -12,7 +12,7 @@ export const patchSearchBar = async () => {
         searchBarRootNode = findInReactTree(reactTree, node => node?.type?.toString().includes('SetUniversalSearchFocused') && node?.type?.toString().includes('GetForceHeaderAfterResume'))
         if (searchBarRootNode) continue
         if (t >= 20000) {
-            logN('Search Bar Patch', `Failed to find search bar root node after ${t / 1000}`)
+            logN('Search Bar Patch', `Failed to find search bar root node after ${t / 1000} sec.`)
             return
         }
         t += 200
@@ -30,7 +30,7 @@ export const patchSearchBar = async () => {
             if (res) {
                 const [parent, key] = res
                 parent[key] = <SearchBarInput tabManager={tabManager} />
-            } else logN("Search Bar Patch", 'Failed to find search bar element to patch')
+            } else logN("Search Bar Patch", 'Failed to find search bar element to patch.')
         }
         return ret
     }

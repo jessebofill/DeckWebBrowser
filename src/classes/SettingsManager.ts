@@ -15,6 +15,7 @@ interface Settings {
     defaultTabs: string[]
     searchEngine?: SearchEngine
     seenWarning?: boolean
+    menuPosition: number
 }
 
 interface History {
@@ -52,7 +53,7 @@ export class SettingsManager {
         this.settingsLoaded = false
         this.favoritesLoaded = false
         this.historyLoaded = false
-        this.settings = { defaultTabs: ['home'] }
+        this.settings = { defaultTabs: ['home'], menuPosition: 3 }
         this.favorites = {}
         this.history = {}
     }
@@ -68,8 +69,15 @@ export class SettingsManager {
         this.historyLoad = backendService.serverApi.callPluginMethod<BackendLoadArgs, History>('load', { manager: 'history' })
         this.settingsLoad.then(({ success, result }) => {
             if (success) {
-                if (Object.keys(result).length === 0) this.saveDataSet('settings')
-                else this.settings = result
+                if (Object.keys(result).length === 0) {
+                    this.saveDataSet('settings')
+                } else {
+                    this.settings = result
+                    if (!result.menuPosition) {
+                        this.settings.menuPosition = 3
+                        this.saveDataSet('settings')
+                    }
+                }
                 this.settingsLoaded = true
             }
             else errorN('Settings Manager', 'Failed to load settings')
@@ -89,8 +97,8 @@ export class SettingsManager {
             else errorN('Settings Manager', 'Failed to load history')
         })
     }
-    
-    saveSetting(settingName: keyof Settings){
+
+    saveSetting(settingName: keyof Settings) {
         backendService.serverApi!.callPluginMethod<BackendSaveSettingArgs>('save_setting', { key: settingName, value: this.settings[settingName] })
     }
 

@@ -5,6 +5,7 @@ import { SearchEngine, settingsManager } from "../classes/SettingsManager";
 import { ReorderableEntry, ReorderableList } from "./ReorderableListModified";
 import { ConfirmDeleteDefaultTabModal } from "./ConfrimationModals";
 import { tabManager } from "../classes/TabManager";
+import { EnhancedSelector } from './generic/EnhancedSelector';
 
 const openUrl = (url: string, inNewtab?: boolean) => {
     if (!status.running) {
@@ -119,6 +120,33 @@ export const QAMContent: VFC = ({ }) => {
                             />
                         </PanelSectionRow>
                     </PanelSection>
+                    <PanelSection title='Menu Position' >
+                        <PanelSectionRow>
+                            <Field label={
+                                <div style={{ width: '100%' }}>
+                                    <EnhancedSelector
+                                        rgOptions={[
+                                            { label: '1', data: 1 },
+                                            { label: '2', data: 2 },
+                                            { label: '3', data: 3 },
+                                            { label: '4', data: 4 },
+                                            { label: '5', data: 5 },
+                                            { label: '6', data: 6 },
+                                            { label: '7', data: 7 },
+                                            { label: '8', data: 8 },
+                                            { label: '9', data: 9 },
+                                        ]}
+                                        onChange={option => {
+                                            settingsManager.setSetting('menuPosition', option.data)
+                                        }}
+                                        selectedOption={settingsManager.settings.menuPosition}
+                                        fullWidth={true}
+                                    />
+                                </div>}
+                            />
+                        </PanelSectionRow>
+                    </PanelSection>
+
                 </>
             }
             <PanelSection title='other'>
