@@ -1,6 +1,6 @@
 import { warnN } from "../log"
 import { defaultUrl, windowRouter } from "../init"
-import BrowserTabHandler from "./BroswerTabHandler"
+import BrowserTabHandler from "./BrowserTabHandler"
 import isURL from "validator/lib/isURL"
 import { v4 as uuidv4 } from "uuid"
 import { SearchEngine, settingsManager } from "./SettingsManager"

@@ -1,6 +1,6 @@
 <h1 align="center">Web Browser for Steam Deck</h1>
 
-<div align="center">A multifeatured web broswer integegrated into the Steam Deck's game mode UI!</div>
+<div align="center">A multifeatured web browser integegrated into the Steam Deck's game mode UI!</div>
 
 <div align="center"><sub>Find it in the <a href="https://wiki.deckbrew.xyz/en/user-guide/plugin-store">Decky Loader store</a></sub></div>
 <br>
