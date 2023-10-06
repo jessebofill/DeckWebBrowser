@@ -81,7 +81,7 @@ The browser makes use of the Steam Deck's controls to perform it's main tasks an
 ### Backgrounding
 Each browser tab runs in the background and stays loaded even when you navigate somewhere else on the Steam Deck, meaning pages don't need to reload when navigating out of the browser and back. You can even play music or youtube videos in the background while playing a game!
 
-*Note: The browser always has to have at least one tab open. To terminate all tabs select "Kill Browser" from the context menu.
+*Note: The browser always has to have at least one tab open. To terminate all tabs press the "X" button on the main menu browser item or select "Kill Browser" from the context menu.
 
 ### Inspect/ Dev Tools
 An inspect button is present in the context menu to easily use the integrated CEF dev tools just like you would in Chrome!
