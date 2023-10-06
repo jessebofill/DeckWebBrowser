@@ -9,7 +9,4 @@ export const windowRouter = Router.WindowStore?.GamepadUIMainWindowInstance
 export const SP_Window = windowRouter?.BrowserWindow
 export const reactTree = (document.getElementById('root') as any)._reactRootContainer._internalRoot.current;
 
-export const status = {
-    running: false
-}
 

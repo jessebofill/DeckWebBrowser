@@ -1,11 +1,12 @@
-import { afterPatch, findInReactTree } from "decky-frontend-lib"
+import { FooterLegendProps, afterPatch, findInReactTree } from "decky-frontend-lib"
 import { reactTree, routePath } from "./init"
-import { FC } from "react"
+import { FC, useState } from "react"
 import { PluginIcon } from "./native-components/PluginIcon"
 import { logN } from './log'
 import { settingsManager } from './classes/SettingsManager'
+import { killBrowser, status } from './pluginState'
 
-interface MainMenuItemProps {
+interface MainMenuItemProps extends FooterLegendProps {
     route: string
     label: string
     onFocus: () => void
@@ -38,17 +39,14 @@ export const patchMenu = () => {
                 const menuItemElement = findInReactTree(ret.props.children, (x) =>
                     x?.type?.toString()?.includes('exactRouteMatch:'),
                 );
-                const MenuItemComponent: FC<MainMenuItemProps> = menuItemElement.type
-                const onFocus = menuItemElement.props.onFocus
 
                 const newItem =
-                    <MenuItemComponent
+                    <MenuItemWrapper
                         route={routePath}
                         label='Browser'
-                        onFocus={onFocus}
-                    >
-                        <PluginIcon />
-                    </MenuItemComponent>
+                        onFocus={menuItemElement.props.onFocus}
+                        MenuItemComponent={menuItemElement.type}
+                    />
 
                 const browserPosition = settingsManager.settings.menuPosition
 
@@ -74,4 +72,22 @@ export const patchMenu = () => {
 
 function getMenuItemIndexes(items: any[]) {
     return items.flatMap((item, index) => (item && item.$$typeof && item.type !== 'div') ? index : [])
+}
+
+interface MenuItemWrapperProps extends MainMenuItemProps {
+    MenuItemComponent: FC<MainMenuItemProps>
+}
+
+const MenuItemWrapper: FC<MenuItemWrapperProps> = ({ MenuItemComponent, ...props }) => {
+    const [_, setState] = useState(false)
+
+    return (
+        <MenuItemComponent
+            {...props}
+            onSecondaryActionDescription={status.running ? 'Kill Browser' : ''}
+            onSecondaryButton={status.running ? () => killBrowser(() => setState((state => !state))) : undefined}
+        >
+            <PluginIcon style={status.running ? { filter: 'drop-shadow(rgb(50, 255, 180) 0px 0px 8px)' } : {}} />
+        </MenuItemComponent>
+    )
 }

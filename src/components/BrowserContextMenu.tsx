@@ -8,7 +8,8 @@ import { TabManager } from "../classes/TabManager";
 import { structureMappingFn } from "../classes/StructureController";
 import { ConfirmFavoriteDeleteModal } from "./ConfrimationModals";
 import { settingsManager } from "../classes/SettingsManager";
-import { routePath, status } from "../init";
+import { routePath } from "../init";
+import { status } from '../pluginState';
 
 type SubemenuProps = MenuItemProps & MenuGroupProps
 

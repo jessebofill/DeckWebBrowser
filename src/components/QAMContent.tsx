@@ -1,11 +1,12 @@
 import { PanelSection, PanelSectionRow, Router, Field, GamepadEvent, GamepadButton, showModal, SteamSpinner, ButtonItem, Navigation, sleep, DropdownItem } from "decky-frontend-lib";
 import { VFC, useMemo, useState } from "react";
-import { defaultUrl, routePath, status } from "../init";
+import { defaultUrl, routePath } from "../init";
 import { SearchEngine, settingsManager } from "../classes/SettingsManager";
 import { ReorderableEntry, ReorderableList } from "./ReorderableListModified";
 import { ConfirmDeleteDefaultTabModal } from "./ConfrimationModals";
 import { tabManager } from "../classes/TabManager";
 import { EnhancedSelector } from './generic/EnhancedSelector';
+import { killBrowser, status } from '../pluginState';
 
 const openUrl = (url: string, inNewtab?: boolean) => {
     if (!status.running) {
@@ -159,17 +160,7 @@ export const QAMContent: VFC = ({ }) => {
                     <ButtonItem
                         disabled={!isRunning}
                         layout='below'
-                        onClick={async () => {
-                            setIsRunning(false)
-                            if (window.location.pathname === '/routes' + routePath) {
-                                Navigation.NavigateBack()
-                            }
-                            while (window.location.pathname === '/routes' + routePath) {
-                                await sleep(100)
-                            }
-                            status.running = false
-                            tabManager.closeAllTabs()
-                        }}
+                        onClick={() => killBrowser(() => setIsRunning(false))}
                     >
                         Kill Browser
                     </ButtonItem>

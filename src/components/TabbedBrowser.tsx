@@ -1,7 +1,8 @@
 import { VFC, createContext, useEffect, useState } from "react"
 import { Navigation, Tabs, showModal, sleep } from "decky-frontend-lib"
 import { TabManager } from "../classes/TabManager"
-import { routePath, status } from "../init"
+import { routePath } from "../init"
+import { status } from '../pluginState'
 import { SteamSpinner } from "decky-frontend-lib"
 import { settingsManager } from "../classes/SettingsManager"
 import { UsageWarningModal } from "./UsageWarningModal"
