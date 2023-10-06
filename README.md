@@ -44,12 +44,12 @@ The set home page will automatically load when a new tab is opened. Custom defau
 ![Quick access menu screenshot showing list of default tabs/ home page](assets/screenshots/qam.jpg)
 
 ### Main Menu Icon
-An icon is added to the Steam Decks main menu to quickly access the browser.
+An icon is added to the Steam Deck's main menu to quickly access the browser. When the browser is running the menu icon will be highlighted with a glow.
 
 ![Main menu icon screenshot](assets/screenshots/main-menu.jpg)
 
 ### Gamepad Support
-The browser makes use of the Steam Deck's controls to easily perform it's main tasks and also give the ability to navigate webpages that dont have gamepad support natively.
+The browser makes use of the Steam Deck's controls to perform it's main tasks and navigate webpages.
 
 #### Full List of Controls
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/y-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/y-dark.svg"><img height="16px" alt="Y Button:" title="Y Button" src="assets/button-icons/y-dark.svg"></picture> Open a new tab
@@ -77,7 +77,6 @@ The browser makes use of the Steam Deck's controls to easily perform it's main t
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="assets/button-icons/b-light.svg"><source media="(prefers-color-scheme: light)" srcset="assets/button-icons/b-dark.svg"><img height="16px" alt="B Button:" title="B Button" src="assets/button-icons/b-dark.svg"></picture> If page has focus it will defocus it and set focus to the tab bar/ if page is not focused it will navigate back in the Steam UI
 
-*Note: If a webpage has gamepad support these controls will be overridden and use the built in functions for those buttons. These controls will still work if the page itself is not focused but instead the tab in the tab bar is.
 
 ### Backgrounding
 Each browser tab runs in the background and stays loaded even when you navigate somewhere else on the Steam Deck, meaning pages don't need to reload when navigating out of the browser and back. You can even play music or youtube videos in the background while playing a game!
