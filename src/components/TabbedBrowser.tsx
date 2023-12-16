@@ -6,12 +6,15 @@ import { status } from '../pluginState'
 import { SteamSpinner } from "decky-frontend-lib"
 import { settingsManager } from "../classes/SettingsManager"
 import { UsageWarningModal } from "./UsageWarningModal"
+import { BrowserStyling } from '../styling'
 
 interface TabbedBrowserProps {
     tabManager: TabManager
 }
 
 export const BrowserMountAnimationContext = createContext<{ done: boolean }>({done: false})
+
+export let rerenderBrowser = () => {}
 
 export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
     const [update, setUpdate] = useState(false)
@@ -23,7 +26,7 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
         setActiveTab(id)
     }
     const onTitleChange = () => {
-        setUpdate(title => !title)
+        setUpdate(state => !state)
     }
 
     const onCloseTab = () => {
@@ -41,6 +44,7 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
     }
 
     useEffect(() => {
+        rerenderBrowser = () => setUpdate(state => !state)
         if (!settingsManager.settings.seenWarning) {
             showModal(<UsageWarningModal
                 closeModal={() => { }}
@@ -76,8 +80,20 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
         }
     }, [])
 
+    tabManager.tabHandlers.forEach(tabHandler => {
+        const footerActions = tabHandler.tab.content.props.focusableActionProps
+        if (!status.noTabBar) {
+            if (footerActions?.onCancelButton) {
+                delete footerActions.onCancelButton
+            }
+        } else {
+            if (!footerActions?.onCancelButton) footerActions.onCancelButton = () => Navigation.NavigateBack()
+        }
+    })
+
     return (!activeTab ? <SteamSpinner /> :
         <div style={{ marginTop: '40px', height: 'calc( 100% - 40px)', background: '#3D4450' }} className="tabbedBrowserContainer">
+            <BrowserStyling/>
             <BrowserMountAnimationContext.Provider value={{ done: mountAnimationFinished }}>
                 <Tabs
                     title="Web Browser"

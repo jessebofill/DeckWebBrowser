@@ -1,4 +1,4 @@
-import { PanelSection, PanelSectionRow, Router, Field, GamepadEvent, GamepadButton, showModal, SteamSpinner, ButtonItem, Navigation, sleep, DropdownItem } from "decky-frontend-lib";
+import { PanelSection, PanelSectionRow, Router, Field, GamepadEvent, GamepadButton, showModal, SteamSpinner, ButtonItem, DropdownItem, ToggleField } from "decky-frontend-lib";
 import { VFC, useMemo, useState } from "react";
 import { defaultUrl, routePath } from "../init";
 import { SearchEngine, settingsManager } from "../classes/SettingsManager";
@@ -6,7 +6,9 @@ import { ReorderableEntry, ReorderableList } from "./ReorderableListModified";
 import { ConfirmDeleteDefaultTabModal } from "./ConfrimationModals";
 import { tabManager } from "../classes/TabManager";
 import { EnhancedSelector } from './generic/EnhancedSelector';
-import { killBrowser, status } from '../pluginState';
+import { status } from '../pluginState';
+import { killBrowser } from '../utils';
+import { CustomSearchUrlModal } from './CustomSearchUrlModal';
 
 const openUrl = (url: string, inNewtab?: boolean) => {
     if (!status.running) {
@@ -59,7 +61,8 @@ export const QAMContent: VFC = ({ }) => {
                 <>
                     <PanelSection title='Home Page' >
                         <PanelSectionRow >
-                            <Field focusable={true}
+                            <Field
+                                focusable={true}
                                 description={
                                     <div style={{ wordBreak: 'break-all', marginTop: '-8px' }}>
                                         {settingsManager.settings.homeUrl || defaultUrl}
@@ -108,16 +111,45 @@ export const QAMContent: VFC = ({ }) => {
                     <PanelSection title='Search Engine' >
                         <PanelSectionRow>
                             <DropdownItem
+                                bottomSeparator={settingsManager.settings.searchEngine === SearchEngine.CUSTOM ? 'none' : 'standard'}
                                 layout='below'
                                 rgOptions={[
                                     { label: 'Google', data: SearchEngine.GOOGLE },
                                     { label: 'Bing', data: SearchEngine.BING },
-                                    { label: 'Yahoo', data: SearchEngine.YAHOO }
+                                    { label: 'Yahoo', data: SearchEngine.YAHOO },
+                                    { label: 'Custom', data: SearchEngine.CUSTOM }
                                 ]}
                                 selectedOption={settingsManager.settings.searchEngine ?? SearchEngine.GOOGLE}
                                 onChange={(option) => {
                                     settingsManager.setSetting('searchEngine', option.data)
                                 }}
+                            />
+                        </PanelSectionRow>
+                        {settingsManager.settings.searchEngine === SearchEngine.CUSTOM && <>
+                            <PanelSectionRow>
+                                <ButtonItem
+                                    description={settingsManager.settings.customSearchUrl}
+                                    onClick={() => showModal(<CustomSearchUrlModal value={settingsManager.settings.customSearchUrl ?? ''} onSave={url => settingsManager.setSetting('customSearchUrl', url)} />)}
+                                    layout='below'
+                                >
+                                    Edit Custom Url
+                                </ButtonItem>
+                            </PanelSectionRow>
+                        </>}
+                    </PanelSection>
+                    <PanelSection title='Tab Bar'>
+                        <PanelSectionRow>
+                            <ToggleField
+                                label={<div style={{ display: 'flex', alignItems: 'baseline' }}>
+                                    <div>
+                                        Start Hidden
+                                    </div>
+                                    <div style={{ fontSize: '.7em', lineHeight: '.7em', marginLeft: '1ch' }}>
+                                        requires reload
+                                    </div>
+                                </div>}
+                                checked={!!settingsManager.settings.noTabBar}
+                                onChange={checked => settingsManager.setSetting('noTabBar', checked)}
                             />
                         </PanelSectionRow>
                     </PanelSection>

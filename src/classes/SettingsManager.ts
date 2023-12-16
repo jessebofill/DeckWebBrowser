@@ -2,12 +2,14 @@ import { errorN } from "../log";
 import { ServerResponse } from "decky-frontend-lib";
 import { Favorites } from "./FavoritesManager";
 import { backendService } from "./BackendService";
+import { status } from '../pluginState';
 
 
 export enum SearchEngine {
     GOOGLE,
     BING,
-    YAHOO
+    YAHOO,
+    CUSTOM
 }
 
 interface Settings {
@@ -16,6 +18,8 @@ interface Settings {
     searchEngine?: SearchEngine
     seenWarning?: boolean
     menuPosition: number
+    customSearchUrl?: string
+    noTabBar?: boolean
 }
 
 interface History {
@@ -77,6 +81,7 @@ export class SettingsManager {
                         this.settings.menuPosition = 3
                         this.saveDataSet('settings')
                     }
+                    status.noTabBar = !!this.settings.noTabBar
                 }
                 this.settingsLoaded = true
             }

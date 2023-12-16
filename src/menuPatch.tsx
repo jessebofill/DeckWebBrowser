@@ -4,7 +4,8 @@ import { FC, useState } from "react"
 import { PluginIcon } from "./native-components/PluginIcon"
 import { logN } from './log'
 import { settingsManager } from './classes/SettingsManager'
-import { killBrowser, status } from './pluginState'
+import { status } from './pluginState'
+import { killBrowser } from './utils'
 
 interface MainMenuItemProps extends FooterLegendProps {
     route: string

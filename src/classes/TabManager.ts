@@ -208,6 +208,9 @@ function getQueriedUrl(query: string, searchEngine: SearchEngine) {
             break
         case SearchEngine.YAHOO:
             prefix = 'https://search.yahoo.com/search?p='
+            break
+        case SearchEngine.CUSTOM:
+            prefix = settingsManager.settings.customSearchUrl ?? 'https://www.google.com/search?q='
     }
     return prefix + query
 }

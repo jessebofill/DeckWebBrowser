@@ -4,6 +4,8 @@ import { SearchBarInput } from "./components/SearchBarInput"
 import { reactTree, routePath } from "./init"
 import { logN } from './log'
 
+export const searchBarPatchState = { isPatched: false }
+
 export let unpatchSearchBar: () => void = () => {}
 export const patchSearchBar = async () => {
     let searchBarRootNode: any
@@ -13,6 +15,7 @@ export const patchSearchBar = async () => {
         if (searchBarRootNode) continue
         if (t >= 20000) {
             logN('Search Bar Patch', `Failed to find search bar root node after ${t / 1000} sec.`)
+            searchBarPatchState.isPatched = false
             return
         }
         t += 200
@@ -30,7 +33,11 @@ export const patchSearchBar = async () => {
             if (res) {
                 const [parent, key] = res
                 parent[key] = <SearchBarInput tabManager={tabManager} />
-            } else logN("Search Bar Patch", 'Failed to find search bar element to patch.')
+                searchBarPatchState.isPatched = true
+            } else {
+                logN("Search Bar Patch", 'Failed to find search bar element to patch.')
+                searchBarPatchState.isPatched = false
+            }
         }
         return ret
     }

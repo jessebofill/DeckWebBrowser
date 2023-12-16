@@ -10,6 +10,7 @@ import { ConfirmFavoriteDeleteModal } from "./ConfrimationModals";
 import { settingsManager } from "../classes/SettingsManager";
 import { routePath } from "../init";
 import { status } from '../pluginState';
+import { rerenderBrowser } from './TabbedBrowser';
 
 type SubemenuProps = MenuItemProps & MenuGroupProps
 
@@ -219,6 +220,12 @@ export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabMana
                 Add to Default Tabs
             </MenuItem>
             <div className="gamepadcontextmenu_ContextMenuSeparator_1KL6n" />
+            <MenuItem onClick={() => {
+                status.noTabBar = !status.noTabBar
+                rerenderBrowser()
+            }}>
+                Toggle Tab Bar
+            </MenuItem>
             <MenuItem
                 onClick={activeTabHasTarget ? () => tabManager.inspectActiveTab() : () => tabManager.openCefInspectorTab()}
                 onOptionsButton={activeTabHasTarget ? () => {

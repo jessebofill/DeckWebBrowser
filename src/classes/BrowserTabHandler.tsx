@@ -1,8 +1,11 @@
-import { GamepadButton, GamepadEvent, afterPatch, showContextMenu } from 'decky-frontend-lib'
+import { GamepadButton, GamepadEvent, afterPatch, showContextMenu, showModal } from 'decky-frontend-lib'
 import { BrowserTab } from "../components/BrowserTab"
 import { BrowserTabCloser } from "../components/BrowserTabCloser"
 import { TabManager } from "./TabManager"
 import { BrowserContextMenu } from "../components/BrowserContextMenu"
+import { searchBarNavFocusable } from '../components/SearchBarInput'
+import { FallbackSearchModal } from '../components/FallbackSearchModal'
+import { searchBarPatchState } from '../searchBarPatch'
 
 export default class BrowserTabHandler {
     title: string
@@ -70,6 +73,12 @@ export default class BrowserTabHandler {
                         //page forward
                         browser.m_browserView.GoForward()
                         break
+
+                    case GamepadButton.SELECT:
+                        //focus searchbar or show search modal
+                        if (searchBarPatchState.isPatched && searchBarNavFocusable && searchBarNavFocusable.BTakeFocus) searchBarNavFocusable.BTakeFocus();
+                        else showModal(<FallbackSearchModal tabManager={tabManager}/>)
+                        break
                 }
 
             },
@@ -79,6 +88,7 @@ export default class BrowserTabHandler {
                 [GamepadButton.REAR_RIGHT_UPPER]: 'Shift Tab',
                 [GamepadButton.REAR_LEFT_LOWER]: 'Pg Back',
                 [GamepadButton.REAR_RIGHT_LOWER]: 'Pg Forward',
+                [GamepadButton.SELECT]: 'Search',
             },
             onCancelActionDescription: 'Back',
             onSecondaryActionDescription: 'Close Tab',
