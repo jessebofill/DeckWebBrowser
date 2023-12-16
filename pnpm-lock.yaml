@@ -1,9 +1,6 @@
 lockfileVersion: '6.0'
 
 dependencies:
-  decky-frontend-lib:
-    specifier: ^3.21.0
-    version: 3.21.0
   react-icons:
     specifier: ^4.8.0
     version: 4.8.0
@@ -42,6 +39,9 @@ devDependencies:
   '@types/webpack':
     specifier: ^5.28.0
     version: 5.28.0
+  decky-frontend-lib:
+    specifier: ^3.24.1
+    version: 3.24.1
   rollup:
     specifier: ^2.77.1
     version: 2.77.1
@@ -450,9 +450,9 @@ packages:
     resolution: {integrity: sha512-uX1KG+x9h5hIJsaKR9xHUeUraxf8IODOwq9JLNPq6BwB04a/xgpq3rcx47l5BZu5zBPlgD342tdke3Hom/nJRA==}
     dev: true
 
-  /decky-frontend-lib@3.21.0:
-    resolution: {integrity: sha512-BZY+F9HKhjF0zthoBdQxbluZ/37UyjlzCCpcC6dQfOeAAPmjFDATs/FF/n9qo9B+NMepgWUXpStZR0becE9EOw==}
-    dev: false
+  /decky-frontend-lib@3.24.1:
+    resolution: {integrity: sha512-VGxLTPetxx/pQVC+t8odTHrwQAh7uy4bO2Od2gGWSTfmUUoxtAcEtiXGyE9mKsoD6t7QNHrGvgXn78sf2i/IeQ==}
+    dev: true
 
   /deepmerge@4.2.2:
     resolution: {integrity: sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg==}
