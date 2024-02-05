@@ -1,6 +1,5 @@
-import { DialogBodyText, DialogButtonSecondary, DialogSubHeader } from "decky-frontend-lib";
+import { DialogBodyText, DialogButtonSecondary, DialogSubHeader, ModalPosition, SimpleModal  } from "decky-frontend-lib";
 import { VFC } from "react";
-import { ModalPosition, SimpleModal } from "../native-components/SimpleModal";
 
 interface UsageWarningModalProps {
     closeModal: () => void
