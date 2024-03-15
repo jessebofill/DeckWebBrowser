@@ -96,7 +96,6 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
             <BrowserStyling/>
             <BrowserMountAnimationContext.Provider value={{ done: mountAnimationFinished }}>
                 <Tabs
-                    title="Web Browser"
                     activeTab={activeTab}
                     onShowTab={activateTab}
                     tabs={tabManager.tabHandlers.map(tabHandler => tabHandler.tab)}

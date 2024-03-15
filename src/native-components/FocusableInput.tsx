@@ -22,11 +22,9 @@ export interface FocusableInputProps extends FooterLegendProps {
     onKeyboardFullyVisible?: Function
     onTextEntered?: Function
 }
-export const FocusableInput = findModuleChild((mod) => {
-    if (typeof mod !== 'object') return undefined
+export const FocusableInput: VFC<FocusableInputProps> = (findModuleChild((mod) => {
+    if (typeof mod !== 'object') return undefined;
     for (let prop in mod) {
-        if (prop === 'FocusableInput') {
-            return mod[prop]
-        }
+        if (mod[prop]?.toString().includes('virtualKeyboardProps') && mod[prop]?.toString().includes('BIsElementValidForInput')) return mod[prop];
     }
-}) as VFC<FocusableInputProps>
+}))?.('input');
