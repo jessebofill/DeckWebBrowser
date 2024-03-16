@@ -3,6 +3,7 @@ import { VFC, useContext, useEffect } from "react";
 import { BrowserContainer } from "../native-components/BrowserContainer";
 import { TabManager } from "../classes/TabManager";
 import { BrowserMountAnimationContext } from "./TabbedBrowser";
+import { browserClasses } from '../staticClasses';
 
 interface BrowserTabProps {
     browser: any
@@ -23,14 +24,13 @@ export const BrowserTab: VFC<BrowserTabProps> = (props: BrowserTabProps) => {
 
     const element = (
         <Focusable
-            focusClassName='tabContentContainer'
             noFocusRing={true}
             onGamepadFocus={(evt: GamepadEvent) => {
                 // @ts-ignore
-                if (evt.target?.classList[0] !== 'mainbrowser_BrowserContainer_3-G5o') {
+                if (evt.target?.classList[0] !== browserClasses.BrowserContainer) { //prevents from triggering twice
                     setTimeout(() => {
                         // @ts-ignore
-                        evt.detail.focusedNode.m_rgChildren[0].BTakeFocus(3)
+                        evt.detail.focusedNode?.m_rgChildren[0]?.BTakeFocus(3)
                     }, browserMountAnimation.done ? 200 : 1100)
                 }
             }}
@@ -72,7 +72,7 @@ export const BrowserTab: VFC<BrowserTabProps> = (props: BrowserTabProps) => {
         >
             <BrowserContainer
                 browser={browser}
-                className={"mainbrowser_ExternalBrowserContainer_3FyI1" + (tabManager.activeTab === tabId ? ' activeBrowserTab_BrowserContainer' : '')}
+                className={browserClasses.ExternalBrowserContainer}
                 visible={tabManager.activeTab === tabId && browserMountAnimation.done}
                 hideForModals={true}
                 external={true}

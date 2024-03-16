@@ -1,5 +1,5 @@
 import { warnN } from "../log";
-import { Marquee, Menu, MenuGroup, MenuItem, showModal, GamepadButton, GamepadEvent, ModalRoot, Focusable, MenuGroupProps, ConfirmModal, MenuItemProps, Navigation, sleep } from "decky-frontend-lib";
+import { Marquee, Menu, MenuGroup, MenuItem, showModal, GamepadButton, GamepadEvent, ModalRoot, Focusable, MenuGroupProps, ConfirmModal, MenuItemProps, Navigation, sleep, gamepadContextMenuClasses } from "decky-frontend-lib";
 import { VFC } from "react";
 import { NewFavoriteFolderModal } from "./NewFavoriteFolderModal";
 import { NewFavoriteModal } from "./NewFavoriteModal";
@@ -11,6 +11,7 @@ import { settingsManager } from "../classes/SettingsManager";
 import { routePath } from "../init";
 import { status } from '../pluginState';
 import { rerenderBrowser } from './TabbedBrowser';
+import { classes } from '../staticClasses';
 
 type SubemenuProps = MenuItemProps & MenuGroupProps
 
@@ -106,7 +107,7 @@ const formatAddToFavoritesMenu: structureMappingFn = (children, value, path, tab
         <MenuGroup label={label} onMenuButton={() => { menu.instance.Hide() }}>
             <MenuItem
                 //@ts-ignore
-                className="gamepadcontextmenu_Positive_2gJWj"
+                className={gamepadContextMenuClasses.Positive}
                 onClick={() => {
                     showModal(<NewFavoriteModal parentPath={path} tabManager={tabManager} closeModal={() => { }} />)
                 }}
@@ -116,7 +117,7 @@ const formatAddToFavoritesMenu: structureMappingFn = (children, value, path, tab
             </MenuItem>
             <MenuItem
                 //@ts-ignore
-                className="gamepadcontextmenu_Emphasis_1viOG"
+                className={gamepadContextMenuClasses.Emphasis}
                 onClick={() => {
                     showModal(<NewFavoriteFolderModal parentPath={path} tabManager={tabManager} closeModal={() => { }} />)
                 }}
@@ -124,7 +125,7 @@ const formatAddToFavoritesMenu: structureMappingFn = (children, value, path, tab
             >
                 New Folder
             </MenuItem>
-            {children.length > 0 ? <div className="gamepadcontextmenu_ContextMenuSeparator_1KL6n" /> : null}
+            {children.length > 0 ? <div className={gamepadContextMenuClasses.ContextMenuSeparator}/> : null}
             {...children}
         </MenuGroup>
     )
@@ -158,7 +159,7 @@ export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabMana
         <Menu onMenuButton={() => { menu.instance.Hide() }}>
             <MenuItem
                 //@ts-ignore
-                className="gamepadcontextmenu_Emphasis_1viOG"
+                className={gamepadContextMenuClasses.Emphasis}
                 actionDescriptionMap={{ [GamepadButton.SELECT]: 'View Home Page Url' }}
                 onClick={() => { tabManager.activeTabLoadHome() }}
                 disabled={!settingsManager.settingsLoaded}
@@ -182,16 +183,16 @@ export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabMana
             <MenuItem onClick={() => { tabManager.getActiveTabBrowserView().Reload() }}>
                 Refresh Page
             </MenuItem>
-            <div className="gamepadcontextmenu_ContextMenuSeparator_1KL6n" />
+            <div className={gamepadContextMenuClasses.ContextMenuSeparator} />
             {addToFavoritesMenuItem}
             {favoritesMenuItem}
-            <div className="gamepadcontextmenu_ContextMenuSeparator_1KL6n" />
+            <div className={gamepadContextMenuClasses.ContextMenuSeparator} />
             <MenuItem
                 onClick={() => {
                     const closeModal = () => { }
                     showModal(
                         <ConfirmModal
-                            className='destructiveModal'
+                            className={classes.destructiveModal}
                             strTitle='Are you sure you want to set your Home Page as'
                             strCancelButtonText='Cancel'
                             onOK={() => {
@@ -219,7 +220,7 @@ export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabMana
             >
                 Add to Default Tabs
             </MenuItem>
-            <div className="gamepadcontextmenu_ContextMenuSeparator_1KL6n" />
+            <div className={gamepadContextMenuClasses.ContextMenuSeparator} />
             <MenuItem onClick={() => {
                 status.noTabBar = !status.noTabBar
                 rerenderBrowser()
@@ -239,7 +240,7 @@ export const BrowserContextMenu: VFC<BrowserContextMenuProps> = ({ menu, tabMana
             </MenuItem>
             <MenuItem
                 //@ts-ignore
-                className="gamepadcontextmenu_Destructive_3aIFv"
+                className={gamepadContextMenuClasses.Destructive}
                 onClick={async () => {
                     Navigation.NavigateBack()
                     while (window.location.pathname === '/routes' + routePath) {

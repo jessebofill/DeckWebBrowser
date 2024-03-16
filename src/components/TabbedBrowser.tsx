@@ -12,9 +12,9 @@ interface TabbedBrowserProps {
     tabManager: TabManager
 }
 
-export const BrowserMountAnimationContext = createContext<{ done: boolean }>({done: false})
+export const BrowserMountAnimationContext = createContext<{ done: boolean }>({ done: false })
 
-export let rerenderBrowser = () => {}
+export let rerenderBrowser = () => { }
 
 export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
     const [update, setUpdate] = useState(false)
@@ -91,17 +91,19 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
         }
     })
 
-    return (!activeTab ? <SteamSpinner /> :
-        <div style={{ marginTop: '40px', height: 'calc( 100% - 40px)', background: '#3D4450' }} className="tabbedBrowserContainer">
-            <BrowserStyling/>
-            <BrowserMountAnimationContext.Provider value={{ done: mountAnimationFinished }}>
-                <Tabs
-                    activeTab={activeTab}
-                    onShowTab={activateTab}
-                    tabs={tabManager.tabHandlers.map(tabHandler => tabHandler.tab)}
-                    autoFocusContents={true}
-                />
-            </BrowserMountAnimationContext.Provider>
+    return (
+        <div style={{ marginTop: '40px', height: 'calc(100% - 40px)', background: 'linear-gradient(to bottom, #060709 .5%, #1d2027 40%)' }} className="tabbedBrowserContainer">
+            <BrowserStyling />
+            {!activeTab ? <SteamSpinner /> :
+                <BrowserMountAnimationContext.Provider value={{ done: mountAnimationFinished }}>
+                    <Tabs
+                        activeTab={activeTab}
+                        onShowTab={activateTab}
+                        tabs={tabManager.tabHandlers.map(tabHandler => tabHandler.tab)}
+                        autoFocusContents={true}
+                    />
+                </BrowserMountAnimationContext.Provider>
+            }
         </div >
     )
 }

@@ -1,8 +1,9 @@
-import { ConfirmModal, Marquee, TextField, getFocusNavController, showModal, sleep } from "decky-frontend-lib";
+import { ConfirmModal, Marquee, TextField, gamepadDialogClasses, getFocusNavController, showModal, sleep } from "decky-frontend-lib";
 import { ChangeEvent, FocusEvent, VFC, useEffect, useState } from "react";
 import { favoritesManager } from "../classes/FavoritesManager";
 import { TabManager } from "../classes/TabManager";
 import { ConfirmFavoriteOverwriteModal } from "./ConfrimationModals";
+import { classes } from '../staticClasses';
 
 interface NewFavoriteModalProps {
     tabManager: TabManager
@@ -24,7 +25,7 @@ export const NewFavoriteModal: VFC<NewFavoriteModalProps> = ({ tabManager, paren
     useEffect(() => {
         (async () => {
             const activeContext = getFocusNavController().m_ActiveContext
-            while (activeContext.m_ActiveFocusChange.to?.m_element.classList[0] !== "gamepaddialog_BasicTextInput_3GCBi") {
+            while (activeContext.m_ActiveFocusChange.to?.m_element.classList[0] !== gamepadDialogClasses.BasicTextInput) {
                 await sleep(5)
             }
             activeContext.m_ActiveFocusChange.to.m_Parent.m_rgChildren[0].m_Parent.m_Parent.m_rgChildren[1].BTakeFocus(3)
@@ -33,7 +34,7 @@ export const NewFavoriteModal: VFC<NewFavoriteModalProps> = ({ tabManager, paren
 
     return (
         <ConfirmModal
-            className={alreadyExists ? 'destructiveModal' : ''}
+            className={alreadyExists ? classes.destructiveModal : ''}
             strTitle={dir + favoriteName}
             strOKButtonText={alreadyExists ? 'Update ' + favoriteName : ('Save favorite' + (favoriteName ? ' as ' + favoriteName : ''))}
             strCancelButtonText='Cancel'

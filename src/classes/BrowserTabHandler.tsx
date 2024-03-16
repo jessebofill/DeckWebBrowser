@@ -148,8 +148,8 @@ export default class BrowserTabHandler {
         this.navNode = null
     }
 
-    async takeFocus() {
-        this.navNode.BTakeFocus(3)
+    takeFocus() {
+        this.navNode?.BTakeFocus(3)
     }
 
 }

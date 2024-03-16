@@ -2,6 +2,8 @@ import { VFC } from 'react';
 import myFont from "../assets/FORCED_SQUARE.ttf"
 import { warnN } from "./log";
 import { status } from './pluginState';
+import { browserClasses, classes, spinnerClasses } from './staticClasses';
+import { gamepadDialogClasses, gamepadTabbedPageClasses } from 'decky-frontend-lib';
 
 const tabBarPadding = 5
 //tabHeight is defined by component and should not be changed
@@ -21,38 +23,41 @@ export const BrowserStyling: VFC<{}> = () => {
         font-family: MyFont !important;
     }
 
-    .tabbedBrowserContainer .gamepadtabbedpage_Floating_3I3IM .gamepadtabbedpage_TabContentsScroll_1X4dt {
+    .${classes.tabbedBrowserContainer} .${gamepadTabbedPageClasses.Floating} .${gamepadTabbedPageClasses.TabContentsScroll} {
         clip: initial
     }
-
-    .tabbedBrowserContainer .gamepadtabbedpage_Right_1-jlW>.gamepadtabbedpage_ContentTransition_L_ehQ.gamepadtabbedpage_Enter_11zfc,
-    .tabbedBrowserContainer .gamepadtabbedpage_Right_1-jlW>.gamepadtabbedpage_ContentTransition_L_ehQ.gamepadtabbedpage_EnterActive_3lqCS,
-    .tabbedBrowserContainer .gamepadtabbedpage_Right_1-jlW>.gamepadtabbedpage_ContentTransition_L_ehQ.gamepadtabbedpage_Exit_3Rv4M,
-    .tabbedBrowserContainer .gamepadtabbedpage_Right_1-jlW>.gamepadtabbedpage_ContentTransition_L_ehQ.gamepadtabbedpage_ExitActive_1V17j,
-    .tabbedBrowserContainer .gamepadtabbedpage_Left_3lSTy>.gamepadtabbedpage_ContentTransition_L_ehQ.gamepadtabbedpage_Enter_11zfc,
-    .tabbedBrowserContainer .gamepadtabbedpage_Left_3lSTy>.gamepadtabbedpage_ContentTransition_L_ehQ.gamepadtabbedpage_EnterActive_3lqCS,
-    .tabbedBrowserContainer .gamepadtabbedpage_Left_3lSTy>.gamepadtabbedpage_ContentTransition_L_ehQ.gamepadtabbedpage_Exit_3Rv4M,
-    .tabbedBrowserContainer .gamepadtabbedpage_Left_3lSTy>.gamepadtabbedpage_ContentTransition_L_ehQ.gamepadtabbedpage_ExitActive_1V17j {
+    .${classes.tabbedBrowserContainer} .${gamepadTabbedPageClasses.Right}>.${gamepadTabbedPageClasses.ContentTransition}.${gamepadTabbedPageClasses.Enter},
+    .${classes.tabbedBrowserContainer} .${gamepadTabbedPageClasses.Right}>.${gamepadTabbedPageClasses.ContentTransition}.${gamepadTabbedPageClasses.EnterActive},
+    .${classes.tabbedBrowserContainer} .${gamepadTabbedPageClasses.Right}>.${gamepadTabbedPageClasses.ContentTransition}.${gamepadTabbedPageClasses.Exit},
+    .${classes.tabbedBrowserContainer} .${gamepadTabbedPageClasses.Right}>.${gamepadTabbedPageClasses.ContentTransition}.${gamepadTabbedPageClasses.ExitActive},
+    .${classes.tabbedBrowserContainer} .${gamepadTabbedPageClasses.Left}>.${gamepadTabbedPageClasses.ContentTransition}.${gamepadTabbedPageClasses.Enter},
+    .${classes.tabbedBrowserContainer} .${gamepadTabbedPageClasses.Left}>.${gamepadTabbedPageClasses.ContentTransition}.${gamepadTabbedPageClasses.EnterActive},
+    .${classes.tabbedBrowserContainer} .${gamepadTabbedPageClasses.Left}>.${gamepadTabbedPageClasses.ContentTransition}.${gamepadTabbedPageClasses.Exit},
+    .${classes.tabbedBrowserContainer} .${gamepadTabbedPageClasses.Left}>.${gamepadTabbedPageClasses.ContentTransition}.${gamepadTabbedPageClasses.ExitActive} {
         transform: initial;
     }
-    .tabbedBrowserContainer .gamepadtabbedpage_TabHeaderRowWrapper_2Jobs {
+    .${classes.tabbedBrowserContainer} .${gamepadTabbedPageClasses.TabHeaderRowWrapper} {
         ${status.noTabBar ? 'display: none;' : ''}
         background: #060709;
     }
-    .tabbedBrowserContainer .gamepadtabbedpage_FixCenterAlignScroll_1CJeU {
+    .${classes.tabbedBrowserContainer} .${gamepadTabbedPageClasses.FixCenterAlignScroll} {
         padding: ${tabBarPadding}px 0px;
     }
-    .tabbedBrowserContainer .gamepadtabbedpage_TabContentsScroll_1X4dt {
+    .${classes.tabbedBrowserContainer} .${gamepadTabbedPageClasses.TabContentsScroll} {
         bottom: var(--gamepadui-current-footer-height);
         padding: 0;
     }
-    .tabbedBrowserContainer .gamepadtabbedpage_TabContentsScroll_1X4dt > .Panel {
-    }
-    .tabbedBrowserContainer .mainbrowser_ExternalBrowserContainer_3FyI1 {
+    .${classes.tabbedBrowserContainer} .${browserClasses.ExternalBrowserContainer} {
         background: linear-gradient(to bottom, #060709 .5%, #1d2027 40%);
         top: ${status.noTabBar ? '0' : tabBarHeight}px;
     }
-    .destructiveModal button.gamepaddialog_Button_1kn70.DialogButton.gpfocus.Primary {
+    .${classes.tabbedBrowserContainer} .${spinnerClasses.ContainerBackground} {
+        background: transparent;
+    }
+    .${classes.tabbedBrowserContainer} .${spinnerClasses.LoadingStatus} {
+        display: none;
+    }
+    .${classes.destructiveModal} button.${gamepadDialogClasses.Button}.DialogButton.gpfocus.Primary {
         background: #de3618;
         color: #fff
     }
@@ -67,7 +72,7 @@ export function appendStyles(_window?: Window) {
         let style = _window.document.createElement('style')
 
         style.textContent = `
-    .destructiveModal button.gamepaddialog_Button_1kn70.DialogButton.gpfocus.Primary {
+    .${classes.destructiveModal} button.${gamepadDialogClasses.Button}.DialogButton.gpfocus.Primary {
         background: #de3618;
         color: #fff
     }

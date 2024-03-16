@@ -21,3 +21,8 @@ export function playUISound(path: SFXPath) {
     //@ts-ignore
     if (settingsStore?.m_ClientSettings?.enable_ui_sounds) GamepadUIAudio.AudioPlaybackManager.PlayAudioURL(path);
 }
+
+export function addClasses(...strings: any[]) {
+    return strings.filter(string => string).join(' ');
+}
+

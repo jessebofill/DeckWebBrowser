@@ -3,10 +3,11 @@ import { tabManager } from "./classes/TabManager"
 import { SearchBarInput } from "./components/SearchBarInput"
 import { reactTree, routePath } from "./init"
 import { logN } from './log'
+import { browserClasses } from './staticClasses'
 
 export const searchBarPatchState = { isPatched: false }
 
-export let unpatchSearchBar: () => void = () => {}
+export let unpatchSearchBar: () => void = () => { }
 export const patchSearchBar = async () => {
     let searchBarRootNode: any
     let t = 0

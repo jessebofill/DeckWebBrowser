@@ -1,7 +1,5 @@
-import { findInReactTree } from "decky-frontend-lib"
+import { findModuleChild } from "decky-frontend-lib"
 import { VFC } from "react"
-import { reactTree } from "../init"
-
 
 interface BrowserContainerProps {
     browser: any
@@ -13,7 +11,10 @@ interface BrowserContainerProps {
     autoFocus?: boolean
 }
 
-export const BrowserContainer = findInReactTree(reactTree, node => {
-    return node?.type?.toString().includes('Z5.GamepadUI.SteamWeb()') && node?.type?.toString().includes('GetStoreBrowser()')
-}).child.child.child.child.type as VFC<BrowserContainerProps>
+export const BrowserContainer: VFC<BrowserContainerProps> = findModuleChild((mod) => {
+    if (typeof mod !== 'object') return undefined;
+    for (let prop in mod) {
+        if (mod[prop]?.toString().includes('displayURLBar') && mod[prop]?.toString().includes('BExternalTriggeredLoad()')) return mod[prop];
+    }
+})
 
