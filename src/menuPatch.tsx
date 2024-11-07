@@ -1,5 +1,5 @@
 import { FooterLegendProps, afterPatch, findInReactTree } from "decky-frontend-lib"
-import { reactTree, routePath } from "./init"
+import { getReactTree, routePath } from "./init"
 import { FC, useState } from "react"
 import { PluginIcon } from "./native-components/PluginIcon"
 import { logN } from './log'
@@ -15,7 +15,7 @@ interface MainMenuItemProps extends FooterLegendProps {
 }
 
 export const patchMenu = () => {
-    const menuNode = findInReactTree(reactTree, (node) => node?.memoizedProps?.navID == 'MainNavMenuContainer')
+    const menuNode = findInReactTree(getReactTree(), (node) => node?.memoizedProps?.navID == 'MainNavMenuContainer')
     if (!menuNode || !menuNode.return?.type) {
         logN('Menu Patch', 'Failed to find main menu root node.')
         return () => { }

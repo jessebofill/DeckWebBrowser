@@ -5,7 +5,7 @@ import { TabManager } from "./TabManager"
 import { BrowserContextMenu } from "../components/BrowserContextMenu"
 import { searchBarNavFocusable } from '../components/SearchBarInput'
 import { FallbackSearchModal } from '../components/FallbackSearchModal'
-import { searchBarPatchState } from '../searchBarPatch'
+import { searchBarState } from '../searchBarPatch'
 
 export default class BrowserTabHandler {
     title: string
@@ -78,7 +78,7 @@ export default class BrowserTabHandler {
 
                     case GamepadButton.SELECT:
                         //focus searchbar or show search modal
-                        if (searchBarPatchState.isPatched && searchBarNavFocusable && searchBarNavFocusable.BTakeFocus) searchBarNavFocusable.BTakeFocus();
+                        if (!searchBarState.useFallbackSearch && searchBarNavFocusable && searchBarNavFocusable.BTakeFocus) searchBarNavFocusable.BTakeFocus();
                         else showModal(<FallbackSearchModal tabManager={tabManager}/>)
                         break
                 }

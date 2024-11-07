@@ -8,7 +8,7 @@ import { tabManager } from "./classes/TabManager";
 import { patchMenu } from "./menuPatch";
 import { settingsManager } from "./classes/SettingsManager";
 import { favoritesManager } from "./classes/FavoritesManager";
-import { patchSearchBar, unpatchSearchBar } from "./searchBarPatch";
+import { patchSearchBar, searchBarState, unpatchSearchBar } from "./searchBarPatch";
 import { backendService } from "./classes/BackendService";
 
 export default definePlugin((serverApi: ServerAPI) => {
@@ -20,16 +20,20 @@ export default definePlugin((serverApi: ServerAPI) => {
     const unpatchMenu = patchMenu()
     patchSearchBar()
     const unregisterOnResume = SteamClient.System.RegisterForOnResumeFromSuspend(patchSearchBar).unregister
-
+    const unregisterForAppLifetime = SteamClient.GameSessions.RegisterForAppLifetimeNotifications(patchSearchBar).unregister
+    const unregisterForAppOvelay = SteamClient.Overlay.RegisterForOverlayActivated(() => { if (searchBarState.useFallbackSearch) patchSearchBar() })
+    
     return {
         title: <div className={staticClasses.Title}>Web Browser</div>,
         content: <QAMContent />,
-        icon: <PluginIcon size='1em'/>,
+        icon: <PluginIcon size='1em' />,
         onDismount() {
             serverApi.routerHook.removeRoute(routePath);
             unpatchMenu()
-            unpatchSearchBar?.()
+            unpatchSearchBar()
             unregisterOnResume()
+            unregisterForAppLifetime()
+            unregisterForAppOvelay()
         },
     };
 });

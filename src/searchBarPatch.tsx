@@ -1,30 +1,29 @@
 import { findInReactTree, sleep } from "decky-frontend-lib"
 import { tabManager } from "./classes/TabManager"
 import { SearchBarInput } from "./components/SearchBarInput"
-import { reactTree, routePath } from "./init"
+import { getReactTree, routePath } from "./init"
 import { logN } from './log'
-import { browserClasses } from './staticClasses'
 
-export const searchBarPatchState = { isPatched: false }
+export const searchBarState = { useFallbackSearch: true, isInitPatched: false, rootNodeOriginal: ((() => {}) as (props: any) => any) }
 
 export let unpatchSearchBar: () => void = () => { }
 export const patchSearchBar = async () => {
+    searchBarState.useFallbackSearch = true
     let searchBarRootNode: any
     let t = 0
     while (!searchBarRootNode) {
-        searchBarRootNode = findInReactTree(reactTree, node => node?.type?.toString().includes('SetUniversalSearchFocused') && node?.type?.toString().includes('GetForceHeaderAfterResume'))
+        searchBarRootNode = findInReactTree(getReactTree(), node => node?.type?.toString().includes('SetUniversalSearchFocused') && node?.type?.toString().includes('GetForceHeaderAfterResume'))
         if (searchBarRootNode) continue
         if (t >= 20000) {
             logN('Search Bar Patch', `Failed to find search bar root node after ${t / 1000} sec.`)
-            searchBarPatchState.isPatched = false
             return
         }
         t += 200
         await sleep(200)
     }
-    const orig = searchBarRootNode.type
+    if (!searchBarState.isInitPatched) searchBarState.rootNodeOriginal = searchBarRootNode.type
     const searchBarRootWrapper = (props: any) => {
-        const ret = orig(props)
+        const ret = searchBarState.rootNodeOriginal(props)
         if (window.location.pathname === '/routes' + routePath) {
             const res = findLocation(ret, node => {
                 if (!node.type) return false
@@ -34,10 +33,10 @@ export const patchSearchBar = async () => {
             if (res) {
                 const [parent, key] = res
                 parent[key] = <SearchBarInput tabManager={tabManager} />
-                searchBarPatchState.isPatched = true
+                searchBarState.useFallbackSearch = false
             } else {
                 logN("Search Bar Patch", 'Failed to find search bar element to patch.')
-                searchBarPatchState.isPatched = false
+                searchBarState.useFallbackSearch = true
             }
         }
         return ret
@@ -46,10 +45,14 @@ export const patchSearchBar = async () => {
     if (searchBarRootNode.alternate) {
         searchBarRootNode.alternate.type = searchBarRootNode.type;
     }
+    searchBarState.isInitPatched = true
+
 
     unpatchSearchBar = () => {
-        searchBarRootNode.type = orig
-        searchBarRootNode.alternate.type = searchBarRootNode.type;
+        try {
+            searchBarRootNode.type = searchBarState.rootNodeOriginal
+            searchBarRootNode.alternate.type = searchBarRootNode.type;
+        } catch {}
     }
 }
 
