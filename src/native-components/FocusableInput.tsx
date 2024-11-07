@@ -19,6 +19,6 @@ export interface FocusableInputProps extends FooterLegendProps, InputHTMLAttribu
 export const FocusableInput: VFC<FocusableInputProps> = (findModuleChild((mod) => {
     if (typeof mod !== 'object') return undefined;
     for (let prop in mod) {
-        if (mod[prop]?.toString().includes('virtualKeyboardProps') && mod[prop]?.toString().includes('BIsElementValidForInput')) return mod[prop];
+        if (mod[prop]?.toString?.().includes('virtualKeyboardProps') && mod[prop]?.toString?.().includes('BIsElementValidForInput')) return mod[prop];
     }
 }))?.('input');
