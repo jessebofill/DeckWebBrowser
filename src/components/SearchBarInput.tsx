@@ -19,8 +19,10 @@ export const SearchBarInput: VFC<SearchInputProps> = ({ tabManager }) => {
     const ref = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
-        const url = tabManager.getActiveTabUrlRequested()
-        setValue(url)
+        try {
+            const url = tabManager.getActiveTabUrlRequested()
+            setValue(url)
+        } catch {}
     }, [isFocused])
 
     const addBackgroundClass = useCallback((isFocused: boolean) => {
