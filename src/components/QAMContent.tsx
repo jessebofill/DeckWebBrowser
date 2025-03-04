@@ -1,4 +1,4 @@
-import { PanelSection, PanelSectionRow, Router, Field, GamepadEvent, GamepadButton, showModal, SteamSpinner, ButtonItem, DropdownItem, ToggleField } from "decky-frontend-lib";
+import { PanelSection, PanelSectionRow, Router, Field, GamepadEvent, GamepadButton, showModal, ButtonItem, DropdownItem, ToggleField } from "decky-frontend-lib";
 import { VFC, useMemo, useState } from "react";
 import { defaultUrl, routePath } from "../init";
 import { SearchEngine, settingsManager } from "../classes/SettingsManager";
@@ -56,7 +56,9 @@ export const QAMContent: VFC = ({ }) => {
         <>
             {!settingsManager.settingsLoaded ?
                 (<PanelSection title='Loading Settings'>
-                    <SteamSpinner />
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <img alt="Loading..." src="/images/steam_spinner.png" style={{ width: '50%' }} />
+                    </div>
                 </PanelSection>) :
                 <>
                     <PanelSection title='Home Page' >
