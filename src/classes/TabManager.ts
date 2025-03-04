@@ -26,7 +26,7 @@ export class TabManager {
         this.browserViewName = 'TabbedWebBrowser'
         this.tabHandlers = []
         this.windowRouter = windowRouter
-        this.headerStore = windowRouter.HeaderStore
+        this.headerStore = windowRouter?.HeaderStore
         this.activeTab = ""
         this.defaultSearchEngine = SearchEngine.GOOGLE
     }
@@ -34,7 +34,7 @@ export class TabManager {
     createTab = async (Url?: string) => {
         const id = uuidv4()
         const url = (Url && Url !== 'home') ? Url : (settingsManager.settings.homeUrl || this.fallbackUrl)
-        const browser = this.windowRouter.CreateBrowserView(this.browserViewName)
+        const browser = this.windowRouter?.CreateBrowserView(this.browserViewName)
         browser.LoadURL(`data:text/plain,${id}`)
         const tabHandler = new BrowserTabHandler(id, browser, this)
         this.tabHandlers.push(tabHandler)
@@ -83,7 +83,7 @@ export class TabManager {
     }
 
     setActiveBrowserHeaderByIndex(index: number) {
-        this.headerStore.SetCurrentBrowserAndBackstack(this.tabHandlers[index].browser, true)
+        this.headerStore?.SetCurrentBrowserAndBackstack(this.tabHandlers[index].browser, true)
     }
 
     setActiveBrowserHeader() {

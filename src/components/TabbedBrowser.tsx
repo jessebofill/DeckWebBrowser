@@ -74,8 +74,8 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
         })()
 
         return () => {
-            if (tabManager.browserViewName === tabManager.headerStore.GetCurrentBrowserAndBackstack().browser.name) {
-                tabManager.headerStore.SetCurrentBrowserAndBackstack(null, false)
+            if (tabManager.browserViewName === tabManager.headerStore?.GetCurrentBrowserAndBackstack().browser.name) {
+                tabManager.headerStore?.SetCurrentBrowserAndBackstack(null, false)
             }
         }
     }, [])
