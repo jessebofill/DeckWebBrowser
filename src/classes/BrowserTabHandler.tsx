@@ -6,7 +6,15 @@ import { BrowserContextMenu } from "../components/BrowserContextMenu"
 import { searchBarNavFocusable } from '../components/SearchBarInput'
 import { FallbackSearchModal } from '../components/FallbackSearchModal'
 import { searchBarState } from '../patches/searchBarPatch'
+import { MicIcon } from '../components/MicIcon'
 
+export enum MicAccess {
+    NONE,
+    ALLOWED,
+    BLOCKED
+}
+
+export interface MicAccessChangeEvent extends CustomEvent<{ id: string; state: MicAccess }> { };
 export default class BrowserTabHandler {
     title: string
     id: string
@@ -17,6 +25,8 @@ export default class BrowserTabHandler {
     navNode: any
     targetId: string | undefined
     hasTarget: boolean
+    micAccess = MicAccess.NONE
+    setMicIconHeader: (state: MicAccess) => any = (state: MicAccess) => undefined
     constructor(id: string, browser: any, tabManager: TabManager, targetId?: string) {
         browser.m_browserView.on('set-title', this.onSetTitle)
 
@@ -26,6 +36,11 @@ export default class BrowserTabHandler {
         this.navNode = null
         this.targetId = targetId
         this.hasTarget = !!targetId
+        tabManager.eventTarget.addEventListener('micAccesChange', (event: Event) => {
+            const customEvent = event as CustomEvent<{ id: string; state: MicAccess }>;
+            const { id, state } = customEvent.detail;
+            if (id === this.id) this.setMicIconHeader(state);
+        });
 
         const outerTabActionProps = {
             //X button
@@ -79,7 +94,7 @@ export default class BrowserTabHandler {
                     case GamepadButton.SELECT:
                         //focus searchbar or show search modal
                         if (!searchBarState.useFallbackSearch && searchBarNavFocusable && searchBarNavFocusable.BTakeFocus) searchBarNavFocusable.BTakeFocus();
-                        else showModal(<FallbackSearchModal tabManager={tabManager}/>)
+                        else showModal(<FallbackSearchModal tabManager={tabManager} />)
                         break
                 }
 
@@ -109,7 +124,10 @@ export default class BrowserTabHandler {
                 clearNavNode={this.clearNavNode}
                 focusableActionProps={outerTabActionProps}
             />,
-            renderTabAddon: () => <BrowserTabCloser close={() => tabManager.closeTab(id)} />,
+            renderTabAddon: () => <div style={{ display: 'flex', gap: '8px', flexDirection: 'row' }}>
+                <MicIcon tabHandler={this} />
+                <BrowserTabCloser close={() => tabManager.closeTab(id)} />
+            </div>,
             footer: outerTabActionProps
         }
     }

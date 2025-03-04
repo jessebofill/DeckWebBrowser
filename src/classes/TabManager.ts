@@ -1,6 +1,6 @@
 import { Logger } from "../lib/log"
 import { defaultUrl, windowRouter } from "../init"
-import BrowserTabHandler from "./BrowserTabHandler"
+import BrowserTabHandler, { MicAccess, MicAccessChangeEvent } from "./BrowserTabHandler"
 import isURL from "validator/lib/isURL"
 import { v4 as uuidv4 } from "uuid"
 import { SearchEngine, settingsManager } from "./SettingsManager"
@@ -19,6 +19,8 @@ export class TabManager {
     onCloseTab?: () => void
     defaultSearchEngine: SearchEngine
     loadTabPromise: Promise<void> | undefined
+    eventTarget = new EventTarget()
+    wsm?: WSManager
     constructor(defaultUrl: string, windowRouter: any) {
         this.fallbackUrl = defaultUrl
         this.browserViewName = 'TabbedWebBrowser'
@@ -38,7 +40,7 @@ export class TabManager {
         this.tabHandlers.push(tabHandler)
         this.setActiveTabById(id)
         const response = await waitForUniqueUriLoad(browser, id).then(() => {
-            return backendService.serverApi!.callPluginMethod('assign_target', { frontendId: id })
+            return backendService.serverApi!.callPluginMethod('setup_target', { frontend_id: id })
         }).then((res) => {
             if (!res.success) tmLogger.warn('Backend method "assign_target" returned this message> ')
             else {
@@ -176,6 +178,13 @@ export class TabManager {
         const targetId = this.getActiveTabHandler().targetId
         targetId && this.openCefInspectorTab(targetId)
     }
+    setWSManager(wsm: WSManager) {
+        this.wsm = wsm;
+        wsm.onMicAccessChange = (id: string, state: MicAccess) => {
+            const event: MicAccessChangeEvent = new CustomEvent('micAccesChange', { detail: { id, state } });
+            this.eventTarget.dispatchEvent(event);
+        }
+    }
 }
 
 function isOtherProtocol(input: string, protocols: string[]) {
@@ -221,7 +230,7 @@ function waitForUniqueUriLoad(browser: any, id: string) {
     let onFinish: any
     browser.m_browserView.on('finished-request', (title: string) => {
         if (title === `data:text/plain,${id}`) {
-            onFinish()
+            onFinish?.()
         }
     })
     return Promise.race([new Promise((resolve) => {
@@ -230,7 +239,7 @@ function waitForUniqueUriLoad(browser: any, id: string) {
     new Promise((resolve, reject) => {
         setTimeout(() => {
             reject({ msg: 'Could not load unique URI within time limit' })
-        }, 1000)
+        }, 1500)
     })])
 }
 

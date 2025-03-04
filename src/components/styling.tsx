@@ -1,5 +1,5 @@
 import { VFC } from 'react';
-import myFont from "../assets/FORCED_SQUARE.ttf"
+import myFont from "../../assets/FORCED_SQUARE.ttf"
 import { warnN } from "../lib/log";
 import { status } from '../pluginState';
 import { browserClasses, classes, spinnerClasses } from '../lib/staticClasses';

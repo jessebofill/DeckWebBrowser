@@ -10,11 +10,17 @@ import { settingsManager } from "./classes/SettingsManager";
 import { favoritesManager } from "./classes/FavoritesManager";
 import { patchSearchBar, searchBarState, unpatchSearchBar } from "./patches/searchBarPatch";
 import { backendService } from "./classes/BackendService";
+import { WSManager } from './classes/WSManager';
+import { error } from './lib/log';
 
 export default definePlugin((serverApi: ServerAPI) => {
     backendService.init(serverApi)
+    backendService.setMainTab()
+        .then(({ id, key }) => tabManager.setWSManager(new WSManager(id, key)))
+        .catch(e => error('Error setting main tab for establishing ws server', e))
     settingsManager.init()
     favoritesManager.init()
+
     appendStyles(SP_Window)
     serverApi.routerHook.addRoute(routePath, () => { return <TabbedBrowser tabManager={tabManager} /> })
     const unpatchMenu = patchMenu()

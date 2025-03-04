@@ -4,7 +4,7 @@ import { SearchBarInput } from "../components/SearchBarInput"
 import { getReactTree, routePath } from "../init"
 import { logN } from '../lib/log'
 
-export const searchBarState = { useFallbackSearch: true, isInitPatched: false, rootNodeOriginal: ((() => {}) as (props: any) => any) }
+export const searchBarState = { useFallbackSearch: true, isInitPatched: false, rootNodeOriginal: ((() => { }) as (props: any) => any) }
 
 export let unpatchSearchBar: () => void = () => { }
 export const patchSearchBar = async () => {
@@ -52,7 +52,7 @@ export const patchSearchBar = async () => {
         try {
             searchBarRootNode.type = searchBarState.rootNodeOriginal
             searchBarRootNode.alternate.type = searchBarRootNode.type;
-        } catch {}
+        } catch { }
     }
 }
 

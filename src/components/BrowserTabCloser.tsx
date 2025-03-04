@@ -5,20 +5,18 @@ interface BrowserTabCloserProps {
 }
 
 export const BrowserTabCloser: VFC<BrowserTabCloserProps> = ({ close }) => {
-    return <span
+    return <div
         onClick={() => close()}
         style={{
-            height: 20,
-            width: 20,
+            height: '20px',
+            width: '20px',
+            lineHeight: '20px',
             backgroundColor: '#a0aaba88',
             borderRadius: '50%',
-            display: 'inline-flex',
-            justifyContent: 'center',
-            alignItems: 'center',
             boxShadow: '#9598b2ba 0px 0px 3px 2px',
         }}
         className="tabAddonExit"
     >
-        <span style={{ fontSize: '18px', transform: 'translate(1px, 1px)' }}>X</span>
-    </span>;
+        <div style={{ fontSize: '18px', textAlign: 'center', transform: 'translate(1px, 1px)' }}>X</div>
+    </div>;
 }

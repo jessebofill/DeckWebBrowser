@@ -1,4 +1,4 @@
-import { ChangeEvent, VFC, useCallback, useEffect, useRef, useState } from "react"
+import { VFC, useCallback, useEffect, useRef, useState } from "react"
 import { SearchIcon } from "./native-components/SearchIcon"
 import { TabManager } from "../classes/TabManager"
 import { FocusableInput } from "./native-components/FocusableInput"
