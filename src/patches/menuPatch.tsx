@@ -1,11 +1,11 @@
 import { FooterLegendProps, afterPatch, findInReactTree } from "decky-frontend-lib"
-import { getReactTree, routePath } from "./init"
+import { getReactTree, routePath } from "../init"
 import { FC, useState } from "react"
-import { PluginIcon } from "./native-components/PluginIcon"
-import { logN } from './log'
-import { settingsManager } from './classes/SettingsManager'
-import { status } from './pluginState'
-import { killBrowser } from './utils'
+import { PluginIcon } from "../components/native-components/PluginIcon"
+import { logN } from '../lib/log'
+import { settingsManager } from '../classes/SettingsManager'
+import { status } from '../pluginState'
+import { killBrowser } from '../lib/utils'
 
 interface MainMenuItemProps extends FooterLegendProps {
     route: string

@@ -1,10 +1,10 @@
 import { ChangeEvent, VFC, useCallback, useEffect, useRef, useState } from "react"
-import { SearchIcon } from "../native-components/SearchIcon"
+import { SearchIcon } from "./native-components/SearchIcon"
 import { TabManager } from "../classes/TabManager"
-import { FocusableInput } from "../native-components/FocusableInput"
+import { FocusableInput } from "./native-components/FocusableInput"
 import { afterPatch } from 'decky-frontend-lib'
-import { addClasses } from '../utils'
-import { browserClasses, searchBarClasses } from '../staticClasses'
+import { addClasses } from '../lib/utils'
+import { browserClasses, searchBarClasses } from '../lib/staticClasses'
 
 interface SearchInputProps {
     tabManager: TabManager

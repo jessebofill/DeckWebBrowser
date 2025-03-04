@@ -1,8 +1,8 @@
 import { findInReactTree, sleep } from "decky-frontend-lib"
-import { tabManager } from "./classes/TabManager"
-import { SearchBarInput } from "./components/SearchBarInput"
-import { getReactTree, routePath } from "./init"
-import { logN } from './log'
+import { tabManager } from "../classes/TabManager"
+import { SearchBarInput } from "../components/SearchBarInput"
+import { getReactTree, routePath } from "../init"
+import { logN } from '../lib/log'
 
 export const searchBarState = { useFallbackSearch: true, isInitPatched: false, rootNodeOriginal: ((() => {}) as (props: any) => any) }
 

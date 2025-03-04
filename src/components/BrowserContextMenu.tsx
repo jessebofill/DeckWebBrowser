@@ -1,4 +1,4 @@
-import { warnN } from "../log";
+import { warnN } from "../lib/log";
 import { Marquee, Menu, MenuGroup, MenuItem, showModal, GamepadButton, GamepadEvent, ModalRoot, Focusable, MenuGroupProps, ConfirmModal, MenuItemProps, Navigation, sleep, gamepadContextMenuClasses } from "decky-frontend-lib";
 import { VFC } from "react";
 import { NewFavoriteFolderModal } from "./NewFavoriteFolderModal";
@@ -11,7 +11,7 @@ import { settingsManager } from "../classes/SettingsManager";
 import { routePath } from "../init";
 import { status } from '../pluginState';
 import { rerenderBrowser } from './TabbedBrowser';
-import { classes } from '../staticClasses';
+import { classes } from '../lib/staticClasses';
 
 type SubemenuProps = MenuItemProps & MenuGroupProps
 

@@ -1,8 +1,8 @@
 import { VFC } from 'react';
 import myFont from "../assets/FORCED_SQUARE.ttf"
-import { warnN } from "./log";
-import { status } from './pluginState';
-import { browserClasses, classes, spinnerClasses } from './staticClasses';
+import { warnN } from "../lib/log";
+import { status } from '../pluginState';
+import { browserClasses, classes, spinnerClasses } from '../lib/staticClasses';
 import { gamepadDialogClasses, gamepadTabbedPageClasses } from 'decky-frontend-lib';
 
 const tabBarPadding = 5

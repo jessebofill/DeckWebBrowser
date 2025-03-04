@@ -1,4 +1,4 @@
-import { warnN } from "../log"
+import { warnN } from "../lib/log"
 import { defaultUrl, windowRouter } from "../init"
 import BrowserTabHandler from "./BrowserTabHandler"
 import isURL from "validator/lib/isURL"

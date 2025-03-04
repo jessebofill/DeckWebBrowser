@@ -3,7 +3,7 @@ import { ChangeEvent, FocusEvent, VFC, useEffect, useState } from "react";
 import { favoritesManager } from "../classes/FavoritesManager";
 import { TabManager } from "../classes/TabManager";
 import { ConfirmFavoriteOverwriteModal } from "./ConfrimationModals";
-import { classes } from '../staticClasses';
+import { classes } from '../lib/staticClasses';
 
 interface NewFavoriteModalProps {
     tabManager: TabManager

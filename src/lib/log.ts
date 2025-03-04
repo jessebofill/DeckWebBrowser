@@ -1,4 +1,4 @@
-import { pluginName } from "./init";
+import { pluginName } from "../init";
 
 export const log = (...args) => {
     console.log(`%c ${pluginName} %c`, 'background: #7627D3; color: #E5E1EA;', 'background: transparent;', ...args);

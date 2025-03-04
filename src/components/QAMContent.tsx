@@ -7,7 +7,7 @@ import { ConfirmDeleteDefaultTabModal } from "./ConfrimationModals";
 import { tabManager } from "../classes/TabManager";
 import { EnhancedSelector } from './generic/EnhancedSelector';
 import { status } from '../pluginState';
-import { killBrowser } from '../utils';
+import { killBrowser } from '../lib/utils';
 import { CustomSearchUrlModal } from './CustomSearchUrlModal';
 
 const openUrl = (url: string, inNewtab?: boolean) => {

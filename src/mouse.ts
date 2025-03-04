@@ -1,7 +1,7 @@
 import { backendService } from "./classes/BackendService";
 import { tabManager } from "./classes/TabManager";
 import { SP_Window } from "./init"
-import { tabContentRealY } from "./styling"
+import { tabContentRealY } from "./components/styling"
 
 type FakeMouseEvtType = 'down' | 'move' | 'up'
 class Mouse {

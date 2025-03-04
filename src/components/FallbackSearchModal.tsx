@@ -1,7 +1,7 @@
 import { ChangeEvent, VFC, useCallback, useState } from 'react';
 import { TabManager } from '../classes/TabManager';
 import { ModalRoot, gamepadDialogClasses } from 'decky-frontend-lib';
-import { FocusableInput } from '../native-components/FocusableInput';
+import { FocusableInput } from './native-components/FocusableInput';
 
 interface FallbackSearchModalProps {
     tabManager: TabManager

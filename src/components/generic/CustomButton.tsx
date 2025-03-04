@@ -1,8 +1,8 @@
 import { FocusableProps, Focusable, DialogButton, GamepadEvent } from "decky-frontend-lib";
 import { ReactNode, FC, useState, CSSProperties } from "react";
-import { SoundEffect, SFXPath } from "../../GamepadUIAudio";
-import { playUISound } from '../../utils';
-import { addClasses } from '../../utils';
+import { SoundEffect, SFXPath } from "../../lib/GamepadUIAudio";
+import { playUISound } from '../../lib/utils';
+import { addClasses } from '../../lib/utils';
 
 export interface CustomButtonProps extends Omit<FocusableProps, 'focusWithinClassName' | 'flow-children' | 'onActivate' | 'onCancel' | 'onClick' | 'children' | 'noFocusRing' | 'onChange' | 'onFocus' | 'onBlur'> {
     /** The sound effect to use when clicking @default 'deck_ui_default_activation.wav' */

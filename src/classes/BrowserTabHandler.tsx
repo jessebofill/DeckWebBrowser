@@ -5,7 +5,7 @@ import { TabManager } from "./TabManager"
 import { BrowserContextMenu } from "../components/BrowserContextMenu"
 import { searchBarNavFocusable } from '../components/SearchBarInput'
 import { FallbackSearchModal } from '../components/FallbackSearchModal'
-import { searchBarState } from '../searchBarPatch'
+import { searchBarState } from '../patches/searchBarPatch'
 
 export default class BrowserTabHandler {
     title: string

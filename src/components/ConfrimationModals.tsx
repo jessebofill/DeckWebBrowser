@@ -2,7 +2,7 @@ import { ConfirmModal, Marquee } from "decky-frontend-lib";
 import { VFC } from "react";
 import { favoritesManager } from "../classes/FavoritesManager";
 import { settingsManager } from "../classes/SettingsManager";
-import { classes } from '../staticClasses';
+import { classes } from '../lib/staticClasses';
 
 interface ConfirmFavoriteOverwriteModalProps {
     name: string

@@ -1,4 +1,4 @@
-import { errorN } from "../log";
+import { errorN } from "../lib/log";
 import { ServerResponse } from "decky-frontend-lib";
 import { Favorites } from "./FavoritesManager";
 import { backendService } from "./BackendService";

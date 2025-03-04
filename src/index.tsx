@@ -1,14 +1,14 @@
 import { definePlugin, ServerAPI, staticClasses } from "decky-frontend-lib";
 import { routePath, SP_Window } from "./init";
 import { QAMContent } from "./components/QAMContent";
-import { PluginIcon } from "./native-components/PluginIcon";
-import { appendStyles } from "./styling";
+import { PluginIcon } from "./components/native-components/PluginIcon";
+import { appendStyles } from "./components/styling";
 import { TabbedBrowser } from "./components/TabbedBrowser";
 import { tabManager } from "./classes/TabManager";
-import { patchMenu } from "./menuPatch";
+import { patchMenu } from "./patches/menuPatch";
 import { settingsManager } from "./classes/SettingsManager";
 import { favoritesManager } from "./classes/FavoritesManager";
-import { patchSearchBar, searchBarState, unpatchSearchBar } from "./searchBarPatch";
+import { patchSearchBar, searchBarState, unpatchSearchBar } from "./patches/searchBarPatch";
 import { backendService } from "./classes/BackendService";
 
 export default definePlugin((serverApi: ServerAPI) => {

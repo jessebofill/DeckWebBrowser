@@ -6,7 +6,7 @@ import { status } from '../pluginState'
 import { SteamSpinner } from "decky-frontend-lib"
 import { settingsManager } from "../classes/SettingsManager"
 import { UsageWarningModal } from "./UsageWarningModal"
-import { BrowserStyling } from '../styling'
+import { BrowserStyling } from './styling'
 
 interface TabbedBrowserProps {
     tabManager: TabManager

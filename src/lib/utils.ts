@@ -1,7 +1,7 @@
-import { status } from './pluginState';
+import { status } from '../pluginState';
 import { Navigation, sleep } from 'decky-frontend-lib';
-import { tabManager } from './classes/TabManager';
-import { routePath } from './init';
+import { tabManager } from '../classes/TabManager';
+import { routePath } from '../init';
 import { SFXPath } from './GamepadUIAudio';
 
 

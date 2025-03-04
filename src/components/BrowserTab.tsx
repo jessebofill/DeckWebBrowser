@@ -1,9 +1,9 @@
 import { Focusable, GamepadEvent, FooterLegendProps } from "decky-frontend-lib";
 import { VFC, useContext, useEffect } from "react";
-import { BrowserContainer } from "../native-components/BrowserContainer";
+import { BrowserContainer } from "./native-components/BrowserContainer";
 import { TabManager } from "../classes/TabManager";
 import { BrowserMountAnimationContext } from "./TabbedBrowser";
-import { browserClasses } from '../staticClasses';
+import { browserClasses } from '../lib/staticClasses';
 
 interface BrowserTabProps {
     browser: any
