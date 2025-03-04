@@ -1,11 +1,13 @@
-import { warnN } from "../lib/log"
+import { Logger } from "../lib/log"
 import { defaultUrl, windowRouter } from "../init"
 import BrowserTabHandler from "./BrowserTabHandler"
 import isURL from "validator/lib/isURL"
 import { v4 as uuidv4 } from "uuid"
 import { SearchEngine, settingsManager } from "./SettingsManager"
 import { backendService } from "./BackendService"
+import { WSManager } from './WSManager'
 
+const tmLogger = new Logger('Tab Manager');
 export class TabManager {
     tabHandlers: BrowserTabHandler[]
     fallbackUrl: string
@@ -38,14 +40,14 @@ export class TabManager {
         const response = await waitForUniqueUriLoad(browser, id).then(() => {
             return backendService.serverApi!.callPluginMethod('assign_target', { frontendId: id })
         }).then((res) => {
-            if (!res.success) warnN('Tab Manager', 'Backend method "assign_target" returned this message> ')
+            if (!res.success) tmLogger.warn('Backend method "assign_target" returned this message> ')
             else {
                 tabHandler.targetId = res.result as string
                 tabHandler.hasTarget = true
             }
             return res
         }).catch(({ msg }) => {
-            warnN('Tab Manager', msg)
+            tmLogger.warn(msg)
             return { success: false, result: undefined }
         })
         browser.LoadURL(url)
@@ -65,7 +67,7 @@ export class TabManager {
 
     createDefaultTabs() {
         if (!settingsManager.settingsLoaded) {
-            warnN('Tab Manager', 'Settings have not loaded when trying to create default tabs. Using fallback url to create tab instead.')
+            tmLogger.warn('Settings have not loaded when trying to create default tabs. Using fallback url to create tab instead.')
             this.createTab()
         } else {
             for (let i = 0; i < settingsManager.settings.defaultTabs.length; i++) {
