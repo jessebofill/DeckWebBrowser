@@ -21,8 +21,7 @@ export default definePlugin((serverApi: ServerAPI) => {
     patchSearchBar()
     const unregisterOnResume = SteamClient.System.RegisterForOnResumeFromSuspend(patchSearchBar).unregister
     const unregisterForAppLifetime = SteamClient.GameSessions.RegisterForAppLifetimeNotifications(patchSearchBar).unregister
-    const unregisterForAppOvelay = SteamClient.Overlay.RegisterForOverlayActivated(() => { if (searchBarState.useFallbackSearch) patchSearchBar() })
-    
+    const unregisterForAppOvelay = SteamClient.Overlay.RegisterForOverlayActivated(() => { if (searchBarState.useFallbackSearch) patchSearchBar() }).unregister;
     return {
         title: <div className={staticClasses.Title}>Web Browser</div>,
         content: <QAMContent />,
