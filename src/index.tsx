@@ -12,6 +12,7 @@ import { patchSearchBar, searchBarState, unpatchSearchBar } from "./patches/sear
 import { backendService } from "./classes/BackendService";
 import { WSManager } from './classes/WSManager';
 import { error } from './lib/log';
+import { initApi } from './classes/Api';
 
 export default definePlugin((serverApi: ServerAPI) => {
     backendService.init(serverApi)
@@ -20,6 +21,7 @@ export default definePlugin((serverApi: ServerAPI) => {
         .catch(e => error('Error setting main tab for establishing ws server', e))
     settingsManager.init()
     favoritesManager.init()
+    initApi();
 
     appendStyles(SP_Window)
     serverApi.routerHook.addRoute(routePath, () => { return <TabbedBrowser tabManager={tabManager} /> })

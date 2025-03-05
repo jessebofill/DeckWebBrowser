@@ -1,5 +1,5 @@
 import { status } from '../pluginState';
-import { Navigation, sleep } from 'decky-frontend-lib';
+import { Navigation, Router, sleep } from 'decky-frontend-lib';
 import { tabManager } from '../classes/TabManager';
 import { routePath } from '../init';
 import { SFXPath } from './GamepadUIAudio';
@@ -25,4 +25,22 @@ export function playUISound(path: SFXPath) {
 export function addClasses(...strings: any[]) {
     return strings.filter(string => string).join(' ');
 }
+export const openUrl = (url: string, inNewtab?: boolean) => {
+    if (!status.running) {
+        status.running = true;
+        tabManager.createTab(url);
+        Router.CloseSideMenus();
+        Router.Navigate(routePath);
+    } else {
+        if (inNewtab) {
+            tabManager.createTab(url);
+        } else {
+            tabManager.activeTabLoad(url);
+        }
+        Router.CloseSideMenus();
+        if (window.location.pathname !== '/routes' + routePath) {
+            Router.Navigate(routePath);
+        }
+    }
+};
 

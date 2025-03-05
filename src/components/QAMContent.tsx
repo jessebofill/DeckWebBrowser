@@ -1,33 +1,13 @@
-import { PanelSection, PanelSectionRow, Router, Field, GamepadEvent, GamepadButton, showModal, ButtonItem, DropdownItem, ToggleField } from "decky-frontend-lib";
+import { PanelSection, PanelSectionRow, Field, GamepadEvent, GamepadButton, showModal, ButtonItem, DropdownItem, ToggleField } from "decky-frontend-lib";
 import { VFC, useMemo, useState } from "react";
-import { defaultUrl, routePath } from "../init";
+import { defaultUrl } from "../init";
 import { SearchEngine, settingsManager } from "../classes/SettingsManager";
 import { ReorderableEntry, ReorderableList } from "./ReorderableListModified";
 import { ConfirmDeleteDefaultTabModal } from "./ConfrimationModals";
-import { tabManager } from "../classes/TabManager";
 import { EnhancedSelector } from './generic/EnhancedSelector';
 import { status } from '../pluginState';
-import { killBrowser } from '../lib/utils';
+import { killBrowser, openUrl } from '../lib/utils';
 import { CustomSearchUrlModal } from './CustomSearchUrlModal';
-
-const openUrl = (url: string, inNewtab?: boolean) => {
-    if (!status.running) {
-        status.running = true
-        tabManager.createTab(url)
-        Router.CloseSideMenus()
-        Router.Navigate(routePath)
-    } else {
-        if (inNewtab) {
-            tabManager.createTab(url)
-        } else {
-            tabManager.activeTabLoad(url)
-        }
-        Router.CloseSideMenus()
-        if (window.location.pathname !== '/routes' + routePath) {
-            Router.Navigate(routePath)
-        }
-    }
-}
 
 export const QAMContent: VFC = ({ }) => {
     const [isRunning, setIsRunning] = useState(status.running)
