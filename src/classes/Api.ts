@@ -1,5 +1,6 @@
 import { openUrl } from '../lib/utils';
 
+const apiName = 'WebBrowserPlugin';
 export class PluginApi {
     openInBrowser(url: string) {
         try {
@@ -13,9 +14,12 @@ export class PluginApi {
 export function initApi() {
     const api = new PluginApi();
     Object.freeze(api);
-    Object.defineProperty(window, 'WebBrowserPlugin', {
+    Object.defineProperty(window, apiName, {
         value: api,
         writable: false,
-        configurable: false,
+        configurable: true,
     });
+}
+export function removeApi() {
+    delete window[apiName];
 }

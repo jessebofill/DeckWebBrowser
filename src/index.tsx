@@ -12,7 +12,7 @@ import { patchSearchBar, searchBarState, unpatchSearchBar } from "./patches/sear
 import { backendService } from "./classes/BackendService";
 import { WSManager } from './classes/WSManager';
 import { error } from './lib/log';
-import { initApi } from './classes/Api';
+import { initApi, removeApi } from './classes/Api';
 
 export default definePlugin((serverApi: ServerAPI) => {
     backendService.init(serverApi)
@@ -41,6 +41,7 @@ export default definePlugin((serverApi: ServerAPI) => {
             unregisterOnResume()
             unregisterForAppLifetime()
             unregisterForAppOvelay()
+            removeApi();
         },
     };
 });
