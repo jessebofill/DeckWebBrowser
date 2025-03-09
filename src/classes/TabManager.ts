@@ -1,11 +1,12 @@
 import { Logger } from "../lib/log"
 import { defaultUrl, windowRouter } from "../init"
-import BrowserTabHandler, { MicAccess, MicAccessChangeEvent } from "./BrowserTabHandler"
+import BrowserTabHandler, { MicAccess, MicAccessChangeEvent, OnCancelType } from "./BrowserTabHandler"
 import isURL from "validator/lib/isURL"
 import { v4 as uuidv4 } from "uuid"
 import { SearchEngine, settingsManager } from "./SettingsManager"
 import { backendService } from "./BackendService"
 import { WSManager } from './WSManager'
+import { killBrowser } from '../lib/utils'
 
 const tmLogger = new Logger('Tab Manager');
 export class TabManager {
@@ -31,12 +32,12 @@ export class TabManager {
         this.defaultSearchEngine = SearchEngine.GOOGLE
     }
 
-    createTab = async (Url?: string) => {
+    createTab = async (Url?: string, onCancelType = OnCancelType.NONE) => {
         const id = uuidv4()
         const url = (Url && Url !== 'home') ? Url : (settingsManager.settings.homeUrl || this.fallbackUrl)
         const browser = this.windowRouter?.CreateBrowserView(this.browserViewName)
         browser.LoadURL(`data:text/plain,${id}`)
-        const tabHandler = new BrowserTabHandler(id, browser, this)
+        const tabHandler = new BrowserTabHandler(id, browser, this, onCancelType)
         this.tabHandlers.push(tabHandler)
         this.setActiveTabById(id)
         const response = await waitForUniqueUriLoad(browser, id).then(() => {
@@ -56,7 +57,11 @@ export class TabManager {
         if (this.onNewTab) this.onNewTab()
     }
 
-    closeTab(id: string) {
+    closeTab(id: string, killIfLastTab = false) {
+        if (killIfLastTab && this.tabHandlers.length === 1) {
+            killBrowser()
+            return
+        }
         const index = this.tabHandlers.findIndex(tabHandler => tabHandler.id === id)
         this.tabHandlers[index].closeBrowser()
         if (this.tabHandlers.length === 1) this.createTab()

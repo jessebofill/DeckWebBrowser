@@ -1,10 +1,11 @@
+import { log } from '../lib/log';
 import { openUrl } from '../lib/utils';
 
 const apiName = 'WebBrowserPlugin';
 export class PluginApi {
-    openInBrowser(url: string) {
+    openInBrowser(url: string, autoKill = true) {
         try {
-            openUrl(url, true);
+            openUrl(url, true, autoKill);
         } catch (e: any) {
             throw new Error(`Encountered error trying to open in Web Browser plugin${e?.message ? ': ' + e.message : ''}`)
         }

@@ -3,6 +3,7 @@ import { Navigation, Router, sleep } from 'decky-frontend-lib';
 import { tabManager } from '../classes/TabManager';
 import { routePath } from '../init';
 import { SFXPath } from './GamepadUIAudio';
+import { OnCancelType } from '../classes/BrowserTabHandler';
 
 
 export const killBrowser = async (onClose?: () => void) => {
@@ -25,15 +26,15 @@ export function playUISound(path: SFXPath) {
 export function addClasses(...strings: any[]) {
     return strings.filter(string => string).join(' ');
 }
-export const openUrl = (url: string, inNewtab?: boolean) => {
+export const openUrl = (url: string, inNewtab?: boolean, autoKill = false) => {
     if (!status.running) {
         status.running = true;
-        tabManager.createTab(url);
+        tabManager.createTab(url, autoKill ? OnCancelType.KILL_BROWSER : OnCancelType.NONE);
         Router.CloseSideMenus();
         Router.Navigate(routePath);
     } else {
         if (inNewtab) {
-            tabManager.createTab(url);
+            tabManager.createTab(url, autoKill ? OnCancelType.CLOSE_TAB : OnCancelType.NONE);
         } else {
             tabManager.activeTabLoad(url);
         }

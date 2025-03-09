@@ -1,4 +1,4 @@
-import { GamepadButton, GamepadEvent, afterPatch, showContextMenu, showModal } from 'decky-frontend-lib'
+import { FooterLegendProps, GamepadButton, GamepadEvent, afterPatch, showContextMenu, showModal } from 'decky-frontend-lib'
 import { BrowserTab } from "../components/BrowserTab"
 import { BrowserTabCloser } from "../components/BrowserTabCloser"
 import { TabManager } from "./TabManager"
@@ -7,11 +7,18 @@ import { searchBarNavFocusable } from '../components/SearchBarInput'
 import { FallbackSearchModal } from '../components/FallbackSearchModal'
 import { searchBarState } from '../patches/searchBarPatch'
 import { MicIcon } from '../components/MicIcon'
+import { killBrowser } from '../lib/utils'
 
 export enum MicAccess {
     NONE,
     ALLOWED,
     BLOCKED
+}
+
+export enum OnCancelType {
+    NONE,
+    CLOSE_TAB,
+    KILL_BROWSER
 }
 
 export interface MicAccessChangeEvent extends CustomEvent<{ id: string; state: MicAccess }> { };
@@ -24,42 +31,34 @@ export default class BrowserTabHandler {
     onTitleChange: any
     navNode: any
     targetId: string | undefined
-    hasTarget: boolean
+    hasTarget: boolean = false
     micAccess = MicAccess.NONE
     setMicIconHeader: (state: MicAccess) => any = (state: MicAccess) => undefined
-    constructor(id: string, browser: any, tabManager: TabManager, targetId?: string) {
+    constructor(id: string, browser: any, tabManager: TabManager, onCancelType = OnCancelType.NONE) {
         browser.m_browserView.on('set-title', this.onSetTitle)
 
         this.title = 'data:text/html,<body><%2Fbody>'
         this.id = id
         this.browser = browser
         this.navNode = null
-        this.targetId = targetId
-        this.hasTarget = !!targetId
         tabManager.eventTarget.addEventListener('micAccesChange', (event: Event) => {
             const customEvent = event as CustomEvent<{ id: string; state: MicAccess }>;
             const { id, state } = customEvent.detail;
             if (id === this.id) this.setMicIconHeader(state);
         });
 
-        const outerTabActionProps = {
+        const outerTabActionProps: FooterLegendProps = {
             //X button
-            onSecondaryButton: () => {
-                browser.m_browserView.SetFocus(false)
-                tabManager.closeTab(id)
-            },
+            onSecondaryButton: () => tabManager.closeTab(id),
 
             //Y button
-            onOptionsButton: () => {
-                tabManager.createTab()
-            },
+            onOptionsButton: () => tabManager.createTab(),
 
             // start button
             onMenuButton: () => {
                 const shownContextMenu: { instance: any } = { instance: null }
                 shownContextMenu.instance = showContextMenu(<BrowserContextMenu menu={shownContextMenu} tabManager={tabManager} />)
             },
-
             onButtonDown: (evt: GamepadEvent) => {
                 switch (evt.detail.button) {
                     case GamepadButton.REAR_LEFT_LOWER:
@@ -113,6 +112,15 @@ export default class BrowserTabHandler {
             onMenuActionDescription: 'Options'
         }
 
+        if (onCancelType === OnCancelType.KILL_BROWSER) {
+            outerTabActionProps.onCancelButton = () => killBrowser();
+            outerTabActionProps.onCancelActionDescription = 'Kill Browser';
+        }
+        if (onCancelType === OnCancelType.CLOSE_TAB) {
+            outerTabActionProps.onCancelButton = () => tabManager.closeTab(id, true);
+            outerTabActionProps.onCancelActionDescription = 'Close Tab';
+        }
+
         this.tab = {
             id: id,
             title: '',
@@ -122,7 +130,7 @@ export default class BrowserTabHandler {
                 tabManager={tabManager}
                 getNavNode={this.getNavNode}
                 clearNavNode={this.clearNavNode}
-                focusableActionProps={outerTabActionProps}
+                focusableActionProps={{...outerTabActionProps}}
             />,
             renderTabAddon: () => <div style={{ display: 'flex', gap: '8px', flexDirection: 'row' }}>
                 <MicIcon tabHandler={this} />
@@ -133,6 +141,7 @@ export default class BrowserTabHandler {
     }
 
     closeBrowser() {
+        this.browser.m_browserView.SetFocus(false)
         setTimeout(() => this.browser.Destroy(), 200)
     }
 
