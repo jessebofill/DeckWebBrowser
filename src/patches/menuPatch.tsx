@@ -1,15 +1,16 @@
 import { FooterLegendProps, afterPatch, findInReactTree } from "decky-frontend-lib"
 import { getReactTree, routePath } from "../init"
-import { FC, useState } from "react"
+import { FC, ReactElement, ReactNode, useState } from "react"
 import { PluginIcon } from "../components/native-components/PluginIcon"
 import { logN } from '../lib/log'
 import { settingsManager } from '../classes/SettingsManager'
 import { status } from '../pluginState'
 import { killBrowser } from '../lib/utils'
+import { tabManager } from '../classes/TabManager'
 
 interface MainMenuItemProps extends FooterLegendProps {
     route: string
-    label: string
+    label: ReactNode
     onFocus: () => void
     onActivate?: () => void
 }
@@ -79,12 +80,20 @@ interface MenuItemWrapperProps extends MainMenuItemProps {
     MenuItemComponent: FC<MainMenuItemProps>
 }
 
-const MenuItemWrapper: FC<MenuItemWrapperProps> = ({ MenuItemComponent, ...props }) => {
+const MenuItemWrapper: FC<MenuItemWrapperProps> = ({ MenuItemComponent, label, ...props }) => {
     const [_, setState] = useState(false)
+
+    const labelElement = (
+        <div style={{ display: 'flex', width: '150px', justifyContent: 'space-between' }}>
+            <div>{label}</div>
+            <div style={{ fontSize: '11px' }}>{(status.running && tabManager.tabHandlers.length) || ''}</div>
+        </div>
+    );
 
     return (
         <MenuItemComponent
             {...props}
+            label={labelElement}
             onSecondaryActionDescription={status.running ? 'Kill Browser' : ''}
             onSecondaryButton={status.running ? () => killBrowser(() => setState((state => !state))) : undefined}
         >
