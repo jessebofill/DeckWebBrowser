@@ -2,7 +2,7 @@ import { status } from '../pluginState';
 import { Navigation, Router, sleep } from 'decky-frontend-lib';
 import { tabManager } from '../classes/TabManager';
 import { routePath } from '../init';
-import { SFXPath } from './GamepadUIAudio';
+import { GamepadUIAudio, SFXPath } from './GamepadUIAudio';
 import { OnCancelType } from '../classes/BrowserTabHandler';
 
 
@@ -19,7 +19,6 @@ export const killBrowser = async (onClose?: () => void) => {
 }
 
 export function playUISound(path: SFXPath) {
-    //@ts-ignore
     if (settingsStore?.m_ClientSettings?.enable_ui_sounds) GamepadUIAudio.AudioPlaybackManager.PlayAudioURL(path);
 }
 
