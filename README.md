@@ -20,7 +20,6 @@
 - Limited gamepad navigation support
 - Backgrounding
 - Inspect tabs/ use devtools
-- Browse file system
 
 ### Tabs
 Easily open, close and navigate between multiple tabs with just the touch of a button.
@@ -87,12 +86,6 @@ Each browser tab runs in the background and stays loaded even when you navigate 
 An inspect button is present in the context menu to easily use the integrated CEF dev tools just like you would in Chrome!
 
 ![Inpect tab screenshot](assets/screenshots/inspect.jpg)
-
-### Browse File System
-A neat use of the browser is to easily browse and view files on your Steam Deck. Just type "file:///" in the url bar to browse the file system and open common files like text files or images all without having to switch to desktop mode.
-
-![File system browser screenshot](assets/screenshots/file-system.jpg)
-![Viewing a video file screenshot](assets/screenshots/video-file.jpg)
 
 ## Installation
 This plugin is installed through [Decky Loader](https://wiki.deckbrew.xyz/en/user-guide/home). Just search/ find "Web Browser" in the Decky Loader store front. See "Using the Store" for details [here](https://wiki.deckbrew.xyz/en/user-guide/plugin-store)
