@@ -8,6 +8,8 @@ import { EnhancedSelector } from './generic/EnhancedSelector';
 import { status } from '../pluginState';
 import { killBrowser, openUrl } from '../lib/utils';
 import { CustomSearchUrlModal } from './CustomSearchUrlModal';
+import { SiGithub, SiKofi } from "react-icons/si";
+import { SocialButton } from './SocialButton';
 
 export const QAMContent: VFC = ({ }) => {
     const [isRunning, setIsRunning] = useState(status.running)
@@ -179,11 +181,12 @@ export const QAMContent: VFC = ({ }) => {
                         Kill Browser
                     </ButtonItem>
                 </PanelSectionRow>
-                <PanelSectionRow>
-                    <ButtonItem layout='below' onClick={() => openUrl('https://github.com/jessebofill/DeckWebBrowser#readme', true)}>
-                        View Readme
-                    </ButtonItem>
-                </PanelSectionRow>
+                <SocialButton icon={<SiGithub />} url='https://github.com/jessebofill/DeckWebBrowser#readme' minHeight='40px'>
+                    Plugin GitHub
+                </SocialButton>
+                <SocialButton icon={<SiKofi />} url='https://ko-fi.com/jessebofill' minHeight='40px'>
+                    Kofi
+                </SocialButton>
             </PanelSection>
         </>
     );

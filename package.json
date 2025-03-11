@@ -46,6 +46,7 @@
     },
     "dependencies": {
         "react-icons": "^4.8.0",
+        "react-qr-code": "^2.0.15",
         "uuid": "^9.0.0",
         "validator": "^13.9.0"
     },
