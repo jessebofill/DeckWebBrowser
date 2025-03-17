@@ -23,9 +23,9 @@ class BackendService {
 
     async setMainTab() {
         const id = uuidv4();
-        const res = await this.serverApi!.callPluginMethod<{ frontend_id: string }, string>('set_main_tab', { frontend_id: id });
+        const res = await this.serverApi!.callPluginMethod<{ frontend_id: string }, { key: string, port: number }>('set_main_tab', { frontend_id: id });
         if (!res.success) throw new Error(res.result);
-        return { id, key: res.result };
+        return { id, ...res.result };
     }
 }
 

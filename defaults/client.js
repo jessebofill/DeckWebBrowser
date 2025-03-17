@@ -1,4 +1,4 @@
-((tabId, apiKey) => {
+((wsPort, tabId, apiKey) => {
     if (window.scriptLoaded) {
         console.debug('Web Browser script already loaded');
         return;
@@ -16,7 +16,8 @@
     };
 
     class WSManager {
-        constructor(tabId, key) {
+        constructor(port, tabId, key) {
+            this.port = port;
             this.id = tabId;
             this.key = key;
             this.responsePromises = new Map();
@@ -26,7 +27,7 @@
             this.handleCandidate = async () => { };
         }
         connect() {
-            this.ws = new WebSocket(`ws://127.0.0.1:8765/ws?api_key=${this.key}`);
+            this.ws = new WebSocket(`ws://127.0.0.1:${this.port}/ws?api_key=${this.key}`);
             this.ws.onerror = e => console.error('WebSocket error', e);
             this.ws.onclose = e => console.error('WebSocket closed', e);
             this.ws.onopen = e => console.debug('WebSocket opened', e);
@@ -300,7 +301,7 @@
     }
 
     let remoteStream;
-    const wsManager = new WSManager(tabId, apiKey);
+    const wsManager = new WSManager(wsPort, tabId, apiKey);
     const rtcHandler = new RTCHandler(wsManager);
 
     // window.wsm = wsManager
@@ -312,4 +313,4 @@
     navigator.mediaDevices.getUserMedia = async constraints => await getUserMedia(constraints);
     const originalEnumerateDevices = navigator.mediaDevices.enumerateDevices;
     navigator.mediaDevices.enumerateDevices = async () => (await originalEnumerateDevices.call(navigator.mediaDevices)).filter(device => device.kind !== 'audioinput' || device.deviceId === 'default');
-})(id, key)
+})(port, id, key)

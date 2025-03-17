@@ -17,7 +17,7 @@ import { initApi, removeApi } from './classes/Api';
 export default definePlugin((serverApi: ServerAPI) => {
     backendService.init(serverApi)
     backendService.setMainTab()
-        .then(({ id, key }) => tabManager.setWSManager(new WSManager(id, key)))
+        .then(({ id, key, port }) => tabManager.setWSManager(new WSManager(port, id, key)))
         .catch(e => error('Error setting main tab for establishing ws server', e))
     settingsManager.init()
     favoritesManager.init()

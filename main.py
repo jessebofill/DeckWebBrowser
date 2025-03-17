@@ -54,7 +54,8 @@ class Plugin:
         tab = await get_gamepadui_tab()
         decky_plugin.logger.info(f'Got main tab with frontend id {frontend_id}: {tab.ws_url}')
         tabs[frontend_id] = tab
-        return self.ws_server.generate_api_key(frontend_id)
+        port = await self.ws_server.getPort()
+        return { 'key': self.ws_server.generate_api_key(frontend_id), 'port': port }
 
     async def setup_target(self, frontend_id):
         try: 
@@ -72,8 +73,9 @@ class Plugin:
 
     async def add_client_script(self, tab: Tab, frontend_id):
         if (self.client_js):
+            port = await self.ws_server.getPort()
             key = self.ws_server.generate_api_key(frontend_id)
-            js = f"const id = '{frontend_id}'; const key = '{key}'; {self.client_js}"
+            js = f"const id = '{frontend_id}'; const key = '{key}'; const port = '{port}'; {self.client_js}"
             await tab._send_devtools_cmd({
                 "method": "Page.addScriptToEvaluateOnNewDocument",
                 "params": {
@@ -148,6 +150,8 @@ class WSServer:
         self.client_targets: Dict[str, ClientTarget] = {}
         self.main_target = None
         self.api_keys = {}
+        self.port = 51212
+        self.started = False
 
     def generate_api_key(self, target_id):
         api_key = str(uuid4())
@@ -314,21 +318,33 @@ class WSServer:
         return app
 
     async def run(self):
-        decky_plugin.logger.info("Starting WebSocket server...")
-        app = await self.init_websocket_app()
-        runner = aiohttp.web.AppRunner(app)
-        await runner.setup()
-        site = aiohttp.web.TCPSite(runner, 'localhost', 8765)
         try:
-            await site.start()
-            decky_plugin.logger.info("WebSocket server is running.")
+            decky_plugin.logger.info("Starting WebSocket server...")
+            app = await self.init_websocket_app()
+            runner = aiohttp.web.AppRunner(app)
+            await runner.setup()
+            while True:
+                try:
+                    site = aiohttp.web.TCPSite(runner, 'localhost', self.port)
+                    await site.start()
+                    break
+                except OSError:
+                    decky_plugin.logger.info(f"Port {self.port} is in use, trying the next one...")
+                    self.port += 1
+            decky_plugin.logger.info(f"WebSocket server is running on port {self.port}.")
+            self.started = True
+            
             while True:
                 await asyncio.sleep(3600)
         except asyncio.CancelledError:
             decky_plugin.logger.info("WebSocket server task was cancelled.")
-            raise
         except Exception as e:
             decky_plugin.logger.info(f"WebSocket server encountered an error: {e}")
         finally:
             await runner.cleanup()
             decky_plugin.logger.info("WebSocket server has ended.")
+            
+    async def getPort(self):
+        while not self.started:
+            await asyncio.sleep(1)
+        return self.port

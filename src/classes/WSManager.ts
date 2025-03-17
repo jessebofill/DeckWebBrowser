@@ -65,9 +65,9 @@ export class WSManager {
     readyToSend = false;
     clients = new Map<string, RTCHandler>();
     onMicAccessChange = (id: string, state: MicAccess) => undefined;
-    constructor(mainId: string, key: string) {
+    constructor(port: number, mainId: string, key: string) {
         this.id = mainId;
-        this.ws = new WebSocket(`ws://127.0.0.1:8765/ws?api_key=${key}`);
+        this.ws = new WebSocket(`ws://127.0.0.1:${port}/ws?api_key=${key}`);
         this.ws.onerror = e => wsLogger.error('Error', e);
         this.ws.onclose = e => wsLogger.error('Connection closed', e);
         this.ws.onopen = e => wsLogger.debug('Connection opened', e);
