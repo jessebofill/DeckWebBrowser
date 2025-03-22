@@ -20,6 +20,7 @@
 - Limited gamepad navigation support
 - Backgrounding
 - Inspect tabs/ use devtools
+- Microphone Support
 
 ### Tabs
 Easily open, close and navigate between multiple tabs with just the touch of a button.
@@ -86,6 +87,11 @@ Each browser tab runs in the background and stays loaded even when you navigate 
 An inspect button is present in the context menu to easily use the integrated CEF dev tools just like you would in Chrome!
 
 ![Inpect tab screenshot](assets/screenshots/inspect.jpg)
+
+### Microphone Support
+A custom solution is implemented in order to support microphone access. This feature may not work on all websites (like Google) however most should be supported. A prompt asking user for permisson will be shown the first time a page requests access to the microphone, and permission will be reset every time a page reloads or new page loads. For security reasons permissions are not saved, and the requirement for user to explicitly grant permission every time a page is navigated to is intentional. Once the user has allowed/ denied access, a mic icon indicating whether permission is granted, will be shown next to the tab title.  
+
+Note: If a page says "micphone access denied" without showing showing the user prompt first, simply refresh the page and the prompt should now work when the page requests access again. 
 
 ## Installation
 This plugin is installed through [Decky Loader](https://wiki.deckbrew.xyz/en/user-guide/home). Just search/ find "Web Browser" in the Decky Loader store front. See "Using the Store" for details [here](https://wiki.deckbrew.xyz/en/user-guide/plugin-store)
