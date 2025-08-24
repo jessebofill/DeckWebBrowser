@@ -1,5 +1,5 @@
 import { status } from '../pluginState';
-import { Navigation, Router, sleep } from 'decky-frontend-lib';
+import { Navigation, PatchOptions, replacePatch, Router, sleep } from 'decky-frontend-lib';
 import { tabManager } from '../classes/TabManager';
 import { routePath } from '../init';
 import { GamepadUIAudio, SFXPath } from './GamepadUIAudio';
@@ -44,3 +44,13 @@ export const openUrl = (url: string, inNewtab?: boolean, autoKill = false) => {
     }
 };
 
+export function maxLifetimeReplacePatch(object: any, property: string, handler: (args: any[]) => any, lifetimeMs: number, options?: PatchOptions) {
+    const patch = replacePatch(object, property, handler, options);
+
+    (async () => {
+        await sleep(lifetimeMs);
+        if (!patch.hasUnpatched) {
+            patch.unpatch();
+        }
+    })();
+}

@@ -1,4 +1,4 @@
-import { Focusable, GamepadEvent, FooterLegendProps } from "decky-frontend-lib";
+import { Focusable, GamepadEvent, FooterLegendProps, GamepadButton, sleep, GamepadEventDetail } from "decky-frontend-lib";
 import { VFC, useContext, useEffect } from "react";
 import { BrowserContainer } from "./native-components/BrowserContainer";
 import { TabManager } from "../classes/TabManager";
@@ -15,8 +15,10 @@ interface BrowserTabProps {
 }
 
 export const BrowserTab: VFC<BrowserTabProps> = (props: BrowserTabProps) => {
+    const containerClass = 'focus-container';
     const { browser, tabId, tabManager, getNavNode, clearNavNode, focusableActionProps } = props
     const browserMountAnimation = useContext(BrowserMountAnimationContext)
+    if (!browserMountAnimation.done) return <></>;
 
     useEffect(() => {
         return () => clearNavNode()
@@ -24,44 +26,43 @@ export const BrowserTab: VFC<BrowserTabProps> = (props: BrowserTabProps) => {
 
     const element = (
         <Focusable
+            className={containerClass}
             noFocusRing={true}
-            onGamepadFocus={(evt: GamepadEvent) => {
+            onGamepadFocus={async (evt: CustomEvent<GamepadEventDetail & { focusedNode?: NavNode }>) => {
                 // @ts-ignore
-                if (evt.target?.classList[0] !== browserClasses.BrowserContainer) { //prevents from triggering twice
-                    setTimeout(() => {
-                        // @ts-ignore
-                        evt.detail.focusedNode?.m_rgChildren[0]?.BTakeFocus(3)
-                    }, browserMountAnimation.done ? 200 : 1100)
+                if (evt.target?.classList?.contains?.(containerClass)) { //only fire from top level element focused
+                    await sleep(1); //defer is necessary so that focus tracks correctly
+                    evt.detail.focusedNode?.BChildTakeFocus()
                 }
             }}
 
             //A button
             onOKButton={(evt: GamepadEvent) => {
-                if (browser.m_gamepadBridge.GetGameInputSupportLevel().Value < 3) {
+                if (browser.m_gamepadBridge.GetGameInputSupportLevel().Value !== BrowserInputSupport.Full) {
                     SteamClient.Input.ControllerKeyboardSetKeyState(88, true)
                     SteamClient.Input.ControllerKeyboardSetKeyState(88, false)
                 }
             }}
 
             onGamepadDirection={(evt: GamepadEvent) => {
-                if (browser.m_gamepadBridge.GetGameInputSupportLevel().Value < 3) {
+                if (browser.m_gamepadBridge.GetGameInputSupportLevel().Value !== BrowserInputSupport.Full) {
                     switch (evt.detail.button) {
-                        case 9:
-                            //arrow up
+                        case GamepadButton.DIR_UP:
+                            //page up
                             SteamClient.Input.ControllerKeyboardSetKeyState(75, true)
                             SteamClient.Input.ControllerKeyboardSetKeyState(75, false)
                             break
-                        case 10:
-                            //arrow down
+                        case GamepadButton.DIR_DOWN:
+                            //page down
                             SteamClient.Input.ControllerKeyboardSetKeyState(78, true)
                             SteamClient.Input.ControllerKeyboardSetKeyState(78, false)
                             break
-                        case 11:
+                        case GamepadButton.DIR_LEFT:
                             //arrow left
                             SteamClient.Input.ControllerKeyboardSetKeyState(80, true)
                             SteamClient.Input.ControllerKeyboardSetKeyState(80, false)
                             break
-                        case 12:
+                        case GamepadButton.DIR_RIGHT:
                             //arrow right
                             SteamClient.Input.ControllerKeyboardSetKeyState(79, true)
                             SteamClient.Input.ControllerKeyboardSetKeyState(79, false)
@@ -73,7 +74,7 @@ export const BrowserTab: VFC<BrowserTabProps> = (props: BrowserTabProps) => {
             <BrowserContainer
                 browser={browser}
                 className={browserClasses.ExternalBrowserContainer}
-                visible={tabManager.activeTab === tabId && browserMountAnimation.done}
+                visible={tabManager.activeTab === tabId}
                 hideForModals={true}
                 external={true}
                 displayURLBar={false}

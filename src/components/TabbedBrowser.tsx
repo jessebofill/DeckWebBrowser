@@ -81,14 +81,14 @@ export const TabbedBrowser: VFC<TabbedBrowserProps> = ({ tabManager }) => {
     }, [])
 
     tabManager.tabHandlers.forEach(tabHandler => {
-        const footerActions = tabHandler.tab.content.props.focusableActionProps
+        const footerActions = tabHandler.tab.content?.props.focusableActionProps
         if (!status.noTabBar) {
             if (footerActions?.onCancelButton) delete footerActions.onCancelButton;
             footerActions.onCancelActionDescription = 'Back';
             
         } else {
-            if (!footerActions?.onCancelButton) footerActions.onCancelButton = tabHandler.tab.footer.onCancelButton ?? (() => Navigation.NavigateBack());
-            footerActions.onCancelActionDescription = tabHandler.tab.footer.onCancelActionDescription;
+            if (!footerActions?.onCancelButton) footerActions.onCancelButton = tabHandler.tab.footer?.onCancelButton ?? (() => Navigation.NavigateBack());
+            footerActions.onCancelActionDescription = tabHandler.tab.footer?.onCancelActionDescription;
         }
     })
 

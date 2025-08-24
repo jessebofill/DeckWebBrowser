@@ -1,4 +1,4 @@
-import { FooterLegendProps, GamepadButton, GamepadEvent, afterPatch, showContextMenu, showModal } from 'decky-frontend-lib'
+import { FooterLegendProps, GamepadButton, GamepadEvent, Tab as _Tab, afterPatch, showContextMenu, showModal, sleep } from 'decky-frontend-lib'
 import { BrowserTab } from "../components/BrowserTab"
 import { BrowserTabCloser } from "../components/BrowserTabCloser"
 import { TabManager } from "./TabManager"
@@ -7,7 +7,12 @@ import { searchBarNavFocusable } from '../components/SearchBarInput'
 import { FallbackSearchModal } from '../components/FallbackSearchModal'
 import { searchBarState } from '../patches/searchBarPatch'
 import { MicIcon } from '../components/MicIcon'
-import { killBrowser } from '../lib/utils'
+import { killBrowser, maxLifetimeReplacePatch } from '../lib/utils'
+import { ReactElement } from 'react'
+
+interface Tab extends Omit<_Tab, 'content'> {
+    content: ReactElement;
+}
 
 export enum MicAccess {
     NONE,
@@ -25,17 +30,36 @@ export interface MicAccessChangeEvent extends CustomEvent<{ id: string; state: M
 export default class BrowserTabHandler {
     title: string
     id: string
-    tab: any
-    browser: any
-    closeTab: any
-    onTitleChange: any
-    navNode: any
-    targetId: string | undefined
+    tab: Tab
+    browser: BrowserInternal
+    onTitleChange?: () => void;
+    navNode?: NavNode | null
+    targetId?: string
     hasTarget: boolean = false
     micAccess = MicAccess.NONE
     setMicIconHeader: (state: MicAccess) => any = (state: MicAccess) => undefined
-    constructor(id: string, browser: any, tabManager: TabManager, onCancelType = OnCancelType.NONE) {
-        browser.m_browserView.on('set-title', this.onSetTitle)
+    constructor(id: string, browser: BrowserInternal, tabManager: TabManager, onCancelType = OnCancelType.NONE) {
+        maxLifetimeReplacePatch(browser.m_refKeyboard, 'ShowVirtualKeyboard', () => { }, 3000, { singleShot: true }); //prevent virtual keyboard from displaying when starting browser for whatever reason
+        /**
+         * Broswer class subscribes Browser.OnFinishRequest to this message which should call
+         *  setTimeout(() => {
+                switch (this.m_gamepadBridge.GetGameInputSupportLevel().Value) {
+                    case o.i6.Unknown:
+                    case o.i6.PageUnloading:
+                        this.m_gamepadBridge.SetGameInputSupportLevel(o.i6.None, 'OnFinishedRequest');
+                }
+            }, 1)
+            at the end.
+            We have to set the support level to unknown after their setTimeout runs
+         */
+        browser.m_browserView.on('finished-request', async (url: string, title: string) => {
+            const inputSupport = browser.GetGameInputSupportLevel().Value;
+            if (inputSupport === BrowserInputSupport.Unknown) {
+                await sleep(10)
+                browser.m_gamepadBridge.SetGameInputSupportLevel(inputSupport)
+            }
+        });
+        browser.m_browserView.on('set-title', this.onSetTitle);
 
         this.title = 'data:text/html,<body><%2Fbody>'
         this.id = id
@@ -62,12 +86,12 @@ export default class BrowserTabHandler {
             onButtonDown: (evt: GamepadEvent) => {
                 switch (evt.detail.button) {
                     case GamepadButton.REAR_LEFT_LOWER:
-                        //shift
-                        SteamClient.Input.ControllerKeyboardSetKeyState(101, true)
+                        //right shift (left shift + tab will open main menu)                                                                       )
+                        SteamClient.Input.ControllerKeyboardSetKeyState(105, true)
                         //tab
                         SteamClient.Input.ControllerKeyboardSetKeyState(43, true)
                         SteamClient.Input.ControllerKeyboardSetKeyState(43, false)
-                        SteamClient.Input.ControllerKeyboardSetKeyState(101, false)
+                        SteamClient.Input.ControllerKeyboardSetKeyState(105, false)
                         break
 
                     case GamepadButton.REAR_RIGHT_LOWER:
@@ -130,7 +154,7 @@ export default class BrowserTabHandler {
                 tabManager={tabManager}
                 getNavNode={this.getNavNode}
                 clearNavNode={this.clearNavNode}
-                focusableActionProps={{...outerTabActionProps}}
+                focusableActionProps={{ ...outerTabActionProps }}
             />,
             renderTabAddon: () => <div style={{ display: 'flex', gap: '8px', flexDirection: 'row' }}>
                 <MicIcon tabHandler={this} />
