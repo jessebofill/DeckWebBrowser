@@ -13,6 +13,7 @@ import { backendService } from "./classes/BackendService";
 import { WSManager } from './classes/WSManager';
 import { error } from './lib/log';
 import { initApi, removeApi } from './classes/Api';
+import { registerForOnResumeFromSuspend } from './lib/SleepManager';
 
 export default definePlugin((serverApi: ServerAPI) => {
     backendService.init(serverApi)
@@ -27,7 +28,7 @@ export default definePlugin((serverApi: ServerAPI) => {
     serverApi.routerHook.addRoute(routePath, () => { return <TabbedBrowser tabManager={tabManager} /> })
     const unpatchMenu = patchMenu()
     patchSearchBar()
-    const unregisterOnResume = SteamClient.System.RegisterForOnResumeFromSuspend(patchSearchBar).unregister
+    const unregisterOnResume = registerForOnResumeFromSuspend(patchSearchBar).unregister
     const unregisterForAppLifetime = SteamClient.GameSessions.RegisterForAppLifetimeNotifications(patchSearchBar).unregister
     const unregisterForAppOvelay = SteamClient.Overlay.RegisterForOverlayActivated(() => { if (searchBarState.useFallbackSearch) patchSearchBar() }).unregister;
     return {
