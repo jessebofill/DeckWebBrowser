@@ -1,8 +1,8 @@
 import { FooterLegendProps, afterPatch, findInReactTree } from "decky-frontend-lib"
 import { getReactTree, routePath } from "../init"
-import { FC, ReactElement, ReactNode, useState } from "react"
+import { FC, ReactNode, useState } from "react"
 import { PluginIcon } from "../components/native-components/PluginIcon"
-import { logN } from '../lib/log'
+import { Logger } from '../lib/log'
 import { settingsManager } from '../classes/SettingsManager'
 import { status } from '../pluginState'
 import { killBrowser } from '../lib/utils'
@@ -15,10 +15,12 @@ interface MainMenuItemProps extends FooterLegendProps {
     onActivate?: () => void
 }
 
+const namedLogger = new Logger('Menu Patch');
+
 export const patchMenu = () => {
     const menuNode = findInReactTree(getReactTree(), (node) => node?.memoizedProps?.navID == 'MainNavMenuContainer')
     if (!menuNode || !menuNode.return?.type) {
-        logN('Menu Patch', 'Failed to find main menu root node.')
+        namedLogger.log('Failed to find main menu root node.')
         return () => { }
     }
     const orig = menuNode.return.type
@@ -26,7 +28,7 @@ export const patchMenu = () => {
     const menuWrapper = (props: any) => {
         const ret = orig(props)
         if (!ret?.props?.children?.props?.children?.[0]?.type) {
-            logN('Menu Patch', 'The main menu element could not be found at the expected location. Valve may have changed it.')
+            namedLogger.log('The main menu element could not be found at the expected location. Valve may have changed it.')
             return ret
         }
         if (patchedInnerMenu) {
@@ -34,7 +36,7 @@ export const patchMenu = () => {
         } else {
             afterPatch(ret.props.children.props.children[0], 'type', (_: any, ret: any) => {
                 if (!ret?.props?.children || !Array.isArray(ret?.props?.children)) {
-                    logN('Menu Patch', 'Could not find menu items to patch.')
+                    namedLogger.log('Could not find menu items to patch.')
                     return ret
                 }
                 const itemIndexes = getMenuItemIndexes(ret.props.children)
