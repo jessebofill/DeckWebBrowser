@@ -14,7 +14,10 @@ interface BrowserContainerProps {
 export const BrowserContainer: VFC<BrowserContainerProps> = findModuleChild((mod) => {
     if (typeof mod !== 'object') return undefined;
     for (let prop in mod) {
-        if (mod[prop]?.toString?.().includes('displayURLBar') && mod[prop]?.toString?.().includes('BExternalTriggeredLoad()')) return mod[prop];
+        if (typeof mod[prop] === 'function') {
+            const f = mod[prop].toString();
+            if (f.includes('displayURLBar') && f.includes('BExternalTriggeredLoad()')) return mod[prop];
+        }
     }
 })
 
