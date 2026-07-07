@@ -11,7 +11,8 @@ import { tabManager } from '../classes/TabManager'
 interface MainMenuItemPropsBase {
     route: string
     label: ReactNode
-    onFocus: () => void
+    onFocus?: () => void
+    onGamepadFocus?: () => void
     icon?: ReactElement
     onActivate?: () => void
 }
@@ -38,7 +39,7 @@ export const patchMenu = () => {
             ret.props.children.props.children[0].type = patchedInnerMenu
         } else {
             afterPatch(ret.props.children.props.children[0], 'type', (_: any, ret: any) => {
-                const isMenuItemElt = (e: any) => e.props?.label && e.props.onFocus && e.props.route && e.type?.toString;
+                const isMenuItemElt = (e: any) => e.props?.label && (e.props.onFocus || e.props.onGamepadFocus) && e.props.route && e.type?.toString;
                 const menuItems = findInReactTree(ret, node => Array.isArray(node) && node.some(isMenuItemElt)) as Array<any>;
                 
                 if (!menuItems) {
@@ -49,12 +50,15 @@ export const patchMenu = () => {
                 const itemIndexes = getMenuItemIndexes(menuItems);
                 const menuItem = menuItems.find(isMenuItemElt) as { props: MainMenuItemProps, type: () => ReactElement };
 
+                const focusProps = menuItem.props.onFocus
+                    ? { onFocus: menuItem.props.onFocus }
+                    : { onGamepadFocus: menuItem.props.onGamepadFocus };
                 const newItem =
                     <MenuItemWrapper
                         key={'browser'}
                         route={routePath}
                         label='Browser'
-                        onFocus={menuItem.props.onFocus}
+                        {...focusProps}
                         useIconAsProp={!!menuItem.props.icon}
                         MenuItemComponent={menuItem.type}
                     />
